@@ -1,13 +1,16 @@
+.headline{
+  text-align: center;
+  margin: 20px;
+}
+
 h3{
-    padding-top: 2%;
+    padding: 10px;
     font-family: 'Inter';
     font-style: normal;
-    font-weight: bolder;
+    font-weight: bold;
     font-size: 30px;
-    line-height: 36px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
     text-align: center;
     color: #000000;
-  }
+    border: 1px solid black;
+    display: inline-block;
+}

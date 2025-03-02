@@ -1,5 +1,7 @@
-.PRODUCTs{
+.PRODUCT-container{
     background: #FAEFEC;
+    width: 100%;
+    overflow: hidden; /*ẩn đi phần margin thừa nó phụ thuộc vào phần tử con */
 }
 
 ul.products{

@@ -9,8 +9,10 @@ const productCategories = [
 
 const ProductCategories = () => {
   return (
-    <div className="PRODUCTs">
-      <h3>Danh mục sản phẩm</h3>
+    <div className="PRODUCT-container">
+      <div className="headline">
+          <h3>Danh mục sản phẩm</h3>
+      </div>
       <ul className="products">
         {productCategories.map((category) => (
           <li key={category.id}>
