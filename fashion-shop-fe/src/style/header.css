@@ -1,0 +1,58 @@
+@import url('https://fonts.googleapis.com/css2?family=Irish+Grover&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+a:link{
+    color: black;
+    text-decoration: none;
+}
+
+a:visited{
+    text-decoration: none;
+    color: black;
+}
+
+a:hover{
+    text-decoration-line: none;
+}
+
+.header{
+    display: flex;
+    justify-content: space-evenly;
+    background-color: #d9d9d9;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    padding: 20px 5px;
+    z-index: 1000;
+}
+
+
+.bar li a {
+    text-decoration: none;
+    color: black;
+    font-family: 'Inter';
+    font-weight: bold;
+    font-size: 20px;
+    text-transform: uppercase;
+    transition: 0.3s ease;
+}
+
+.bar li a:hover, .bar li a.active_bar {
+    text-decoration: underline;
+    color: #088178;
+}
+
+.login {
+    background-color:#f1684e;
+    color: white ;
+}
+
+.log_in a{
+    color: white ;
+}
+
+.login:hover {
+    background-color: #b4432d; 
+    color: white ;
+}

@@ -1,0 +1,36 @@
+.product-list-container{
+  width: 100%;
+  height: auto;
+  background-color: #d9d9d9;
+
+}
+
+.product-list-grid{
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 4 ảnh trên 1 hàng */
+}
+
+.product-card-container {
+  width: 100%;
+  height: 100%;
+  display: block;
+  flex-direction: column; /*sắp xếp theo chiều dọc*/
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.product-card-img {
+  width: 100%; 
+  height: 450px; 
+  object-fit: cover; 
+  padding: 6% 6%;
+}
+
+.product-card-info{
+  background-color: black;
+  width: 100%;
+  height: 100px;
+}
