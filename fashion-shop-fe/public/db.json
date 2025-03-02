@@ -152,6 +152,8 @@
       "name": "ọc ọc",
       "id-prd": "MH01",
       "brand": "Luôn vui tươi",
+      "category":"Sửa sau",
+      "price":"1.000.000 VNĐ",
       "images": [
         "/assets/user/image/product/pp1.jpg"
       ]
@@ -161,6 +163,8 @@
       "name": "ọc ọc",
       "id-prd": "MH02",
       "brand": "Luôn vui tươi",
+      "category":"Sửa sau",
+      "price":"1.000.000 VNĐ",
       "images": [
         "/assets/user/image/product/pp2.jpg"
       ]
@@ -170,6 +174,8 @@
       "name": "ọc ọc",
       "id-prd": "MH03",
       "brand": "Luôn vui tươi",
+      "category":"Sửa sau",
+      "price":"1.000.000 VNĐ",
       "images": [
         "/assets/user/image/product/pp3.jpg"
       ]
@@ -179,6 +185,8 @@
       "name": "ọc ọc",
       "id-prd": "MH04",
       "brand": "Luôn vui tươi",
+      "category":"Sửa sau",
+      "price":"1.000.000 VNĐ",
       "images": [
         "/assets/user/image/product/pp4.jpg"
       ]
@@ -188,6 +196,8 @@
       "name": "ọc ọc",
       "id-prd": "MH05",
       "brand": "Luôn vui tươi",
+      "category":"Sửa sau",
+      "price":"1.000.000 VNĐ",
       "images": [
         "/assets/user/image/product/pp5.jpg"
       ]
@@ -197,6 +207,8 @@
       "name": "ọc ọc",
       "id-prd": "MH06",
       "brand": "Luôn vui tươi",
+      "category":"Sửa sau",
+      "price":"1.000.000 VNĐ",
       "images": [
         "/assets/user/image/product/pp6.jpg"
       ]
@@ -204,8 +216,10 @@
     {
       "id": "7",
       "name": "ọc ọc",
-      "id-prd": "MH07",
+      "id-prd": "MH07", 
       "brand": "Luôn vui tươi",
+      "category":"Sửa sau",
+      "price":"1.000.000 VNĐ",
       "images": [
         "/assets/user/image/product/p1.1.png"
       ]
@@ -215,6 +229,8 @@
       "name": "ọc ọc",
       "id-prd": "MH08",
       "brand": "Luôn vui tươi",
+      "category":"Sửa sau",
+      "price":"1.000.000 VNĐ",
       "images": [
         "/assets/user/image/product/p2.1.jpg"
       ]

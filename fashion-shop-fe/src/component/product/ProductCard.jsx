@@ -7,17 +7,18 @@ const ProductCard=({product_demo})=>{
             <img
                 className="product-card-img"
                 src={product_demo.images[0]}
-                alt={product_demo.name}
+                 alt={product_demo.name}
             />
             <div className="product-card-info">
-                <h6 style={{
-                    fontSize:"16px",
-                    fontWeight:"bold",
-                    textAlign:"center",
-                    color:"white",
-                }}>
+                <a href="" className="product-cat">
+                    {product_demo.category}
+                </a>
+                <a href="" className="product-name">
                     {product_demo.name}
-                </h6>
+                </a>
+                <div className="product-price">
+                    {product_demo.price}
+                </div>
             </div>
         </div>
 
