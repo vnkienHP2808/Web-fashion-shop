@@ -1,18 +1,28 @@
 import ProductCard from "./ProductCard"
 import "../../style/productFormat.css"
 
-const ProductList =({product_demo})=>{
+const ProductList =({product_new_sale, title})=>{
     return(
-        <div className="product-list-container">
+        <div 
+            className="product-list-container"
+            style={{
+                backgroundColor: title === "Hàng mới về" ? "white" : "#FAEFEC"
+            }}      
+        >
             <div className="headline">
-                <h3>Hàng mới về</h3>
+                <h3> {title} </h3>
             </div>
             <div className="product-list-grid">
-                {product_demo.slice(0,8).map((product, index) =>(
+                {product_new_sale.slice(0,8).map((product, index) =>(
                     <ProductCard 
                         key={index}
-                        product_demo={product}  
+                        product_new_sale={product}  
                         index={index} 
+                        /*type để phân biệt tính chất hàng, title để set type*/
+                        type = {
+                            title === "Hàng mới về" ? "New" :
+                            title === "Giảm giá" ? "Sale" : ""
+                        }
                     >
                     </ProductCard>
                 ))}

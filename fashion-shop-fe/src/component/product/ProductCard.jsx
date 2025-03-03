@@ -4,7 +4,8 @@ import "../../style/productFormat.css"
 /* giờ muốn dùng hover để set thì dùng thêm 1 biến hoverIndex
 được set giá trị khi di chuột vào ảnh bằng hàm onMouseEnter và onmouseleave */
 
-const ProductCard=({product_demo, index})=>{
+const ProductCard=({product_new_sale, index, type})=>{
+    /* type để phân biệt trường hợp sale hay 0 */
     const [hoverIndex, setHoverIndex] = useState(null); // khai báo và set giá trị 
     return(
         <div 
@@ -15,18 +16,19 @@ const ProductCard=({product_demo, index})=>{
             style={{
                 transition: "transform 0.5s ease-in-out",
                 //so sánh toán tử 3 ngôi set
-                transform: hoverIndex === index ? "scale(1.05)" : "scale(1)"
+                transform: hoverIndex === index ? "scale(1.05)" : "scale(1)",
             }}
         >
+
             {/* hiệu ứng opacity mờ dần để đổi ảnh nên tách ra thành 2 cái img khác nhau */}   
             {/* khi không hover thì ảnh 1 có độ sáng là 1, còn ảnh 2 ngược lại để có hiệu ứng mong muốn */}
             <div className="product-card-top">
                 <a href="..." className="product-card-thumb">
                     <img
                         className="product-card-img"
-                        //src={hoverIndex === index ? product_demo.images[1] : product_demo.images[0]}
-                        src = {product_demo.images[0]}
-                        alt={product_demo.name}
+                        //src={hoverIndex === index ? product_new_sale.images[1] : product_new_sale.images[0]}
+                        src = {product_new_sale.images[0]}
+                        alt={product_new_sale.name}
                         style={{
                             transition: "opacity 0.5s ease-in-out",
                             opacity: hoverIndex === index ? 0 : 1,
@@ -36,9 +38,9 @@ const ProductCard=({product_demo, index})=>{
 
                     <img
                         className="product-card-img"
-                        //src={hoverIndex === index ? product_demo.images[1] : product_demo.images[0]}
-                        src = {product_demo.images[1]}
-                        alt={product_demo.name}
+                        //src={hoverIndex === index ? product_new_sale.images[1] : product_new_sale.images[0]}
+                        src = {product_new_sale.images[1]}
+                        alt={product_new_sale.name}
                         style={{
                             transition: "opacity 0.5s ease-in-out",
                             opacity: hoverIndex === index ? 1 : 0,
@@ -61,17 +63,17 @@ const ProductCard=({product_demo, index})=>{
 
             <div className="product-card-info">
                 <a href="" className="product-name">
-                    Tên sản phẩm: {product_demo.name}
+                    Tên sản phẩm: {product_new_sale.name}
                 </a>
                 <a href="" className="product-cat">
-                    Loại sản phẩm: {product_demo.category}
+                    Loại sản phẩm: {product_new_sale.category}
                 </a>
                 <a href="" className="product-brand">
-                    Thương hiệu: {product_demo.brand}
+                    Thương hiệu: {product_new_sale.brand}
                 </a>
                 <div className="product-price">
                     <p> Giá:&nbsp; </p>
-                    {product_demo.price}
+                    {type === "New" ? product_new_sale.price : product_new_sale.salePrice}
                 </div>
             </div>
         </div>

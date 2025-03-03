@@ -1,7 +1,6 @@
 .PRODUCT-container{
     background: #FAEFEC;
     width: 100%;
-    overflow: hidden; /*ẩn đi phần margin thừa nó phụ thuộc vào phần tử con */
 }
 
 ul.products{
@@ -9,6 +8,8 @@ ul.products{
     display: flex;
     justify-content: space-between;
     box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
 ul.products li{
@@ -48,6 +49,11 @@ ul.products li .product-top a.product-type{
     opacity: 0.6;
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
+}
+
+ul.products li:hover .product-top{
+    transition: 0.3s ease-in-out;
+    transform: scale(1.05);
 }
 
 ul.products li:hover .product-top a.product-type{

@@ -4,7 +4,7 @@ import "../../style/header.css"
 
 const Header = () => {
     return (
-        <div className="header ">
+        <div className="header">
             {/* Logo */}
             <div className="logo" style={{ fontFamily: "Irish Grover", fontStyle: "normal", fontWeight: "bolder", letterSpacing: "20px" }}>
                 <h1>ELYTS</h1>
