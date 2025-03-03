@@ -4,6 +4,7 @@
       "id": "1",
       "name": "Quần",
       "image_link": "/assets/user/image/category_quan.png",
+      "url":"url5/html",
       "status": "Activate",
       "subcategories": [
         {
@@ -24,6 +25,7 @@
       "id": "2",
       "name": "Áo",
       "image_link": "/assets/user/image/category_ao.png",
+      "url":"url6/html",
       "status": "Activate",
       "subcategories": [
         {
@@ -52,6 +54,7 @@
       "id": "3",
       "name": "Đầm",
       "image_link": "/assets/user/image/category_dam.png",
+      "url":"url7/html",
       "status": "Activate",
       "subcategories": [
         {
@@ -88,6 +91,7 @@
       "id": "4",
       "name": "Chân váy",
       "image_link": "/assets/user/image/category_chanvay.png",
+      "url":"url8/html",
       "status": "Activate",
       "subcategories": [
         {
@@ -112,6 +116,7 @@
       "id": "5",
       "name": "Phụ kiện",
       "image_link": "/assets/user/image/category_phukien.png",
+      "url":"url9/html",
       "status": "Activate",
       "subcategories": [
         {

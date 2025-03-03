@@ -19,28 +19,45 @@ const ProductCard=({product_demo, index})=>{
             }}
         >
             {/* hiệu ứng opacity mờ dần để đổi ảnh nên tách ra thành 2 cái img khác nhau */}   
-            <img
-                className="product-card-img"
-                //src={hoverIndex === index ? product_demo.images[1] : product_demo.images[0]}
-                src = {product_demo.images[0]}
-                alt={product_demo.name}
-                style={{
-                    transition: "opacity 0.5s ease-in-out",
-                    opacity: hoverIndex === index ? 0 : 1,
-                    position: "absolute",
-                }}
-            />
+            {/* khi không hover thì ảnh 1 có độ sáng là 1, còn ảnh 2 ngược lại để có hiệu ứng mong muốn */}
+            <div className="product-card-top">
+                <a href="..." className="product-card-thumb">
+                    <img
+                        className="product-card-img"
+                        //src={hoverIndex === index ? product_demo.images[1] : product_demo.images[0]}
+                        src = {product_demo.images[0]}
+                        alt={product_demo.name}
+                        style={{
+                            transition: "opacity 0.5s ease-in-out",
+                            opacity: hoverIndex === index ? 0 : 1,
+                            position: "absolute",
+                        }}
+                    />
 
-            <img
-                className="product-card-img"
-                //src={hoverIndex === index ? product_demo.images[1] : product_demo.images[0]}
-                src = {product_demo.images[1]}
-                alt={product_demo.name}
-                style={{
-                    transition: "opacity 0.5s ease-in-out",
-                    opacity: hoverIndex === index ? 1 : 0,
-                }}
-            />
+                    <img
+                        className="product-card-img"
+                        //src={hoverIndex === index ? product_demo.images[1] : product_demo.images[0]}
+                        src = {product_demo.images[1]}
+                        alt={product_demo.name}
+                        style={{
+                            transition: "opacity 0.5s ease-in-out",
+                            opacity: hoverIndex === index ? 1 : 0,
+                        }}
+                    />
+                </a>
+                    
+                {/* thêm vào giỏ */}
+                {/* sau này dùng để truy cập thay đổi giỏ hàng */}
+                <a href="..." 
+                    className="product-card-act"
+                    style={{
+                        transition: "opacity 0.5s ease-in-out",
+                        opacity: hoverIndex === index ? 1 : 0,
+                    }}
+                >
+                    Thêm vào giỏ
+                </a>
+            </div>
 
             <div className="product-card-info">
                 <a href="" className="product-name">

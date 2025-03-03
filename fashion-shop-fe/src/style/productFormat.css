@@ -66,3 +66,34 @@
   margin: 5px 0;
   font-size: 16px;
 }
+
+.product-card-container .product-card-top{
+  position: relative;
+}
+
+.product-card-container .product-card-top .product-card-thumb{
+  display: block;
+}
+
+.product-card-container .product-card-top .product-card-thumb img{
+  display: block;
+}
+
+.product-card-container .product-card-top .product-card-act {
+  text-transform: uppercase;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: black;
+  position: absolute;
+  width: 60%;
+  height: 10%;
+  font-size: 13px;
+  color: white;
+  box-sizing: border-box;
+  border-radius: 10px;
+  left: 50%;
+  bottom: 5%;
+  transform: translate(-50%, 0);  /*dịch sang trái 50% */
+}
