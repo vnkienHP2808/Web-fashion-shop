@@ -1,0 +1,67 @@
+@import url('https://fonts.googleapis.com/css2?family=Irish+Grover&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+.footer{
+    background: linear-gradient(to right, black, #2d0b00);
+    width: 100%;
+    bottom: 0;
+    padding: 100px 0 30px;
+    border-top-left-radius: 125px;
+    line-height: 20px;
+    color: white;
+}
+
+.logo{
+    width: 80px;
+    font-family: "Irish Grover";
+    font-style: "normal";
+    font-weight: bolder;
+    letter-spacing: 20px;
+    color: white;
+    font-size: 35px;
+    padding-bottom: 10px;
+}
+
+
+.row{
+    width: 85%;
+    margin: auto;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.col{
+    flex-basis: 25%;
+    padding: 10px;
+}
+
+p{
+    font-size: 13px;
+}
+
+.col h2{
+    width: fit-content;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 10px;
+    position: relative;
+    font-size: 25px;
+    margin-bottom: 8px;
+}
+
+.email-id{
+    width: fit-content;
+    border-bottom: 1px solid #ccc;
+    margin: 20px 0;
+}
+
+ul li{
+    margin-bottom: 12px;
+}
+
+.col li a{
+    text-decoration: none;
+    color: white;
+}

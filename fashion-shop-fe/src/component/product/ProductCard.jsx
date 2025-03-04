@@ -57,7 +57,9 @@ const ProductCard=({product_new_sale, index, type})=>{
                         opacity: hoverIndex === index ? 1 : 0,
                     }}
                 >
-                    Thêm vào giỏ
+                    <div >
+                        <i class="bx bx-cart-alt text-center text-white fs-6 py-3 justify-content-center align-items-center"></i> Thêm vào giỏ
+                    </div>
                 </a>
             </div>
 
@@ -72,8 +74,20 @@ const ProductCard=({product_new_sale, index, type})=>{
                     Thương hiệu: {product_new_sale.brand}
                 </a>
                 <div className="product-price">
-                    <p> Giá:&nbsp; </p>
-                    {type === "New" ? product_new_sale.price : product_new_sale.salePrice}
+                    <p> 
+                        Giá: 
+                        {type === "New" 
+                        ? <span> {product_new_sale.price}đ </span>
+                        : <span> {product_new_sale.salePrice}đ &nbsp;
+                                <span style={{
+                                    color: "black",
+                                    fontSize: "16px",
+                                    opacity: "0.5",
+                                    textDecorationLine: "line-through"
+                                }}> {product_new_sale.price}đ </span>
+                        </span>
+                        }
+                    </p>
                 </div>
             </div>
         </div>

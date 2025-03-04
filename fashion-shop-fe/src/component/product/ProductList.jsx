@@ -21,11 +21,26 @@ const ProductList =({product_new_sale, title})=>{
                         /*type để phân biệt tính chất hàng, title để set type*/
                         type = {
                             title === "Hàng mới về" ? "New" :
-                            title === "Giảm giá" ? "Sale" : ""
+                            title === "Hàng giảm giá" ? "Sale" : ""
                         }
                     >
                     </ProductCard>
                 ))}
+            </div>
+            <div className="headline">
+                <a href="..." style={{
+                    padding: "10px 20px",
+                    fontFamily: "'Inter', sans-serif",
+                    fontStyle: "normal",
+                    fontSize: "16px",
+                    textAlign: "center",
+                    color: "#000000",
+                    border: "2px solid black",
+                    borderRadius: "8px",
+                    textTransform: "uppercase",
+                }}> 
+                    Xem tất cả sản phẩm {title}
+                </a>
             </div>
         </div>
     )

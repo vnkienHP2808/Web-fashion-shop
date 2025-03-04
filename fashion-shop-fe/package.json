@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "bootstrap": "^5.3.3",
+    "bootstrap-icons": "^1.11.3",
     "boxicons": "^2.1.4",
     "fashion-shop-fe": "file:",
     "react": "^19.0.0",

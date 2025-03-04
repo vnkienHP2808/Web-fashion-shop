@@ -8,10 +8,9 @@ h3{
     padding: 10px;
     font-family: 'Inter';
     font-style: normal;
-    font-weight: bold;
     font-size: 30px;
     text-align: center;
     color: #000000;
-    border: 1px solid black;
+    border: 2px solid black;
     display: inline-block;
 }

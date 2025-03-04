@@ -158,7 +158,7 @@
       "id-prd": "MH01",
       "brand": "Luôn vui tươi",
       "category":"Sửa sau",
-      "price":"1.000.000 VNĐ",
+      "price":"1.000.000",
       "images": [
         "/assets/user/image/product/pp1.jpg",
         "/assets/user/image/product/pp1_1.jpg"
@@ -170,7 +170,7 @@
       "id-prd": "MH02",
       "brand": "Luôn vui tươi",
       "category":"Sửa sau",
-      "price":"1.000.000 VNĐ",
+      "price":"1.000.000",
       "images": [
         "/assets/user/image/product/pp2.jpg",
         "/assets/user/image/product/pp2_1.jpg"
@@ -182,7 +182,7 @@
       "id-prd": "MH03",
       "brand": "Luôn vui tươi",
       "category":"Sửa sau",
-      "price":"1.000.000 VNĐ",
+      "price":"1.000.000",
       "images": [
         "/assets/user/image/product/pp3.jpg",
         "/assets/user/image/product/pp3_1.jpg"
@@ -194,7 +194,7 @@
       "id-prd": "MH04",
       "brand": "Luôn vui tươi",
       "category":"Sửa sau",
-      "price":"1.000.000 VNĐ",
+      "price":"1.000.000",
       "images": [
         "/assets/user/image/product/pp4.jpg",
         "/assets/user/image/product/pp4_1.jpg"
@@ -206,7 +206,7 @@
       "id-prd": "MH05",
       "brand": "Luôn vui tươi",
       "category":"Sửa sau",
-      "price":"1.000.000 VNĐ",
+      "price":"1.000.000",
       "images": [
         "/assets/user/image/product/pp5.jpg",
         "/assets/user/image/product/pp5_1.jpg"
@@ -218,7 +218,7 @@
       "id-prd": "MH06",
       "brand": "Luôn vui tươi",
       "category":"Sửa sau",
-      "price":"1.000.000 VNĐ",
+      "price":"1.000.000",
       "images": [
         "/assets/user/image/product/pp6.jpg",
         "/assets/user/image/product/pp6_1.jpg"
@@ -230,7 +230,7 @@
       "id-prd": "MH07", 
       "brand": "Luôn vui tươi",
       "category":"Sửa sau",
-      "price":"1.000.000 VNĐ",
+      "price":"1.000.000",
       "images": [
         "/assets/user/image/product/p1.1.png",
         "/assets/user/image/product/p1.2.png"
@@ -242,7 +242,7 @@
       "id-prd": "MH08",
       "brand": "Luôn vui tươi",
       "category":"Sửa sau",
-      "price":"1.000.000 VNĐ",
+      "price":"1.000.000",
       "images": [
         "/assets/user/image/product/p2.1.jpg",
         "/assets/user/image/product/p2.2.jpg"

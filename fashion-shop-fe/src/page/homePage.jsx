@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import Slider from "../component/ui/Slider";
 import ProductCategories from "../component/ui/ProductCategory";
 import ProductList from "../component/product/ProductList";
+import Footer from "../component/layout/Footer";
 const HomePage = () =>{
     const [product_new, setProductNew] = useState([]);
     const [product_cat, setProductCategories] = useState([]);
@@ -50,8 +51,9 @@ const HomePage = () =>{
             ></ProductList>
             <ProductList 
                 product_new_sale={product_sale}
-                title="Giảm giá"
+                title="Hàng giảm giá"
             ></ProductList>
+            <Footer></Footer>
         </div>
     )
 }
