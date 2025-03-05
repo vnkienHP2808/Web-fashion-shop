@@ -39,7 +39,8 @@ a:hover{
 }
 
 .bar li a:hover, .bar li a.active_bar {
-    text-decoration: underline;
+    text-decoration: none;
+    border-bottom: 3px solid #088178;
     color: #088178;
 }
 

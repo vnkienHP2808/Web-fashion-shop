@@ -1,8 +1,9 @@
 import React from "react";
-
+import { useNavigate } from "react-router-dom";
 import "../../style/header.css"
 
 const Header = () => {
+    const navigate = useNavigate(); // hàm điều hướng
     return (
         <div className="header">
             {/* Logo */}
@@ -29,7 +30,13 @@ const Header = () => {
             <div className="d-flex justify-content-center align-items-center gap-2">
                 {/* Login button */}
                 <div className="log_in">
-                    <a href="url3.html" className="login btn" style={{ borderRadius: "8px" }}> Đăng nhập </a>
+                <button 
+                    className="login btn" 
+                    style={{ borderRadius: "8px" }} 
+                    onClick={() => navigate("/login")} // bấm chuyển sang link
+                >
+                        Đăng nhập
+                </button>
                 </div>
 
                 <div className="vr mx-3 align-self-center" style={{ height: "50%" }}></div>
@@ -49,6 +56,8 @@ const Header = () => {
                     <i className='bx bx-bell fs-3'></i>
                 </a>
             </div>
+
+            
         </div>
     );
 };
