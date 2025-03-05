@@ -1,7 +1,7 @@
 import "../../style/logIn_signUp_profile_Format.css";
 import { useNavigate } from "react-router-dom";
 
-const LogIn= ()=>{
+const SignUp =()=>{
     const navigate = useNavigate();
     return(
         <div style={{
@@ -15,9 +15,21 @@ const LogIn= ()=>{
                         fontSize: "50px", 
                         letterSpacing: "5px",
                         margin: "20px 0",
-                    }}>ĐĂNG NHẬP</p>
+                    }}>ĐĂNG KÝ</p>
                     
                     <div className="login-info">
+                        <div className="input-group">
+                            <div className="input-container-name">
+                                <span>Họ: &nbsp;</span>
+                                <input type="text" required/>
+                            </div>
+
+                            <div className="input-container-name">
+                                <span>Tên: &nbsp;</span>
+                                <input type="text" required/>
+                            </div>
+                        </div>
+                        
                         <div className="input-container">
                             <span>Email: &nbsp;</span>
                             <input type="email" required/>
@@ -25,25 +37,24 @@ const LogIn= ()=>{
 
                         <div className="input-container">
                             <span>Mật khẩu: &nbsp;</span>
+                            <input type="password" required />
+                        </div>
+
+                        <div className="input-container">
+                            <span> Nhập lại mật khẩu: &nbsp;</span>
                             <input type="password" required/>
                         </div>
 
                         <div className="login-act">
                             <button className="sign-in btn"
                                     onClick={()=> navigate("/")}>
-                                Đăng nhập
+                                Đăng ký
                             </button>
-
-                            <button className="forgot-password"
-                                    onClick={()=> navigate("/resetPW")}>
-                                Quên mật khẩu?
-                            </button>
-
                             <p>
                                 Bạn không có tài khoản?
-                                <button className="sign-up-now"
-                                        onClick={()=> navigate("/sign-up")}> 
-                                    Đăng kí ngay!
+                                <button className="sign-in-now"
+                                        onClick={()=> navigate("/sign-in")}> 
+                                    Đăng nhập ngay!
                                 </button>
                             </p>
                         </div>
@@ -54,4 +65,4 @@ const LogIn= ()=>{
     )
 }
 
-export default LogIn
+export default SignUp

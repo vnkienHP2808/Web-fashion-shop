@@ -33,7 +33,7 @@ const Header = () => {
                 <button 
                     className="login btn" 
                     style={{ borderRadius: "8px" }} 
-                    onClick={() => navigate("/login")} // bấm chuyển sang đăng nhập
+                    onClick={() => navigate("/sign-in")} // bấm chuyển sang đăng nhập
                 >
                         Đăng nhập
                 </button>
