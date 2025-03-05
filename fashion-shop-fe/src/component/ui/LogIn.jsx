@@ -1,6 +1,8 @@
 import "../../style/logIn_signUp_profile_Format.css"
+import { useNavigate } from "react-router-dom"
 
 const LogIn= ()=>{
+    const navigate = useNavigate();
     return(
         <div style={{
             marginTop: "96px",
@@ -24,6 +26,26 @@ const LogIn= ()=>{
                         <div className="input-container">
                             <span>Mật khẩu: &nbsp;</span>
                             <input type="password"/>
+                        </div>
+
+                        <div className="login-act">
+                            <button className="sign-in btn"
+                                    onClick={()=> navigate("/")}>
+                                Đăng nhập
+                            </button>
+
+                            <button className="forgot-password"
+                                    onClick={()=> navigate("/resetPW")}>
+                                Quên mật khẩu?
+                            </button>
+
+                            <p>
+                                Bạn không có tài khoản?
+                                <button className="sign-up-now"
+                                        onClick={()=> navigate("/sign-up")}> 
+                                    Đăng kí ngay!
+                                </button>
+                            </p>
                         </div>
                     </div>
                 </div>

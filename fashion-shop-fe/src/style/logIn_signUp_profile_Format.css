@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=League+Gothic&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
 
 .log-in-container {
     display: flex;
@@ -16,7 +17,7 @@
 
 
 .form-container{
-    background-color: #d9d9d9;
+    background-color: #FAEFEC;
     position: absolute;
     width: 450px;
     height: 450px;
@@ -24,7 +25,6 @@
     font-family: "League Gothic";
     text-align: center;
 }
-
 
 
 .input-container {
@@ -55,3 +55,62 @@
     padding-left: 10px;
 }
 
+.login-act{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.sign-in{
+    font-family: "Inter";
+    font-size: 20px;
+    font-weight: bold;
+    color: black;
+    background-color: rgba(180, 7, 206, 0.6);
+    width: 230px;
+    height: 35px;
+    margin-top: 20px;
+    padding: 0;
+    border-radius: 15px;
+}
+
+.sign-in:hover{
+    background-color: rgb(180, 7, 206);
+    color: white;
+}
+
+.forgot-password{
+    border: none;
+    background-color: #FAEFEC;
+    margin-top: 10px;
+    padding: 0;
+    font-size: 15px;
+    font-family: "Inter";
+    font-weight: normal; 
+}
+
+.forgot-password:hover{
+    font-weight: bold;
+}
+
+.login-act p{
+    margin-top: 30px;
+    padding: 0;
+    font-size: 20px;
+    font-family: "Inter";
+    font-weight: normal; 
+    text-align: center;
+}
+
+.sign-up-now{
+    border: none;
+    background-color: #FAEFEC;
+    color: #da02f7;
+    font-weight: bold;
+}
+
+.sign-up-now:hover{
+    text-decoration: underline;
+    color: #800080;
+}
