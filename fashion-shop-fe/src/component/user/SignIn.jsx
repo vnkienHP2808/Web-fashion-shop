@@ -13,7 +13,7 @@ const LogIn= ()=>{
                 <div className="form-container">
                     <p style={{
                         fontSize: "50px", 
-                        letterSpacing: "5px",
+                        letterSpacing: "2px",
                         margin: "20px 0",
                     }}>ĐĂNG NHẬP</p>
                     

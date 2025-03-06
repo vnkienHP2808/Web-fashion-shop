@@ -1,15 +1,15 @@
 import Header from "../component/layout/Header";
 import Footer from "../component/layout/Footer";
-import LogIn from "../component/ui/LogIn";
 import React from "react";
-const LogInPage = ()=>{
+import SetPassword from "../component/user/ChangePw";
+const ChangePassword = ()=>{
     return(
         <div className="page-container">
             <Header></Header>
-            <LogIn></LogIn>
+            <SetPassword></SetPassword>
             <Footer></Footer>
         </div>
     )
 }
 
-export default LogInPage
+export default ChangePassword

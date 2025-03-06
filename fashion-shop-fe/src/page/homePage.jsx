@@ -1,7 +1,7 @@
 import Header from "../component/layout/Header";
 import React, { useState, useEffect } from "react";
 import Slider from "../component/ui/Slider";
-import ProductCategories from "../component/ui/ProductCategory";
+import ProductCategories from "../component/product/ProductCategory";
 import ProductList from "../component/product/ProductList";
 import Footer from "../component/layout/Footer";
 const HomePage = () =>{

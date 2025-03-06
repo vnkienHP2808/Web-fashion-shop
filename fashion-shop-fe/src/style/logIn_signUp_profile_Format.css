@@ -19,7 +19,7 @@
 
 
 .form-container{
-    background-color: #EEDBC4;
+    background-color: rgba(238, 219, 196, 1);
     position: absolute;
     width: 450px;
     height: 450px;
@@ -27,7 +27,7 @@
     font-family: "League Gothic";
     text-align: center;
 }
-
+/*~~~~~~~~~~~Sign-in~~~~~~~~~~~~~~~~~~*/
 
 .input-container {
     display: flex;
@@ -118,7 +118,7 @@
     color: #800080;
 }
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/*~~~~~~~~~~~~Sign-up~~~~~~~~~~~~~~~~~*/
 
 .input-group{
     display: flex;
@@ -129,7 +129,7 @@
     justify-content: center;
 }
 
-.input-container-name {
+.input-container-name-signup {
     border: 2px solid #000;
     border-radius: 10px;
     width: 157px;
@@ -139,14 +139,14 @@
     background-color: white;
 }
 
-.input-container-name span {
+.input-container-name-signup span {
     font-size: 20px;
     white-space: nowrap;
     opacity: 0.5;
     margin-right: 10px;
 }
 
-.input-container-name input {
+.input-container-name-signup input {
     border: none;
     outline: none;
     font-size: 20px;
@@ -154,4 +154,80 @@
     background: transparent;
     height: 100%;
     width: 100%;
+}
+
+/*~~~~~~~~~~~~~Profile~~~~~~~~~~~~~~~~*/
+
+.profile-info{
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+}
+
+.input-container-profile {
+    display: flex;
+    border: 2px solid #000;
+    border-radius: 10px;
+    width: 250px;
+    height: 40px;
+    padding: 0 10px;
+    margin-bottom: 20px;
+    background-color: white;
+    align-items: center;
+}
+
+.input-container-profile span {
+    font-size: 20px;
+    white-space: nowrap;
+    opacity: 0.5;
+    margin-right: 10px;
+}
+
+.input-container-profile input {
+    border: none;
+    outline: none;
+    font-size: 20px;
+    flex: 1;
+    background: transparent;
+    height: 100%;
+    width: 100%;
+}
+
+.profile-act{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.change-password{
+    background-color: white;
+    border-radius: 10px;
+    width: 170px;
+    height: 40px;
+    font-size: 16px;
+    font-family: "Inter";
+    font-weight: bold;
+    margin: 0 20px;
+}
+
+.set-up{
+    background-color: black;
+    border-radius: 10px;
+    width: 130px;
+    height: 40px;
+    font-size: 20px;
+    font-family: Inter, sans-serif;
+    font-weight: bold;
+    color: white;
+}
+
+.change-password:hover{
+    background-color: black;
+    color: white;
+}
+
+.set-up:hover{
+    background-color: white;
+    color: black;
 }

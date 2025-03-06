@@ -1,15 +1,15 @@
 import Header from "../component/layout/Header";
-import SignUp from "../component/user/SignUp";
 import Footer from "../component/layout/Footer";
-
-const SignUpPage =()=>{
+import React from "react";
+import Profile from "../component/user/Profile";
+const UserProfile = ()=>{
     return(
         <div className="page-container">
             <Header></Header>
-            <SignUp></SignUp>
+            <Profile></Profile>
             <Footer></Footer>
         </div>
     )
 }
 
-export default SignUpPage
+export default UserProfile

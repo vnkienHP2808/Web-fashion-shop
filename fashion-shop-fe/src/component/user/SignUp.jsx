@@ -13,35 +13,35 @@ const SignUp =()=>{
                 <div className="form-container">
                     <p style={{
                         fontSize: "50px", 
-                        letterSpacing: "5px",
+                        letterSpacing: "2px",
                         margin: "20px 0",
                     }}>ĐĂNG KÝ</p>
                     
                     <div className="login-info">
                         <div className="input-group">
-                            <div className="input-container-name">
-                                <span>Họ: &nbsp;</span>
+                            <div className="input-container-name-signup">
+                                <span>Họ:</span>
                                 <input type="text" required/>
                             </div>
 
-                            <div className="input-container-name">
-                                <span>Tên: &nbsp;</span>
+                            <div className="input-container-name-signup">
+                                <span>Tên:</span>
                                 <input type="text" required/>
                             </div>
                         </div>
                         
                         <div className="input-container">
-                            <span>Email: &nbsp;</span>
+                            <span>Email:</span>
                             <input type="email" required/>
                         </div>
 
                         <div className="input-container">
-                            <span>Mật khẩu: &nbsp;</span>
+                            <span>Mật khẩu:</span>
                             <input type="password" required />
                         </div>
 
                         <div className="input-container">
-                            <span> Nhập lại mật khẩu: &nbsp;</span>
+                            <span> Nhập lại mật khẩu:</span>
                             <input type="password" required/>
                         </div>
 

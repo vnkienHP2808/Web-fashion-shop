@@ -54,3 +54,15 @@ a:hover{
     background-color: #b4432d; 
     color: white ;
 }
+
+.icon-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+}
+
+.icon-container i:hover{
+    filter: drop-shadow(0px 0px 5px rgba(255, 0, 0, 0.5));
+    transform: scale(1.12);
+}
