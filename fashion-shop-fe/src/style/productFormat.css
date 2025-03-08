@@ -28,7 +28,7 @@
 }
 
 .product-card-info{
-  text-align: left;
+  text-align: center;
   display: flex;
   background-color: #D9D9D9 ;
   flex-direction: column;

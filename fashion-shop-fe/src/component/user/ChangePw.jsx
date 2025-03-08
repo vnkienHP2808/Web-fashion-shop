@@ -48,7 +48,7 @@ const SetPassword = () => {
                         </div>
 
                         <div className="profile-act">
-                            <button className="set-up">
+                            <button className="set-up" onClick={() => navigate("/profile")}>
                                 CẬP NHẬT
                             </button>
                         </div>

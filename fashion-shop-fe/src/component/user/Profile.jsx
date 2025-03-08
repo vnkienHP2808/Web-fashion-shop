@@ -50,7 +50,7 @@ const Profile = () => {
                         <div className="profile-act">
                             <button className="set-up" style={{
                                 marginRight: "53px",
-                            }}>
+                            }} onClick={() => navigate("/profile")} >
                                 CẬP NHẬT
                             </button>
 

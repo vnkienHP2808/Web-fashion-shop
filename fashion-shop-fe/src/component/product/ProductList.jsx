@@ -1,22 +1,20 @@
 import ProductCard from "./ProductCard"
 import "../../style/productFormat.css"
+import AllButton from "../ui/AllButton"
 
-const ProductList =({product_new_sale, title})=>{
+const ProductList =({products, title, btnhref})=>{
     return(
         <div 
-            className="product-list-container"
-            style={{
-                backgroundColor: title === "Hàng mới về" ? "white" : "#FAEFEC"
-            }}      
+            className="product-list-container"      
         >
-            <div className="headline">
+            {/* <div className="headline">
                 <h3> {title} </h3>
-            </div>
+            </div> */}
             <div className="product-list-grid">
-                {product_new_sale.slice(0,8).map((product, index) =>(
+                {products.slice(0,8).map((product, index) =>(
                     <ProductCard 
                         key={index}
-                        product_new_sale={product}  
+                        products={product}  
                         index={index} 
                         /*type để phân biệt tính chất hàng, title để set type*/
                         type = {
@@ -27,7 +25,13 @@ const ProductList =({product_new_sale, title})=>{
                     </ProductCard>
                 ))}
             </div>
-            <div className="headline">
+            <div>
+              <AllButton
+                text={`Xem tất cả sản phẩm ${title}`}
+                href={btnhref}
+              />
+            </div>
+            {/* <div className="headline">
                 <a href="..." style={{
                     padding: "10px 20px",
                     fontFamily: "'Inter', sans-serif",
@@ -41,7 +45,7 @@ const ProductList =({product_new_sale, title})=>{
                 }}> 
                     Xem tất cả sản phẩm {title}
                 </a>
-            </div>
+            </div> */}
         </div>
     )
 }
