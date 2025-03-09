@@ -11,6 +11,7 @@ const SaleProduct = ({products, title}) =>{
             <ProductList
                 products={products}
                 title={title}
+                isShowAll={false}
                 btnhref = "/products/sale"
             />
 

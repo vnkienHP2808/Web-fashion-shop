@@ -1,4 +1,4 @@
-import "../../style/logIn_signUp_profile_Format.css";
+import "../../../style/logIn_signUp_profile_Format.css";
 import { useNavigate } from "react-router-dom";
 
 const SetPassword = () => {

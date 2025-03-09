@@ -111,23 +111,6 @@
           "name": "Chân váy trong bộ Vest"
         }
       ]
-    },
-    {
-      "id": "5",
-      "name": "Phụ kiện",
-      "image_link": "/assets/user/image/category_phukien.png",
-      "url":"url9/html",
-      "status": "Activate",
-      "subcategories": [
-        {
-          "id": 1,
-          "name": "Túi xách"
-        },
-        {
-          "id": 2,
-          "name": "Cài áo"
-        }
-      ]
     }
   ],
   "sliders": [

@@ -16,7 +16,7 @@ const Header = () => {
                 <ul className="bar list-unstyled d-flex align-items-center gap-4 m-0 pt-3">
                     <li><a href="/">Trang chủ</a></li>
                     <li><a href="index.html">Hàng mới về</a></li> {/* "/products/new" */}
-                    <li><a href="index.html">Sản phẩm</a></li> {/* "/products/all" */}
+                    <li><a href="/products/all">Sản phẩm</a></li> {/* "/products/all" */}
                 </ul>
             </div>
 

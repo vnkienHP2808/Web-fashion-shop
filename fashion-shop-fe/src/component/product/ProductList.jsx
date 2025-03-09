@@ -1,51 +1,79 @@
+import React, { useState} from "react";
 import ProductCard from "./ProductCard"
 import "../../style/productFormat.css"
 import AllButton from "../ui/AllButton"
 
-const ProductList =({products, title, btnhref})=>{
+const ProductList =({products, title, isShowAll, btnhref})=>{
+    // set số lượng sản phẩm muốn đưa ra
+    const [itemsToShow] = useState(8);
     return(
         <div 
             className="product-list-container"      
         >
-            {/* <div className="headline">
-                <h3> {title} </h3>
-            </div> */}
-            <div className="product-list-grid">
-                {products.slice(0,8).map((product, index) =>(
-                    <ProductCard 
-                        key={index}
-                        products={product}  
-                        index={index} 
-                        /*type để phân biệt tính chất hàng, title để set type*/
-                        type = {
-                            title === "Hàng mới về" ? "New" :
-                            title === "Hàng giảm giá" ? "Sale" : ""
+            {/* title chuyển sang file khác */}
+            {!isShowAll ? (
+                <>
+                    <div className="product-list-grid">
+                        {products
+                            .filter(
+                                (product) => product.status === "Activate"
+                            )
+                            .slice(0, itemsToShow)
+                            .map((product, index) =>(
+                                <a
+                                    href={`/products/${product.id}`}
+                                    style={{ textDecoration: "none" }}
+                                >
+                                    <ProductCard 
+                                        key={index}
+                                        products={product}  
+                                        index={index} 
+                                        /*type để phân biệt tính chất hàng, title để set type*/
+                                        type = {
+                                            title === "Hàng mới về" ? "New" :
+                                            title === "Hàng giảm giá" ? "Sale" : ""
+                                        }
+                                    >
+                                    </ProductCard>
+                                </a>
+                            )
+                        )}
+                    </div>
+                    <div>
+                        <AllButton
+                            text={`Xem tất cả ${title}`.toUpperCase()}
+                            href={btnhref}
+                        />
+                        {/* đã chuyển button sang file AllButton */}
+                    </div>
+                </>
+            ) : (
+                <>
+                    <div className="product-list-grid">
+                        {products
+                            .filter(
+                                (product) => product.status === "Activate"
+                            )
+                            .map((product, index) => (
+                                <a 
+                                    href={`/products/${product.id}`}
+                                    style={{textDecoration: "none"}}
+                                >   
+                                    <ProductCard
+                                        key={index}
+                                        products={product}
+                                        index={index}
+                                        type = {
+                                            title === "Hàng mới về" ? "New" :
+                                            title === "Hàng giảm giá" ? "Sale" : ""
+                                        }
+                                    ></ProductCard>
+                                </a>
+                            ))
                         }
-                    >
-                    </ProductCard>
-                ))}
-            </div>
-            <div>
-              <AllButton
-                text={`Xem tất cả sản phẩm ${title}`}
-                href={btnhref}
-              />
-            </div>
-            {/* <div className="headline">
-                <a href="..." style={{
-                    padding: "10px 20px",
-                    fontFamily: "'Inter', sans-serif",
-                    fontStyle: "normal",
-                    fontSize: "16px",
-                    textAlign: "center",
-                    color: "#000000",
-                    border: "2px solid black",
-                    borderRadius: "8px",
-                    textTransform: "uppercase",
-                }}> 
-                    Xem tất cả sản phẩm {title}
-                </a>
-            </div> */}
+                    </div>
+                </>
+            )}
         </div>
     )
 }

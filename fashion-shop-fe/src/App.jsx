@@ -8,7 +8,7 @@ import SignInPage from "./page/SignInPage";
 import SignUpPage from "./page/SignUpPage";
 import UserProfile from "./page/UserProfile";
 import ChangePassword from "./page/ChangePage";
-
+import AllProduct from "./page/ShowAllProduct";
 function App() {
   return (
     // route của các trang
@@ -18,6 +18,7 @@ function App() {
       <Route path="/sign-up" element={<SignUpPage/>} />
       <Route path="/profile" element={<UserProfile/>} />
       <Route path="/change-password" element={<ChangePassword/>} />
+      <Route path="/products/all" element={<AllProduct/>} />
     </Routes>
   );
 }
