@@ -9,6 +9,8 @@ import SignUpPage from "./page/SignUpPage";
 import UserProfile from "./page/UserProfile";
 import ChangePassword from "./page/ChangePage";
 import AllProduct from "./page/ShowAllProduct";
+import AllNewProduct from "./page/ShowNewProduct";
+import AllSaleProduct from "./page/ShowSaleProduct";
 function App() {
   return (
     // route của các trang
@@ -19,6 +21,8 @@ function App() {
       <Route path="/profile" element={<UserProfile/>} />
       <Route path="/change-password" element={<ChangePassword/>} />
       <Route path="/products/all" element={<AllProduct/>} />
+      <Route path="/products/new" element={<AllNewProduct/>} />
+      <Route path="/products/sale" element={<AllSaleProduct/>} />
     </Routes>
   );
 }

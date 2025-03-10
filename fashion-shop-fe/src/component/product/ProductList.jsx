@@ -3,7 +3,7 @@ import ProductCard from "./ProductCard"
 import "../../style/productFormat.css"
 import AllButton from "../ui/AllButton"
 
-const ProductList =({products, title, isShowAll, btnhref})=>{
+const ProductList =({products, filterFn, title, isShowAll, btnhref})=>{
     // set số lượng sản phẩm muốn đưa ra
     const [itemsToShow] = useState(8);
     return(
@@ -16,7 +16,7 @@ const ProductList =({products, title, isShowAll, btnhref})=>{
                     <div className="product-list-grid">
                         {products
                             .filter(
-                                (product) => product.status === "Activate"
+                                (product) => product.status === "Activate" && filterFn(product)
                             )
                             .slice(0, itemsToShow)
                             .map((product, index) =>(
@@ -52,7 +52,7 @@ const ProductList =({products, title, isShowAll, btnhref})=>{
                     <div className="product-list-grid">
                         {products
                             .filter(
-                                (product) => product.status === "Activate"
+                                (product) => product.status === "Activate" && filterFn(product)
                             )
                             .map((product, index) => (
                                 <a 

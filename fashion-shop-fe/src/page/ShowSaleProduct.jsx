@@ -7,7 +7,7 @@ import Paginated from "../component/ui/Pagination";
 import Breadcrump from "../component/ui/Breadcrump";
 import Filter from "../component/ui/Filter";
 
-const AllProduct = () => {
+const AllSaleProduct = () => {
     // 2 biến để duyệt sản phẩm và loại
     const [products, setProducts] = useState([]);
     const [categories, setCategory] = useState([]);
@@ -87,8 +87,9 @@ const AllProduct = () => {
         const occasionMatch =
           selectedOccasion.length === 0 ||
           selectedOccasion.includes(product.occasion);
-    
-        return categoryMatch && priceMatch && occasionMatch;
+        
+        const saleMatch = product.isSale; // thêm để lọc theo sản phẩm sale
+        return categoryMatch && priceMatch && occasionMatch && saleMatch;
       };
 
     // tính toán các chỉ mục cho phân trang kết hợp với việc chọn filter, nếu mặc định = show all
@@ -111,7 +112,7 @@ const AllProduct = () => {
     return (
         <div>
             <Header></Header>
-            <Breadcrump text={"Sản phẩm"}></Breadcrump>
+            <Breadcrump text={"Sản phẩm giảm giá"}></Breadcrump>
             <div style={{backgroundColor: "#FAEFEC"}}>
                 <div
                     className="d-flex align-items-center justify-content-between"
@@ -120,7 +121,7 @@ const AllProduct = () => {
                     }}
                 >
                     <h2 style={{marginTop:"10px"}}>
-                        Sản phẩm:{" "}
+                        Sản phẩm giảm giá:{" "}
                         <span
                             style={{
                                 marginLeft: "20px",
@@ -147,8 +148,8 @@ const AllProduct = () => {
                         />
                     </div>
                 </div>
-
-                <div
+                
+                {/* <div
                     style={{
                         display: "flex",
                         marginLeft: "40px",
@@ -182,11 +183,11 @@ const AllProduct = () => {
                             </a>
                         </div>
                     ))}
-                </div>
+                </div> */}
 
                 <ProductList
                     products={currentProducts}
-                    filterFn={(product) => true} // vì đây là show tất cả sản phẩm nên để true để không cần lọc gì show ra
+                    filterFn={(product) => product.isSale} // vì là sản phẩm sale nên phải lọc theo isSale để loại các sp không phải
                     title="Sản phẩm"
                     isShowAll={true}
                 />
@@ -201,4 +202,4 @@ const AllProduct = () => {
     );
 };
 
-export default AllProduct;
+export default AllSaleProduct;
