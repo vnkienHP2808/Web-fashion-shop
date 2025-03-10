@@ -11,6 +11,7 @@ import ChangePassword from "./page/ChangePage";
 import AllProduct from "./page/ShowAllProduct";
 import AllNewProduct from "./page/ShowNewProduct";
 import AllSaleProduct from "./page/ShowSaleProduct";
+import CategoryProduct from "./page/CategoryProduct";
 function App() {
   return (
     // route của các trang
@@ -23,6 +24,10 @@ function App() {
       <Route path="/products/all" element={<AllProduct/>} />
       <Route path="/products/new" element={<AllNewProduct/>} />
       <Route path="/products/sale" element={<AllSaleProduct/>} />
+      <Route path="/products/category/:categoryId" element={<CategoryProduct/>} />
+      <Route
+            path="/products/category/:categoryId/subcategory/:subcategoryId"
+            element={<CategoryProduct/>} />
     </Routes>
   );
 }

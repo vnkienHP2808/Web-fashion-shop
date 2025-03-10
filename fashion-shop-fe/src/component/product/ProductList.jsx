@@ -5,7 +5,7 @@ import AllButton from "../ui/AllButton"
 
 const ProductList =({products, filterFn, title, isShowAll, btnhref})=>{
     // set số lượng sản phẩm muốn đưa ra
-    const [itemsToShow] = useState(8);
+    const [itemsToShow, setItemToShow] = useState(8);
     return(
         <div 
             className="product-list-container"      
@@ -29,10 +29,6 @@ const ProductList =({products, filterFn, title, isShowAll, btnhref})=>{
                                         products={product}  
                                         index={index} 
                                         /*type để phân biệt tính chất hàng, title để set type*/
-                                        type = {
-                                            title === "Hàng mới về" ? "New" :
-                                            title === "Hàng giảm giá" ? "Sale" : ""
-                                        }
                                     >
                                     </ProductCard>
                                 </a>

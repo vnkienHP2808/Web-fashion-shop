@@ -11,6 +11,7 @@ const NewArrival = ({products, title}) =>{
             <ProductList
                 products={products}
                 title={title}
+                filterFn={(product) => product.isNew}
                 isShowAll={false}
                 btnhref = "/products/new"
             />

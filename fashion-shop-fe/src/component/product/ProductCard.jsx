@@ -4,7 +4,7 @@ import "../../style/productFormat.css"
 /* giờ muốn dùng hover để set thì dùng thêm 1 biến hoverIndex
 được set giá trị khi di chuột vào ảnh bằng hàm onMouseEnter và onmouseleave */
 
-const ProductCard = ({ products, index, type }) => {
+const ProductCard = ({ products, index}) => {
     /* type để phân biệt trường hợp sale hay 0 */
     const [hoverIndex, setHoverIndex] = useState(null); // khai báo và set giá trị 
     return (
@@ -20,43 +20,47 @@ const ProductCard = ({ products, index, type }) => {
             }}
         >
             {/* set logo new or sale */}
-            {type === "New" ? (
-                <div
-                    style={{
-                        position: "absolute",
-                        top: "30px",
-                        left: "30px",
-                        backgroundColor: "orange",
-                        borderRadius: "5px",
-                        color: "white",
-                        padding: "5px",
-                        fontWeight: "bold",
-                        zIndex: 5,
-                    }}
-                >
-                    <i className="bi bi-moon-stars-fill"></i>
-                    {type}
-                </div>
-            ) : type === "Sale" ? (
-                <div
-                    style={{
-                        position: "absolute",
-                        top: "30px",
-                        left: "30px",
-                        backgroundColor: "red",
-                        borderRadius: "5px",
-                        color: "white",
-                        padding: "5px",
-                        fontWeight: "bold",
-                        zIndex: 5,
-                    }}
-                >
-                    <i className="bi bi-lightning-charge-fill"></i>-
-                    {Math.floor(
-                        ((products.price - products.salePrice) / products.price) * 100
-                    )}
-                    %
-                </div>
+            {/* đã chỉnh lại chỉ còn 2 cái */}
+            {/* thêm vừa new vừa sale */}
+            {(products.isNew && products.isSale && products.salePrice != null) ? (
+                <>
+                    <div
+                        style={{
+                            position: "absolute",
+                            top: "30px",
+                            left: "30px",
+                            backgroundColor: "orange",
+                            borderRadius: "5px",
+                            color: "white",
+                            padding: "5px",
+                            fontWeight: "bold",
+                            zIndex: 5,
+                        }}
+                    >
+                        <i className="bi bi-moon-stars-fill"></i>
+                        New
+                    </div>
+
+                    <div
+                        style={{
+                            position: "absolute",
+                            top: "70px",
+                            left: "30px",
+                            backgroundColor: "red",
+                            borderRadius: "5px",
+                            color: "white",
+                            padding: "5px",
+                            fontWeight: "bold",
+                            zIndex: 5,
+                        }}
+                    >
+                        <i className="bi bi-lightning-charge-fill"></i>-
+                        {Math.floor(
+                            ((products.price - products.salePrice) / products.price) * 100
+                        )}
+                        %
+                    </div>
+                </>
             ) : products.isNew ? (
                 <div
                     style={{
@@ -152,8 +156,8 @@ const ProductCard = ({ products, index, type }) => {
                 <div className="product-price">
                     <p>
                         Giá:
-                        {type === "New"
-                            ? <span> {products.price}đ </span>
+                        {!products.salePrice
+                            ? <span style={{color: "black"}}> {products.price}đ </span>
                             : <span> {products.salePrice}đ &nbsp;
                                 <span style={{
                                     color: "black",
