@@ -2260,7 +2260,7 @@
       "salePrice": null,
       "isSale": false,
       "isNew": true,
-      "status": "Deleted",
+      "status": "Activate",
       "occasion": "Casual",
       "images": [
         "/assets/user/image/product/p1.1.png",
@@ -2276,10 +2276,10 @@
       "name": "Áo Nỉ",
       "price": "500000",
       "inStock": "48",
-      "status": "Deleted",
+      "status": "Activate",
       "occasion": "",
       "images": [
-        "/assets/user/image/product/p101.1.png"
+        "/assets/user/image/product/p1.1.png"
       ],
       "categoryId": 2,
       "subcategoryId": 4,

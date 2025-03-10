@@ -5,7 +5,6 @@ const Profile = () => {
     const navigate = useNavigate();
     return (
         <div style={{
-            marginTop: "96px",
             width: "100%",
         }}>
             <div className="log-in-container">

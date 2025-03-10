@@ -141,7 +141,7 @@ const ProductCard = ({ products, index, type }) => {
 
             <div className="product-card-info">
                 <a href="" className="product-name">
-                    Tên sản phẩm: {products.name}
+                    {products.name}
                 </a>
                 {/* <a href="" className="product-cat">
                     Loại sản phẩm: {products.category}

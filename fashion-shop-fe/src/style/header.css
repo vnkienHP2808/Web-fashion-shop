@@ -20,7 +20,7 @@ a:hover{
     justify-content: space-evenly;
     background-color: #D9D9D9;
     width: 100%;
-    position: fixed;
+    position: sticky;
     top: 0;
     left: 0;
     padding: 20px 5px;
@@ -32,8 +32,8 @@ a:hover{
     text-decoration: none;
     color: black;
     font-family: 'Inter';
-    font-weight: bold;
-    font-size: 20px;
+    font-weight: normal;
+    font-size: 15px;
     text-transform: uppercase;
     transition: 0.3s ease;
 }

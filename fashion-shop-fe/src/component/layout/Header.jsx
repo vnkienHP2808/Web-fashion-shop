@@ -16,6 +16,7 @@ const Header = () => {
                 <ul className="bar list-unstyled d-flex align-items-center gap-4 m-0 pt-3">
                     <li><a href="/">Trang chủ</a></li>
                     <li><a href="index.html">Hàng mới về</a></li> {/* "/products/new" */}
+                    <li><a href="index.html">Hàng giảm giá</a></li> {/* "/products/sale" */}
                     <li><a href="/products/all">Sản phẩm</a></li> {/* "/products/all" */}
                 </ul>
             </div>
@@ -28,6 +29,17 @@ const Header = () => {
 
             {/* Icons */}
             <div className="icon-container">
+                {/* Cart */}
+                <i className="bx bx-cart-alt fs-3" onClick={() => navigate("/cart")}></i>
+
+                {/* User */}
+                <i className="bx bx-user fs-3" onClick={() => navigate("/profile")}></i>
+
+                {/* Notice */}
+                <i className='bx bx-bell fs-3' onClick={() => navigate("/notice")}></i>
+
+                <div className="vr mx-3 align-self-center" style={{ height: "50%" }}></div>
+
                 {/* Login button */}
                 <div className="log_in">
                     <button
@@ -38,17 +50,6 @@ const Header = () => {
                         Đăng nhập
                     </button>
                 </div>
-
-                <div className="vr mx-3 align-self-center" style={{ height: "50%" }}></div>
-
-                {/* Cart */}
-                <i className="bx bx-cart-alt fs-3" onClick={() => navigate("/cart")}></i>
-
-                {/* User */}
-                <i className="bx bx-user fs-3" onClick={() => navigate("/profile")}></i>
-
-                {/* Notice */}
-                <i className='bx bx-bell fs-3' onClick={() => navigate("/notice")}></i>
             </div>
 
 
