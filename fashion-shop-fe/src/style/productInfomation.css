@@ -146,3 +146,42 @@ button.add-to-cart-btn:hover  {
     color: black;
     border: 2px solid black;
 }
+
+
+.product-size{
+    display: flex;
+}
+
+.size-option {
+    border: 1px solid black;
+    border-radius: 5px;
+    width: 60px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    margin-left: 30px;
+    position: relative;
+    cursor: pointer;
+}
+
+.size-option.selected::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 22px; /* Độ rộng góc đen */
+    height: 22px; /* Độ cao góc đen */
+    background-color: black;
+    clip-path: polygon(100% 0, 0 0, 100% 100%);
+}
+
+.checkmark {
+    position: absolute;
+    bottom: 7px;
+    right: -3px;
+    font-size: 18px;
+    color: white;
+    z-index: 999;
+}

@@ -1,7 +1,9 @@
 import ProductCard from "./ProductCard";
 import "../../style/productFormat.css";
+import { useNavigate } from "react-router-dom";
 
 const RelateProduct=({products, catid, id}) =>{
+    const navigate = useNavigate();
     return(
         <div className="relate-product-container" style={{backgroundColor: "#FAEFEC"}}>
             <div className="headline">
@@ -14,16 +16,16 @@ const RelateProduct=({products, catid, id}) =>{
                     )
                     .slice(0, 8)
                     .map((product, index)=>(
-                        <a
-                            href={`/products/${product.id}`}
-                            style={{textDecoration: "none"}}
+                        <div
+                            onClick={() => navigate(`/products/${product.id}`)}
+                            style={{textDecoration: "none", cursor: "pointer"}}
                             key={index}
                         >
                             <ProductCard
                                 products={product}
                                 index={index}
                             ></ProductCard>
-                        </a>
+                        </div>
                 ))}
             </div>
         </div>

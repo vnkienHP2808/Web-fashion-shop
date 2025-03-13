@@ -4,10 +4,16 @@ import { Button } from "react-bootstrap";
 import RelateProduct
  from "./RelateProduct";
 const ProductInfo=({product, listproduct})=>{
+    //ảnh minh họa sản phẩm
     const [selectedImage, setSelectedImage] = useState(
         product.images && product.images.length > 0 ? product.images[0] : ""
       );
+    // quản lý kho hàng
     const [quantity, setQuantity] = useState(1);
+    
+    //chọn size
+    const [selectedSize, setSelectedSize] = useState(null);
+    const sizes = ["S", "M", "L", "XL"];
 
     useEffect(() => {
         if (product.images && product.images.length > 0) {
@@ -78,10 +84,29 @@ const ProductInfo=({product, listproduct})=>{
                                             </span>
                                         </>
                                     ) : (
-                                        <span className="price">{product.price}₫</span>
+                                        <span className="price" style={{fontSize: "24px", fontWeight: "bold"}}>{product.price}₫</span>
                                     )}
                                 </td>
                             </tr>
+                            
+                            <tr>
+                                <td>Kích thước:</td>
+                                <td>
+                                    <div className="product-size">
+                                        {sizes.map((size) => (
+                                            <span 
+                                                key={size}
+                                                onClick={() => setSelectedSize(size)}
+                                                className={`size-option ${selectedSize === size ? "selected" : ""}`}
+                                            >
+                                                {size}
+                                                {selectedSize === size && <i class="bi bi-check checkmark"></i>}
+                                            </span>
+                                        ))}
+                                    </div>
+                                </td>
+                            </tr>
+
                             <tr>
                                 <td>Số lượng:</td>
                                 <td>
