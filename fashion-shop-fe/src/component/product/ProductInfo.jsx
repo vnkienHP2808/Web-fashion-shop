@@ -1,7 +1,9 @@
 import { useState, useEffect} from "react";
 import "../../style/productInfomation.css";
 import { Button } from "react-bootstrap";
-const ProductInfo=({product})=>{
+import RelateProduct
+ from "./RelateProduct";
+const ProductInfo=({product, listproduct})=>{
     const [selectedImage, setSelectedImage] = useState(
         product.images && product.images.length > 0 ? product.images[0] : ""
       );
@@ -148,6 +150,13 @@ const ProductInfo=({product})=>{
                         alt="ship"
                     />
                 </div>
+            </div>
+            <div>
+                <RelateProduct
+                    products={listproduct}
+                    catid={product.categoryId}
+                    id={product.id}
+                ></RelateProduct>
             </div>
         </div>
     )

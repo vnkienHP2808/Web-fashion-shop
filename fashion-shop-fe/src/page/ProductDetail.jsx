@@ -5,6 +5,7 @@ import Header from "../component/layout/Header"
 import Breadcrump from "../component/ui/Breadcrump"
 import Footer from "../component/layout/Footer";
 import ProductInfo from "../component/product/ProductInfo";
+import RelateProduct from "../component/product/RelateProduct";
 
 
 const ProductDetail=()=>{
@@ -64,6 +65,7 @@ const ProductDetail=()=>{
             </Breadcrump>
             <ProductInfo
                 product={product}
+                listproduct={products}
             ></ProductInfo>
             <Footer></Footer>
         </div>
