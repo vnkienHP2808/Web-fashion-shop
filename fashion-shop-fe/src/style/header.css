@@ -39,8 +39,7 @@ a:hover{
 }
 
 .bar li a:hover, .bar li a.active_bar {
-    text-decoration: none;
-    border-bottom: 3px solid #088178;
+    text-decoration: underline;
     color: #088178;
 }
 
@@ -59,7 +58,7 @@ a:hover{
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 8px;
+    gap: 20px;
 }
 
 .icon-container i:hover{

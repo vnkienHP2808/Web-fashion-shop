@@ -17,16 +17,9 @@ const SignUp =()=>{
                     }}>ĐĂNG KÝ</p>
                     
                     <div className="login-info">
-                        <div className="input-group">
-                            <div className="input-container-name-signup">
-                                <span>Họ:</span>
-                                <input type="text" required/>
-                            </div>
-
-                            <div className="input-container-name-signup">
-                                <span>Tên:</span>
-                                <input type="text" required/>
-                            </div>
+                        <div className="input-container">
+                            <span>Họ và tên:</span>
+                            <input type="text" required/>
                         </div>
                         
                         <div className="input-container">
