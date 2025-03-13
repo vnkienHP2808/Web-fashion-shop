@@ -22,7 +22,7 @@ const ProductCategories=({product_cat}) => {
           <li key={category.id}>
             <div className="product-item">
               <div className="product-top">
-                <a href={category.url} className="product-thumb">
+                <a href={`/products/category/${category.id}`} className="product-thumb">
                   <img src={category.image_link} alt={category.name} />
                 </a>
                 <a href={category.url} className="product-type"> {category.name} </a>

@@ -1,12 +1,17 @@
 import ProductList from "./ProductList"
-
+import "../../style/fontWomanDay.css"
 const SaleProduct = ({products, title}) =>{
     return(
         <div style={{
             backgroundColor: "#FAEFEC"
         }}>
             <div className="headline">
-                <h3> {title} </h3>
+                <h3 style={{ 
+                    fontFamily: "'Great Vibes', cursive",
+                    border: "none",
+                    fontSize: "60px",
+                    letterSpacing: "5px",
+                }}> Woman's Day Sale </h3>
             </div>
             <ProductList
                 products={products}

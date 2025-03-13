@@ -15,7 +15,7 @@ const ProductList =({products, filterFn, title, isShowAll, btnhref})=>{
                 <>
                     <div className="product-list-grid">
                         {products
-                            .filter(
+                            .filter( // hàm lọc sản phẩm theo điều kiện
                                 (product) => product.status === "Activate" && filterFn(product)
                             )
                             .slice(0, itemsToShow)
