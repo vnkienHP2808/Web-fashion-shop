@@ -21,7 +21,7 @@
 .form-container{
     background-color: rgba(238, 219, 196, 1);
     position: absolute;
-    width: 450px;
+    width: 600px;
     height: 450px;
     border-radius: 50px;
     font-family: "League Gothic";
@@ -34,17 +34,17 @@
     align-items: center;
     border: 2px solid black;
     border-radius: 10px;
-    width: 320px;
+    width: 480px;
     height: 40px;
     padding: 0 15px;
     margin: 10px 60px;
+    font-family: Inter;
+    font-size: 17px;
     background-color: white;
-    align-items: center;
     justify-content: center;
 }
 
 .input-container span {
-    font-size: 20px;
     white-space: nowrap;
     opacity: 0.5;
 }
@@ -52,10 +52,9 @@
 .input-container input {
     border: none;
     outline: none;
-    font-size: 20px;
     flex: 1;
     padding-left: 10px;
-    height: 100%;
+    height: 100%;  
 }
 
 .login-act{
@@ -169,29 +168,45 @@
     display: flex;
     border: 2px solid #000;
     border-radius: 10px;
-    width: 250px;
-    height: 40px;
+    width: 400px;
+    height: auto;
     padding: 0 10px;
     margin-bottom: 20px;
     background-color: white;
     align-items: center;
+    font-family: Inter;
+    font-size: 17px;
+    overflow: hidden;
+    flex-wrap: wrap;
 }
 
 .input-container-profile span {
-    font-size: 20px;
     white-space: nowrap;
     opacity: 0.5;
     margin-right: 10px;
 }
 
-.input-container-profile input {
+.input-container-profile p {
     border: none;
     outline: none;
-    font-size: 20px;
+    flex: 1;
+    text-align: left;
+    margin: 10px 0;
+    font-size: 15px;
+}
+
+.select-address {
+    border: none;
+    outline: none;
+    font-size: 15px;
     flex: 1;
     background: transparent;
-    height: 100%;
     width: 100%;
+    height: 45px;
+    padding: 5px;
+    white-space: normal; /*cho phép xuống dòng */
+    word-wrap: break-word; /*tự động xuống dòng khi dài hơn thanh hiển thị*/
+    overflow-wrap: break-word;
 }
 
 .profile-act{

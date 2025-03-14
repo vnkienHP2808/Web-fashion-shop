@@ -2288,7 +2288,7 @@
   "users": [
     {
       "id": "1",
-      "username": "customer1",
+      "username": "Customer1",
       "email": "nguyetanh0945@gmail.com",
       "password": "nguyetanh2311",
       "phonenumber": "0972427628",
@@ -2305,7 +2305,7 @@
     },
     {
       "id": "2",
-      "username": "admin",
+      "username": "Admin",
       "email": "admin@gmail.com",
       "password": "admin",
       "phonenumber": "0972427629",

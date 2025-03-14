@@ -1,8 +1,15 @@
 import "../../../style/logIn_signUp_profile_Format.css";
 import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
 
 const Profile = () => {
+    const user = JSON.parse(sessionStorage.getItem("account"));
     const navigate = useNavigate();
+
+    // lấy địa chỉ, có thể có nhiều địa chỉ
+    const addressOptions = user.address;
+    const [selectedAddress, setSelectedAddress] = useState(user.address);
+
     return (
         <div style={{
             width: "100%",
@@ -31,24 +38,45 @@ const Profile = () => {
                             <div className="profile-text">
                                 <div className="input-container-profile">
                                     <span>Họ và tên:</span>
-                                    <input type="text" required />
-                                </div>
-
-                                <div className="input-container-profile">
-                                    <span>Địa chỉ:</span>
-                                    <input type="text" required />
+                                    <p> {user.username} </p>
                                 </div>
 
                                 <div className="input-container-profile">
                                     <span>Email:</span>
-                                    <input type="email" required />
+                                    <p>{user.email}</p>
                                 </div>
+
+                                {user.role !== "admin" && (
+                                    <div className="input-container-profile">
+                                        <span>Số điện thoại:</span>
+                                        <p> {user.phonenumber} </p>
+                                    </div>
+                                )}
+
+                                {user.role !== "admin" && (
+                                    <div className="input-container-profile">
+                                        <span>Địa chỉ:</span>
+                                        {user.address && (
+                                            <select
+                                                value={selectedAddress}
+                                                onChange={(e) => setSelectedAddress(e.target.value)}
+                                                className="select-address"
+                                            >
+                                                {addressOptions.map((address, index) => (
+                                                    <option key={index} value={address}>
+                                                        {address}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                        )}
+                                    </div>
+                                )}
                             </div>
                         </div>
 
-                        <div className="profile-act">
+                        <div className="profile-act" style={{marginTop: "30px"}}>
                             <button className="set-up" style={{
-                                marginRight: "53px",
+                                marginRight: "70px",
                             }} onClick={() => navigate("/profile")} >
                                 CẬP NHẬT
                             </button>

@@ -24,7 +24,7 @@ const Header = () => {
         alert("Bạn đã đăng xuất");
         navigate("/");
     };
-    
+    console.log(isLoggedIn);
     return (
         <div className="header">
             {/* Logo */}
@@ -79,7 +79,9 @@ const Header = () => {
             {/* Icons */}
             <div className="icon-container">
                 {/* Cart */}
-
+                <span style={{ cursor: "pointer"}}>
+                    <i className="bx bx-cart-alt fs-3" onClick={() => navigate("/cart")}></i>
+                </span>     
                 {/* Account */}
                 <span
                     style={{ cursor: "pointer"}}
@@ -97,7 +99,7 @@ const Header = () => {
                                     </Dropdown.Item>
                                 )}
                                 {loggedInUser.role === "admin" && ( // admin thì điều hướng tới tài khoản riêng của admin
-                                    <Dropdown.Item onClick={() => navigate("/account")}>
+                                    <Dropdown.Item onClick={() => navigate("/profile")}>
                                         Tài khoản
                                     </Dropdown.Item>
                                 )}
@@ -125,7 +127,7 @@ const Header = () => {
                         </Dropdown>
                     )}
                 </span>
-                {loggedInUser !== null && loggedInUser.role === "customer" && (
+                {/* {loggedInUser !== null && loggedInUser.role === "customer" && (
                     <span
                         style={{ cursor: "pointer",}}
                     >
@@ -141,7 +143,7 @@ const Header = () => {
                             )}
                         </a>
                     </span>
-                )}
+                )} */}
 
                 {/* <div className="vr mx-3 align-self-center" style={{ height: "50%" }}></div> */}
                 {/* Login button
