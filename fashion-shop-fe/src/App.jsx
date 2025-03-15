@@ -16,6 +16,7 @@ import ProductDetail from "./page/ProductDetail";
 import Cart from "./component/user/auth/Cart";
 import NotFound from "./component/ui/404";
 import { CartProvider } from "./context/CartContext";
+import Checkout from "./component/user/auth/CheckOut";
 function App() {
   return (
     // route của các trang
@@ -36,6 +37,7 @@ function App() {
         <Route path="/products/:id" element={<ProductDetail />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/404" element={<NotFound />} />
+        <Route path="/checkout" element={<Checkout/>} />
       </Routes>
     </CartProvider>
   );

@@ -2,7 +2,9 @@ import { useState, useEffect, useContext} from "react";
 import "../../style/productInfomation.css";
 import { Button } from "react-bootstrap";
 import RelateProduct from "./RelateProduct";
-import { CartContext } from "../../context/CartContext"
+import { CartContext } from "../../context/CartContext";
+import { useNavigate } from "react-router-dom";
+
 const ProductInfo=({product, listproduct})=>{
     //ảnh minh họa sản phẩm
     const [selectedImage, setSelectedImage] = useState(
@@ -45,6 +47,14 @@ const ProductInfo=({product, listproduct})=>{
             }
         });
     };
+
+    const navigate = useNavigate();
+
+    const handleBuyNow = () => {
+        const selectedProduct = { ...product, quantity };
+        navigate("/checkout", { state: { selectedCartItems: [selectedProduct] } });
+    };
+
     return(
         <div>
             <div className="product-infomation">
@@ -156,7 +166,10 @@ const ProductInfo=({product, listproduct})=>{
                         <Button className="add-to-cart-btn" onClick={handleAddToCart}>
                             Thêm vào giỏ
                         </Button>
-                        <Button className="buy-now-btn">Mua ngay</Button>
+                        <Button 
+                            className="buy-now-btn"
+                            onClick={handleBuyNow}
+                        >   Mua ngay </Button>
                     </div>
 
                     <hr className="separator" />

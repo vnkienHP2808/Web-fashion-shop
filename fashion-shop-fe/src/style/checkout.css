@@ -1,0 +1,117 @@
+.checkout-container {
+    max-width: 800px;
+    margin: 30px auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+.checkout-container h2 {
+    text-align: center;
+    font-size: 1.8em;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.checkout-items {
+    margin-bottom: 20px;
+}
+
+.checkout-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    border-bottom: 1px solid #eaeaea;
+}
+
+.checkout-item h4 {
+    font-size: 1.1em;
+    margin: 0;
+    color: #333;
+}
+
+.checkout-item p {
+    font-size: 1em;
+    margin: 0;
+    color: #777;
+}
+
+/*địa chỉ giao hàng */
+.address-select {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    font-size: 1em;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.add-address {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.address-input {
+    flex: 1;
+    padding: 10px;
+    font-size: 1em;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+
+.add-address-btn {
+    padding: 10px 20px;
+    font-size: 1em;
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.add-address-btn:hover {
+    background-color: #218838;
+}
+
+/*phương thức thanh toán */
+.payment-methods {
+    margin-bottom: 20px;
+}
+
+.payment-methods label {
+    display: flex;
+    align-items: center;
+    margin-left: 15px;
+    font-size: 1em;
+    color: #333;
+    cursor: pointer;
+}
+
+.payment-methods input[type="radio"] {
+    margin-right: 8px;
+}
+
+/*nút hoàn tất đơn hàng */
+.checkout-btn {
+    width: 100%;
+    padding: 15px;
+    font-size: 1.2em;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 20px;
+}
+
+.checkout-btn:hover {
+    background-color: #0056b3;
+}
+

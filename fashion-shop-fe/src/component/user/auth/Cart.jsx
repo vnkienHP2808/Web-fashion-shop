@@ -6,6 +6,7 @@ import { CartContext } from "../../../context/CartContext";
 import { useNavigate } from "react-router-dom";
 import "../../../style/cart.css";
 import { Button, Modal, Form } from "react-bootstrap";
+import Checkout from "./CheckOut";
 
 const Cart=()=>{
     // dùng để gọi các hàm thao tác trong CartContext
@@ -117,19 +118,28 @@ const Cart=()=>{
             0
         );
 
+    const handleCheckout = () => {
+        const selectedCartItems = cart.filter((product) =>
+            selectedProducts.includes(product.id)
+        );
+        navigate("/checkout", { state: { selectedCartItems } });
+    };
     return(
         <div>
             <Header></Header>
             <Breadcrump text={"Giỏ hàng"}></Breadcrump>
             <div className="cart-container container mt-4">
                 <h2 className="mb-4">Giỏ hàng của bạn</h2>
-                <div className="row">
-                    <div className="col-md-8">
+
+                <div className="row" style={{marginLeft:"0"}}>
+                    <div className="col-md-8" style={{paddingLeft:"0"}}>
                         {cart.length > 0 && (
                             <Button
                                 variant="outline-primary"
                                 onClick={handleSelectAll}
-                                className="mb-3"
+                                style={{
+                                    marginBottom: "20px",
+                                }}
                             >
                                 {selectedProducts.length === cart.length
                                     ? "Bỏ chọn tất cả"
@@ -184,7 +194,8 @@ const Cart=()=>{
                                                 <i className="bi bi-dash-lg"></i>
                                             </Button>
                                             <input
-                                                type="number"
+                                                type="text"
+                                                pattern="[0-9]"
                                                 value={product.quantity}
                                                 onChange={(e) =>
                                                     handleQuantityChange(product, e.target.value)
@@ -234,7 +245,7 @@ const Cart=()=>{
                             <Button
                                 variant="dark"
                                 block
-                                // onClick={handleCheckout}
+                                onClick={handleCheckout}
                                 disabled={selectedProducts.length === 0}
                             >
                                 Thanh toán
