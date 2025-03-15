@@ -1,8 +1,8 @@
-import { useState, useEffect} from "react";
+import { useState, useEffect, useContext} from "react";
 import "../../style/productInfomation.css";
 import { Button } from "react-bootstrap";
-import RelateProduct
- from "./RelateProduct";
+import RelateProduct from "./RelateProduct";
+import { CartContext } from "../../context/CartContext"
 const ProductInfo=({product, listproduct})=>{
     //ảnh minh họa sản phẩm
     const [selectedImage, setSelectedImage] = useState(
@@ -20,6 +20,17 @@ const ProductInfo=({product, listproduct})=>{
             setSelectedImage(product.images[0]);
         }
     }, [product.images]);
+
+    // sử dụng để thêm vào giỏ hàng
+    const { addToCart } = useContext(CartContext);
+    const handleAddToCart = () => {
+        if (product.inStock > 0) {
+          addToCart({ ...product, quantity });
+          alert("Sản phẩm đã được thêm vào giỏ hàng!");
+        } else {
+          alert("Sản phẩm hiện đã hết hàng.");
+        }
+    };
 
     const handleQuantityChange = (type) => {
         setQuantity((prev) => {
@@ -142,7 +153,7 @@ const ProductInfo=({product, listproduct})=>{
                             marginTop: "20px",
                         }}
                     >
-                        <Button className="add-to-cart-btn">
+                        <Button className="add-to-cart-btn" onClick={handleAddToCart}>
                             Thêm vào giỏ
                         </Button>
                         <Button className="buy-now-btn">Mua ngay</Button>

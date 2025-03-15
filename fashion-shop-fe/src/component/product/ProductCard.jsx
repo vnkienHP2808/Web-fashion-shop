@@ -1,12 +1,27 @@
-import { useState } from "react"
+import { useState, useContext } from "react"
 import "../../style/productFormat.css"
-
+import { CartContext } from "../../context/CartContext"
 /* giờ muốn dùng hover để set thì dùng thêm 1 biến hoverIndex
 được set giá trị khi di chuột vào ảnh bằng hàm onMouseEnter và onmouseleave */
 
 const ProductCard = ({ products, index}) => {
     /* type để phân biệt trường hợp sale hay 0 */
     const [hoverIndex, setHoverIndex] = useState(null); // khai báo và set giá trị 
+    const user = JSON.parse(sessionStorage.getItem("account"));
+    
+    const { addToCart } = useContext(CartContext);
+    const handleAddToCart = (e) => {
+        e.stopPropagation(); // ngăn click lên ảnh
+        e.preventDefault(); // ngăn điều hướng
+        const loggedInUser = sessionStorage.getItem("account");
+        if (!loggedInUser) {
+          alert("Bạn cần đăng nhập để thêm sản phẩm vào giỏ hàng.");
+          navigate("/sign-in");
+          return;
+        }
+        addToCart(products);
+        alert("Sản phẩm đã được thêm vào giỏ hàng.");
+    };
     return (
         <div
             className="product-card-container"
@@ -130,17 +145,34 @@ const ProductCard = ({ products, index}) => {
 
                 {/* thêm vào giỏ */}
                 {/* sau này dùng để truy cập thay đổi giỏ hàng */}
-                <button
-                    className="product-card-act"
-                    style={{
-                        transition: "opacity 0.5s ease-in-out",
-                        opacity: hoverIndex === index ? 1 : 0,
-                    }}
-                >
-                    <div >
-                        <i class="bx bx-cart-alt text-center text-white fs-6 py-3 justify-content-center align-items-center"></i> Thêm vào giỏ
-                    </div>
-                </button>
+                {user !== null && user.role === "customer" && (
+                    <button
+                        className="product-card-act"
+                        style={{
+                            transition: "opacity 0.5s ease-in-out",
+                            opacity: hoverIndex === index ? 1 : 0,
+                        }}
+                    >
+                        <div onClick={handleAddToCart}>
+                            <i class="bx bx-cart-alt text-center text-black fs-5 py-3 justify-content-center align-items-center"></i>
+                            &nbsp; Thêm vào giỏ
+                        </div>
+                    </button>
+                )}
+
+                {user !== null && user.role === "admin" && (
+                    <button
+                        className="product-card-act"
+                        style={{
+                            transition: "opacity 0.5s ease-in-out",
+                            opacity: hoverIndex === index ? 1 : 0,
+                        }}
+                    >
+                        <div onClick={handleAddToCart}>
+                            Sửa sản phẩm
+                        </div>
+                    </button>
+                )}
             </div>
 
             <div className="product-card-info">

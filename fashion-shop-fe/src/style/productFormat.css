@@ -77,12 +77,12 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: black;
+  background-color: white;
   position: absolute;
   width: 60%;
   height: 10%;
-  font-size: 13px;
-  color: white;
+  font-size: 16px;
+  color: black;
   box-sizing: border-box;
   border-radius: 10px;
   left: 50%;

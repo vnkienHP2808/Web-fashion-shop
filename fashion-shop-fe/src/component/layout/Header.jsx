@@ -1,14 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import "../../style/header.css"
 import { Dropdown} from "react-bootstrap";
-
+import { CartContext } from "../../context/CartContext";
 const Header = () => {
     const navigate = useNavigate(); // hàm điều hướng
     const [categories, setCategories] = useState([]); // dùng để lấy dữ liệu trong db.json mục categories
     const isLoggedIn = sessionStorage.getItem("account") !== null; // check đăng nhập
     const loggedInUser = JSON.parse(sessionStorage.getItem("account")); // lấy thông tin tài khoản trong db.json
-
     //categoríe in db.json
     useEffect(() => {
         fetch("/db.json")
@@ -25,6 +24,12 @@ const Header = () => {
         navigate("/");
     };
     console.log(isLoggedIn);
+
+    // set số lượng sp trong cart
+    const { cart } = useContext(CartContext);
+    const totalItems = new Set(cart.map(item => item.id)).size; 
+    // hiện số lượng trong giỏ hàng theo số sp trong giỏ
+    // Set để giữ id duy nhất
     return (
         <div className="header">
             {/* Logo */}
@@ -79,9 +84,35 @@ const Header = () => {
             {/* Icons */}
             <div className="icon-container">
                 {/* Cart */}
-                <span style={{ cursor: "pointer"}}>
-                    <i className="bx bx-cart-alt fs-3" onClick={() => navigate("/cart")}></i>
-                </span>     
+                {loggedInUser !== null && loggedInUser.role === "customer" && (
+                    <span style={{ cursor: "pointer"}}>
+                        <div>
+                            <i className="bx bx-cart-alt fs-3" onClick={() => navigate("/cart")}></i>
+                            {totalItems > 0 && (
+                                <span
+                                    style={{
+                                        position: "absolute",
+                                        top: "27px", 
+                                        right: "120px",
+                                        background: "red",
+                                        color: "white",
+                                        borderRadius: "50%",
+                                        width: "15px",
+                                        height: "15px",
+                                        display: "flex",
+                                        alignItems: "center",
+                                        justifyContent: "center",
+                                        fontSize: "12px",
+                                        fontWeight: "bold",
+                                        lineHeight: "20px"
+                                    }}
+                                >
+                                    {totalItems}
+                                </span>
+                            )}
+                        </div>
+                    </span> 
+                )}    
                 {/* Account */}
                 <span
                     style={{ cursor: "pointer"}}
@@ -127,23 +158,6 @@ const Header = () => {
                         </Dropdown>
                     )}
                 </span>
-                {/* {loggedInUser !== null && loggedInUser.role === "customer" && (
-                    <span
-                        style={{ cursor: "pointer",}}
-                    >
-                        <a href="/cart">
-                            <i className="bx bx-cart-alt fs-3" onClick={() => navigate("/cart")}></i>
-                            {totalItems > 0 && (
-                                <span
-                                    className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
-                                    style={{ fontSize: "0.75rem" }}
-                                >
-                                    {totalItems}
-                                </span>
-                            )}
-                        </a>
-                    </span>
-                )} */}
 
                 {/* <div className="vr mx-3 align-self-center" style={{ height: "50%" }}></div> */}
                 {/* Login button

@@ -18,7 +18,7 @@ const Footer = ()=>{
                         <h2> Văn phòng </h2>
                         <p> <span className="fw-bold fs-6">Vị trí</span>: Km 10, Nguyễn Trãi, Mộ Lao, Hà Đông, Hà Nội, Việt Nam</p>
                         <p> <span className="fw-bold fs-6">Điện thoại</span>: +84 - 0123456789</p>
-                        <p className="email-id"> <span className="fw-bold fs-6">Email</span> : laptrinhweb@gmail.com </p>
+                        <p className="email-id"> <span className="fw-bold fs-6">Email</span> : <span style={{textDecoration: "underline"}}>laptrinhweb@gmail.com</span></p>
                     </div>
                     <div className="col">
                         <h2> Thông tin liên hệ </h2>
