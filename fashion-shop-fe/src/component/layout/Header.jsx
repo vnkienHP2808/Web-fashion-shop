@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import "../../style/header.css"
+import axios from "axios";
 import { Dropdown} from "react-bootstrap";
 import { CartContext } from "../../context/CartContext";
 const Header = () => {
@@ -10,12 +11,9 @@ const Header = () => {
     const loggedInUser = JSON.parse(sessionStorage.getItem("account")); // lấy thông tin tài khoản trong db.json
     //categoríe in db.json
     useEffect(() => {
-        fetch("/db.json")
-            .then((response) => response.json())
-            .then((data) => {
-                setCategories(data.categories);
-            })
-            .catch((error) => console.error("Error loading data:", error));
+        axios.get("http://localhost:9999/categories").then((res) => {
+            setCategories(res.data);
+        });
     }, []);
 
     const handleLogout = () => {
@@ -85,15 +83,15 @@ const Header = () => {
             <div className="icon-container">
                 {/* Cart */}
                 {loggedInUser !== null && loggedInUser.role === "customer" && (
-                    <span style={{ cursor: "pointer"}}>
+                    <span style={{ cursor: "pointer", position: "relative"}}>
                         <div>
                             <i className="bx bx-cart-alt fs-3" onClick={() => navigate("/cart")}></i>
                             {totalItems > 0 && (
                                 <span
                                     style={{
                                         position: "absolute",
-                                        top: "27px", 
-                                        right: "120px",
+                                        top: "5px",
+                                        right: "2px",
                                         background: "red",
                                         color: "white",
                                         borderRadius: "50%",
@@ -104,7 +102,8 @@ const Header = () => {
                                         justifyContent: "center",
                                         fontSize: "12px",
                                         fontWeight: "bold",
-                                        lineHeight: "20px"
+                                        lineHeight: "18px",
+                                        transform: "translate(50%, -50%)"
                                     }}
                                 >
                                     {totalItems}

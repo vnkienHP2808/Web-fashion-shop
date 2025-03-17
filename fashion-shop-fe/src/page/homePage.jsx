@@ -5,28 +5,23 @@ import ProductCategories from "../component/product/ProductCategory";
 import NewArrival from "../component/product/NewArrival";
 import SaleProduct from "../component/product/SaleProduct";
 import Footer from "../component/layout/Footer";
+import axios from "axios";
 const HomePage = () =>{
     const [products, setProduct] = useState([]);
     const [product_cat, setProductCategories] = useState([]);
 
     // product có cả new sale
     useEffect(() => {
-        fetch("/db.json") 
-            .then((response) => response.json())
-            .then((data) => {
-                setProduct(data.products);
-            })
-            .catch((error) => console.error("Error loading data:", error));
+        axios.get("http://localhost:9999/products").then((res) => {
+          setProduct(res.data);
+        });
     }, []);
 
     //category
     useEffect(() => {
-        fetch("/db.json") 
-            .then((response) => response.json())
-            .then((data) => {
-                setProductCategories(data.categories);
-            })
-            .catch((error) => console.error("Error loading data:", error));
+        axios.get("http://localhost:9999/categories").then((res) => {
+            setProductCategories(res.data);
+        });
     }, []);
 
     return (

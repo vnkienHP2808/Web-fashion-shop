@@ -5,7 +5,7 @@ import Header from "../component/layout/Header"
 import Breadcrump from "../component/ui/Breadcrump"
 import Footer from "../component/layout/Footer";
 import ProductInfo from "../component/product/ProductInfo";
-import RelateProduct from "../component/product/RelateProduct";
+import axios from "axios";
 
 
 const ProductDetail=()=>{
@@ -16,35 +16,24 @@ const ProductDetail=()=>{
 
     //products in db.json
     useEffect(() => {
-        fetch("/db.json")
-            .then((response) => response.json())
-            .then((data) => {
-                setProducts(data.products);
-            })
-            .catch((error) => console.error("Error loading data:", error));
+        axios.get("http://localhost:9999/products").then((res) => {
+          setProducts(res.data);
+        });
     }, []);
 
     //lấy sản phẩm theo id từ db.json để gán vào setProduct.
     useEffect(() => {
-        fetch("/db.json")
-            .then((response) => response.json())
-            .then((data) => {
-                const foundProduct = data.products.find((p) => p.id.toString() === id);
-                if (foundProduct) {
-                    setProduct(foundProduct);
-                }
-            })
-            .catch((error) => console.error("Error loading data:", error));
-    }, [id]);
+        axios
+          .get("http://localhost:9999/products/" + id)
+          .then((res) => setProduct(res.data))
+          .catch((err) => console.log("err"));
+    }, []);
 
     //categoríe in db.json
     useEffect(() => {
-        fetch("/db.json")
-            .then((response) => response.json())
-            .then((data) => {
-                setCategories(data.categories);
-            })
-            .catch((error) => console.error("Error loading data:", error));
+        axios.get("http://localhost:9999/categories").then((res) => {
+          setCategories(res.data);
+        });
     }, []);
 
     //tìm id tên loại sản phẩm cho breadcrump 

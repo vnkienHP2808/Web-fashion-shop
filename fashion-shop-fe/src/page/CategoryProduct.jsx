@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
+import axios from "axios";
 import Header from "../component/layout/Header";
 import Footer from "../component/layout/Footer";
 import ProductList from "../component/product/ProductList";
@@ -21,58 +22,28 @@ const CategoryProduct = () => {
     const [currentCategorySubcategories, setCurrentCategorySubcategories] = useState([]);
     const [hoverIndex, setHoverIndex] = useState(null);
 
-    // useEffect(() => {
-    //     fetch("/db.json")
-    //         .then((response) => response.json())
-    //         .then((data) => {
-    //             setProducts(data.products);
-    //         })
-    //         .catch((error) => console.error("Error loading data:", error));
-    // }, [categoryId, subcategoryId]);
-
-    // products in db.json
     useEffect(() => {
-        fetch("/db.json")
-            .then((response) => response.json())
-            .then((data) => {
-                if (!data.products) {
-                    console.error("Không tìm thấy danh sách sản phẩm trong db.json");
-                    return;
-                }
+        const url = subcategoryId
+          ? `http://localhost:9999/products?categoryId=${categoryId}&subcategoryId=${subcategoryId}`
+          : `http://localhost:9999/products?categoryId=${categoryId}`;
     
-                // lọc sản phẩm theo categoryId và subcategoryId (nếu có)
-                const FilteredProduct = data.products.filter((product) => {
-                    if (subcategoryId) {
-                        return ( // set giá trị cho 2 biến để tí so sánh lọc sản phẩm
-                            product.categoryId.toString() === categoryId &&
-                            product.subcategoryId.toString() === subcategoryId
-                        );
-                    }
-                    return product.categoryId.toString() === categoryId;
-                });
-    
-                setProducts(FilteredProduct);
-            })
-            .catch((error) => console.error("Error loading data", error));
+        axios.get(url).then((res) => {
+          setProducts(res.data);
+        });
     }, [categoryId, subcategoryId]);
     
     //category in db.json
     useEffect(() => {
-        fetch("/db.json")
-            .then((response) => response.json())
-            .then((data) => {
-                setCategories(data.categories);
-
-                // trong db.json có 1 mục mảng chứa những subcategory nhỏ của từng category,
-                // và biến này để xét khi lấy id và so sánh với subcategoryId trong products để phân loại
-                const currentCategory = data.categories.find(
-                    (cat) => cat.id.toString() === categoryId
-                );
-                if (currentCategory) {
-                    setCurrentCategorySubcategories(currentCategory.subcategories);
-                }
-            })
-            .catch((error) => console.error("Error loading data:", error));
+        axios.get("http://localhost:9999/categories").then((res) => {
+          setCategories(res.data);
+    
+          const currentCategory = res.data.find(
+            (cat) => cat.id.toString() === categoryId
+          );
+          if (currentCategory) {
+            setCurrentCategorySubcategories(currentCategory.subcategories);
+          }
+        });
     }, [categoryId]);
 
 

@@ -1,4 +1,5 @@
-import { useState, useContext } from "react"
+import { useState, useContext} from "react"
+import {useNavigate} from "react-router-dom"
 import "../../style/productFormat.css"
 import { CartContext } from "../../context/CartContext"
 /* giờ muốn dùng hover để set thì dùng thêm 1 biến hoverIndex
@@ -8,7 +9,7 @@ const ProductCard = ({ products, index}) => {
     /* type để phân biệt trường hợp sale hay 0 */
     const [hoverIndex, setHoverIndex] = useState(null); // khai báo và set giá trị 
     const user = JSON.parse(sessionStorage.getItem("account"));
-    
+    const navigate = useNavigate();
     const { addToCart } = useContext(CartContext);
     const handleAddToCart = (e) => {
         e.stopPropagation(); // ngăn click lên ảnh
@@ -168,9 +169,12 @@ const ProductCard = ({ products, index}) => {
                             opacity: hoverIndex === index ? 1 : 0,
                         }}
                     >
-                        <div onClick={handleAddToCart}>
+                        <a
+                            href={`/updateproduct/${products.id}`}
+                            style={{ textDecoration: "none" }}
+                        >
                             Sửa sản phẩm
-                        </div>
+                        </a>
                     </button>
                 )}
             </div>

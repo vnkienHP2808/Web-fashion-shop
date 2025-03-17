@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import Footer from "../../layout/Footer";
 import Header from "../../layout/Header";
+import axios from "axios";
 import Breadcrump from "../../ui/Breadcrump";
 import { CartContext } from "../../../context/CartContext";
 import { useNavigate } from "react-router-dom";
@@ -20,12 +21,9 @@ const Cart=()=>{
     //lấy dữ liệu
     const [categories, setCategories] = useState([]);
     useEffect(() => {
-        fetch("/db.json")
-            .then((response) => response.json())
-            .then((data) => {
-                setCategories(data.categories);
-            })
-            .catch((error) => console.error("Error loading data:", error));
+        axios.get("http://localhost:9999/categories").then((res) => {
+            setCategories(res.data);
+        });
     }, []);
 
     const navigate = useNavigate();

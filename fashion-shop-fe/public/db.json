@@ -129,231 +129,6 @@
       "status": "Activate"
     }
   ],
-
-  "product_new":[
-    {
-      "id": "1",
-      "name": "ọc ọc",
-      "id-prd": "MH01",
-      "brand": "Luôn vui tươi",
-      "category":"Sửa sau",
-      "price":"1.000.000",
-      "images": [
-        "/assets/user/image/product/pp1.jpg",
-        "/assets/user/image/product/pp1_1.jpg"
-      ]
-    },
-    {
-      "id": "2",
-      "name": "ọc ọc",
-      "id-prd": "MH02",
-      "brand": "Luôn vui tươi",
-      "category":"Sửa sau",
-      "price":"1.000.000",
-      "images": [
-        "/assets/user/image/product/pp2.jpg",
-        "/assets/user/image/product/pp2_1.jpg"
-      ]
-    },
-    {
-      "id": "3",
-      "name": "ọc ọc",
-      "id-prd": "MH03",
-      "brand": "Luôn vui tươi",
-      "category":"Sửa sau",
-      "price":"1.000.000",
-      "images": [
-        "/assets/user/image/product/pp3.jpg",
-        "/assets/user/image/product/pp3_1.jpg"
-      ]
-    },
-    {
-      "id": "4",
-      "name": "ọc ọc",
-      "id-prd": "MH04",
-      "brand": "Luôn vui tươi",
-      "category":"Sửa sau",
-      "price":"1.000.000",
-      "images": [
-        "/assets/user/image/product/pp4.jpg",
-        "/assets/user/image/product/pp4_1.jpg"
-      ]
-    },
-    {
-      "id": "5",
-      "name": "ọc ọc",
-      "id-prd": "MH05",
-      "brand": "Luôn vui tươi",
-      "category":"Sửa sau",
-      "price":"1.000.000",
-      "images": [
-        "/assets/user/image/product/pp5.jpg",
-        "/assets/user/image/product/pp5_1.jpg"
-      ]
-    },
-    {
-      "id": "6",
-      "name": "ọc ọc",
-      "id-prd": "MH06",
-      "brand": "Luôn vui tươi",
-      "category":"Sửa sau",
-      "price":"1.000.000",
-      "images": [
-        "/assets/user/image/product/pp6.jpg",
-        "/assets/user/image/product/pp6_1.jpg"
-      ]
-    },
-    {
-      "id": "7",
-      "name": "ọc ọc",
-      "id-prd": "MH07", 
-      "brand": "Luôn vui tươi",
-      "category":"Sửa sau",
-      "price":"1.000.000",
-      "images": [
-        "/assets/user/image/product/p1.1.png",
-        "/assets/user/image/product/p1.2.png"
-      ]
-    },
-    {
-      "id": "8",
-      "name": "ọc ọc",
-      "id-prd": "MH08",
-      "brand": "Luôn vui tươi",
-      "category":"Sửa sau",
-      "price":"1.000.000",
-      "images": [
-        "/assets/user/image/product/p2.1.jpg",
-        "/assets/user/image/product/p2.2.jpg"
-      ]
-    }
-  ],
-  
-  "product_sale": [
-    {
-      "id": "1",
-      "name": "Quần Dài Kẻ Sọc",
-      "categoryId": 1,
-      "subcategoryId": 1,
-      "price": 400000,
-      "salePrice": 280000,
-      "brand": "Luôn vui tươi",
-      "category":"Sửa sau",
-      "images": [
-        "/assets/user/image/product/p11.1.png",
-        "/assets/user/image/product/p11.2.png",
-        "/assets/user/image/product/p11.3.png"
-      ]
-    },
-    {
-      "id": "2",
-      "name": "Quần Dài Denim Ống Suông",
-      "categoryId": 1,
-      "subcategoryId": 1,
-      "price": 300000,
-      "salePrice": 280000,
-      "brand": "Luôn vui tươi",
-      "category":"Sửa sau",
-      "images": [
-        "/assets/user/image/product/p12.1.png",
-        "/assets/user/image/product/p12.2.png",
-        "/assets/user/image/product/p12.3.png",
-        "/assets/user/image/product/p12.4.png"
-      ]
-    },
-    {
-      "id": "3",
-      "name": "Quần Lửng Dài",
-      "categoryId": 1,
-      "subcategoryId": 2,
-      "price": 350000,
-      "salePrice": 300000,
-      "brand": "Luôn vui tươi",
-      "category":"Sửa sau",
-      "images": [
-        "/assets/user/image/product/p13.1.png",
-        "/assets/user/image/product/p13.2.png",
-        "/assets/user/image/product/p13.2.png",
-        "/assets/user/image/product/p14.2.png"
-      ]
-    },
-    {
-      "id": "4",
-      "name": "Quần Short Ánh Kim",
-      "categoryId": 1,
-      "subcategoryId": 3,
-      "price": 450000,
-      "salePrice": 400000,
-      "brand": "Luôn vui tươi",
-      "category":"Sửa sau",
-      "images": [
-        "/assets/user/image/product/p14.1.png",
-        "/assets/user/image/product/p14.2.png",
-        "/assets/user/image/product/p14.3.png"
-      ]
-    },
-    {
-      "id": "5",
-      "name": "Quần Short Bò",
-      "categoryId": 1,
-      "subcategoryId": 3,
-      "price": 480000,
-      "salePrice": 450000,
-      "brand": "Luôn vui tươi",
-      "category":"Sửa sau",
-      "images": [
-        "/assets/user/image/product/p15.1.png",
-        "/assets/user/image/product/p15.2.png",
-        "/assets/user/image/product/p15.3.png"
-      ]
-    },
-    {
-      "id": "6",
-      "name": "Quần Dài Kẻ Ánh Kim",
-      "categoryId": 1,
-      "subcategoryId": 1,
-      "price": 350000,
-      "salePrice": 320000,
-      "brand": "Luôn vui tươi",
-      "category":"Sửa sau",
-      "images": [
-        "/assets/user/image/product/p16.1.png",
-        "/assets/user/image/product/p16.2.png",
-        "/assets/user/image/product/p16.3.png"
-      ]
-    },
-    {
-      "id": "17",
-      "name": "Quần Dài Ống Suông Rộng",
-      "categoryId": 1,
-      "subcategoryId": 1,
-      "price": 600000,
-      "salePrice": 550000,
-      "brand": "Luôn vui tươi",
-      "category":"Sửa sau",
-      "images": [
-        "/assets/user/image/product/p17.1.png",
-        "/assets/user/image/product/p17.2.png",
-        "/assets/user/image/product/p17.3.png"
-      ]
-    },
-    {
-      "id": "8",
-      "name": "Quần Dài Ống Ly",
-      "categoryId": 1,
-      "subcategoryId": 1,
-      "price": 520000,
-      "salePrice": 300000,
-      "brand": "Luôn vui tươi",
-      "category":"Sửa sau",
-      "images": [
-        "/assets/user/image/product/p18.1.png",
-        "/assets/user/image/product/p18.2.png",
-        "/assets/user/image/product/p18.3.png"
-      ]
-    }
-  ],
-
   "products": [
     {
       "id": "1",
@@ -2283,6 +2058,21 @@
       "isSale": true,
       "isNew": true,
       "soldQuantity": "0"
+    },
+    {
+      "id": "f4b6",
+      "name": "Không biết",
+      "price": "10000",
+      "inStock": "10000000000",
+      "status": "Activate",
+      "occasion": "",
+      "images": [],
+      "categoryId": 2,
+      "subcategoryId": 5,
+      "salePrice": "1000",
+      "isSale": false,
+      "isNew": true,
+      "soldQuantity": "10000"
     }
   ],
   "users": [
@@ -2291,14 +2081,17 @@
       "username": "Customer1",
       "email": "nguyetanh0945@gmail.com",
       "password": "nguyetanh2311",
-      "phonenumber": "0972427628",
+      "phonenumber": [
+        "0972427628"
+      ],
       "address": [
         "1999 Bui Vien, Kien An, Hai Phong, Viet Nam",
         "661 Khuc Tri, Kien An, Hai Phong, Viet Nam",
         "99 Dragon St. Los Angeles America",
         "Bangkok",
         "Ha Noi",
-        "Vienie", "Địa chỉ mới"
+        "Vienie",
+        "Địa chỉ mới"
       ],
       "role": "customer",
       "status": "Active"
@@ -2308,27 +2101,37 @@
       "username": "Admin",
       "email": "admin@gmail.com",
       "password": "admin",
-      "phonenumber": "0972427629",
+      "phonenumber": [
+        "0972427629"
+      ],
       "role": "admin",
       "status": "Active"
     },
     {
       "id": "3",
-      "username": "Nguyet Anh",
-      "email": "anhbhnhe180164@fpt.edu.vn",
-      "password": "nguyetanh2311",
-      "phoneNumber": "0972427628",
-      "address": "999 Trieu Khuc, Ha Noi",
+      "username": "Nhân Kiên",
+      "email": "kien@gmail.com",
+      "password": "123",
+      "phonenumber": [
+        "0123456789",
+        "11111111111"
+      ],
+      "address": [
+        "Hải Phòng",
+        "Hà Nội"
+      ],
+      "role": "customer",
       "status": "Active"
     }
   ],
   "orders": [
     {
       "id": "1",
+      "customerId": 1,
+      "customerName": "Customer1",
       "items": [
         {
           "id": "3",
-          "customerId": 1,
           "name": "Quần Lửng",
           "categoryId": 1,
           "subcategoryId": 2,
@@ -2359,10 +2162,11 @@
     },
     {
       "id": "2",
+      "customerId": 1,
+      "customerName": "Customer1",
       "items": [
         {
           "id": "2",
-          "customerId": 1,
           "name": "Quần Lửng Baggy",
           "categoryId": 1,
           "subcategoryId": 2,
@@ -2406,10 +2210,45 @@
       "address": "1999 Bui Vien, Kien An, Hai Phong, Viet Nam",
       "date": "10/30/2024",
       "paymentMethod": "COD",
-      "status": "Pending Payment",
+      "status": "In Transit",
       "totalAmount": 870000,
       "shippingFee": 0,
       "grandTotal": 870000
+    },
+    {
+      "id": "1742114976383",
+      "customerId": "3",
+      "customerName": "Nhân Kiên",
+      "items": [
+        {
+          "id": "7",
+          "name": "Quần Dài Ống Loe",
+          "categoryId": 1,
+          "subcategoryId": 1,
+          "price": 800000,
+          "salePrice": null,
+          "isSale": false,
+          "isNew": true,
+          "status": "Activate",
+          "occasion": "Đi làm",
+          "images": [
+            "/assets/user/image/product/p7.1.jpg",
+            "/assets/user/image/product/p7.2.jpg",
+            "/assets/user/image/product/p7.3.jpg"
+          ],
+          "soldQuantity": 5,
+          "inStock": 15,
+          "quantity": 1
+        }
+      ],
+      "address": "Hà Nội",
+      "phonenumber": "11111111111",
+      "date": "3/16/2025",
+      "paymentMethod": "COD",
+      "status": "Đang chờ",
+      "totalAmount": 800000,
+      "shippingFee": 0,
+      "grandTotal": 800000
     }
   ]
 }

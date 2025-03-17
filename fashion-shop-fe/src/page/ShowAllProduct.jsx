@@ -6,6 +6,7 @@ import ProductList from "../component/product/ProductList";
 import Paginated from "../component/ui/Pagination";
 import Breadcrump from "../component/ui/Breadcrump";
 import Filter from "../component/ui/Filter";
+import axios from "axios";
 
 const AllProduct = () => {
     // 2 biến để duyệt sản phẩm và loại
@@ -24,22 +25,16 @@ const AllProduct = () => {
 
     //products in db.json
     useEffect(() => {
-        fetch("/db.json")
-            .then((response) => response.json())
-            .then((data) => {
-                setProducts(data.products);
-            })
-            .catch((error) => console.error("Error loading data:", error));
+        axios.get("http://localhost:9999/products").then((res) => {
+          setProducts(res.data);
+        });
     }, []);
 
     //category in db.json
     useEffect(() => {
-        fetch("/db.json")
-            .then((response) => response.json())
-            .then((data) => {
-                setCategory(data.categories);
-            })
-            .catch((error) => console.error("Error loading data:", error));
+        axios.get("http://localhost:9999/categories").then((res) => {
+          setCategories(res.data);
+        });
     }, []);
 
     // thay đổi khi 1 sự kiện nhấn vào mục chọn 

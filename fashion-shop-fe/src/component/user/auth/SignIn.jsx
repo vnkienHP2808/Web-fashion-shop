@@ -1,7 +1,7 @@
 import "../../../style/logIn_signUp_profile_Format.css";
 import { useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
-
+import axios from "axios";
 const LogIn= ()=>{
     const navigate = useNavigate();
     //set email, password để check
@@ -10,12 +10,9 @@ const LogIn= ()=>{
 
     const [users, setUsers] = useState([]); // thấy thông tin người đăng nhập trong db.json
     useEffect(() => {
-        fetch("/db.json")
-            .then((response) => response.json())
-            .then((data) => {
-                setUsers(data.users);
-            })
-            .catch((error) => console.error("Error loading data:", error));
+        axios.get("http://localhost:9999/users").then((res) => {
+          setUsers(res.data);
+        });
     }, []);
 
     useEffect(() => {
