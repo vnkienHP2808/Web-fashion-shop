@@ -166,7 +166,7 @@
         "/assets/user/image/product/p2.2.jpg",
         "/assets/user/image/product/p2.3.jpg"
       ],
-      "soldQuantity": 30,
+      "soldQuantity": 25,
       "inStock": 80
     },
     {
@@ -2114,11 +2114,27 @@
       "password": "123",
       "phonenumber": [
         "0123456789",
-        "11111111111"
+        "11111111111",
+        "12445"
       ],
       "address": [
         "Hải Phòng",
+        "Hà Nội",
         "Hà Nội"
+      ],
+      "role": "customer",
+      "status": "Active"
+    },
+    {
+      "id": "4",
+      "username": "Nguyễn Thị Thanh",
+      "email": "thanh@gmail.com",
+      "password": "123",
+      "phonenumber": [
+        "0123456789"
+      ],
+      "address": [
+        "Hải Phòng"
       ],
       "role": "customer",
       "status": "Active"
@@ -2249,6 +2265,168 @@
       "totalAmount": 800000,
       "shippingFee": 0,
       "grandTotal": 800000
+    },
+    {
+      "id": "1742197994588",
+      "customerId": "4",
+      "customerName": "Nguyễn Thị Thanh",
+      "items": [
+        {
+          "id": "1",
+          "name": "Quần Dài, Ống Suông",
+          "categoryId": "1",
+          "subcategoryId": "1",
+          "price": 450000,
+          "salePrice": 300000,
+          "isSale": true,
+          "isNew": true,
+          "status": "Activate",
+          "occasion": "Đi làm",
+          "images": [
+            "/assets/user/image/product/p1.1.png",
+            "/assets/user/image/product/p1.2.png",
+            "/assets/user/image/product/p1.3.png",
+            "/assets/user/image/product/p1.4.png"
+          ],
+          "soldQuantity": 50,
+          "inStock": 100,
+          "quantity": 1
+        }
+      ],
+      "address": "Hải Phòng",
+      "phonenumber": "0123456789",
+      "date": "3/17/2025",
+      "paymentMethod": "COD",
+      "status": "Đang chờ",
+      "totalAmount": 300000,
+      "shippingFee": 30000,
+      "grandTotal": 330000
+    },
+    {
+      "id": "1742198841162",
+      "customerId": "4",
+      "customerName": "Nguyễn Thị Thanh",
+      "items": [
+        {
+          "id": "2",
+          "name": "Quần Lửng Baggy",
+          "categoryId": 1,
+          "subcategoryId": 2,
+          "price": 350000,
+          "salePrice": 320000,
+          "isSale": true,
+          "isNew": false,
+          "status": "Activate",
+          "occasion": "Đi làm",
+          "images": [
+            "/assets/user/image/product/p2.1.jpg",
+            "/assets/user/image/product/p2.2.jpg",
+            "/assets/user/image/product/p2.3.jpg"
+          ],
+          "soldQuantity": 30,
+          "inStock": 80,
+          "quantity": 1
+        }
+      ],
+      "address": "Hải Phòng",
+      "phonenumber": "0123456789",
+      "date": "3/17/2025",
+      "paymentMethod": "COD",
+      "status": "Đang chờ",
+      "totalAmount": 320000,
+      "shippingFee": 30000,
+      "grandTotal": 350000
+    },
+    {
+      "id": "1742199467055",
+      "customerId": "3",
+      "customerName": "Nhân Kiên",
+      "items": [
+        {
+          "id": "2",
+          "name": "Quần Lửng Baggy",
+          "categoryId": 1,
+          "subcategoryId": 2,
+          "price": 350000,
+          "salePrice": 320000,
+          "isSale": true,
+          "isNew": false,
+          "status": "Activate",
+          "occasion": "Đi làm",
+          "images": [
+            "/assets/user/image/product/p2.1.jpg",
+            "/assets/user/image/product/p2.2.jpg",
+            "/assets/user/image/product/p2.3.jpg"
+          ],
+          "soldQuantity": 25,
+          "inStock": 80,
+          "quantity": 4
+        }
+      ],
+      "address": "Hà Nội",
+      "phonenumber": "0123456789",
+      "date": "3/17/2025",
+      "paymentMethod": "VNPay",
+      "status": "Đang chờ",
+      "totalAmount": 1280000,
+      "shippingFee": 0,
+      "grandTotal": 1280000
+    },
+    {
+      "id": 1742203612422,
+      "customerId": "3",
+      "customerName": "Nhân Kiên",
+      "items": [
+        {
+          "id": "3",
+          "name": "Quần Lửng",
+          "categoryId": 1,
+          "subcategoryId": 2,
+          "price": 400000,
+          "salePrice": 370000,
+          "isSale": true,
+          "isNew": false,
+          "status": "Activate",
+          "occasion": "Đi chơi",
+          "images": [
+            "/assets/user/image/product/p3.1.jpg",
+            "/assets/user/image/product/p3.2.jpg",
+            "/assets/user/image/product/p3.3.jpg",
+            "/assets/user/image/product/p3.4.jpg"
+          ],
+          "soldQuantity": 20,
+          "inStock": 50,
+          "quantity": 3
+        },
+        {
+          "id": "4",
+          "name": "Quần Short",
+          "categoryId": 1,
+          "subcategoryId": 3,
+          "price": 500000,
+          "salePrice": null,
+          "isSale": false,
+          "isNew": true,
+          "status": "Activate",
+          "occasion": "Đi chơi",
+          "images": [
+            "/assets/user/image/product/p4.1.jpg",
+            "/assets/user/image/product/p4.2.jpg",
+            "/assets/user/image/product/p4.3.jpg"
+          ],
+          "soldQuantity": 10,
+          "inStock": 30,
+          "quantity": 1
+        }
+      ],
+      "address": "Hải Phòng",
+      "phonenumber": "12445",
+      "date": "3/17/2025",
+      "paymentMethod": "VNPay",
+      "status": "Đang chờ",
+      "totalAmount": 1610000,
+      "shippingFee": 0,
+      "grandTotal": 1610000
     }
   ]
 }

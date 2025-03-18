@@ -8,7 +8,9 @@ const Profile = () => {
 
     // lấy địa chỉ, có thể có nhiều địa chỉ
     const addressOptions = user.address;
+    const phoneNumberOptions = user.phonenumber;
     const [selectedAddress, setSelectedAddress] = useState(user.address);
+    const [selectedPhone, setSelectedPhone] = useState(user.phonenumber)
 
     return (
         <div style={{
@@ -49,7 +51,19 @@ const Profile = () => {
                                 {user.role !== "admin" && (
                                     <div className="input-container-profile">
                                         <span>Số điện thoại:</span>
-                                        <p> {user.phonenumber} </p>
+                                        {user.phonenumber && (
+                                            <select
+                                                value={selectedPhone}
+                                                onChange={(e) => setSelectedPhone(e.target.value)}
+                                                className="select-address"
+                                            >
+                                                {phoneNumberOptions.map((phone, index) => (
+                                                    <option key={index} value={phone}>
+                                                        {phone}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                        )}
                                     </div>
                                 )}
 

@@ -123,12 +123,17 @@ const Header = () => {
                             </Dropdown.Toggle>
 
                             <Dropdown.Menu>
-                                {loggedInUser.role === "customer" && ( // khách thì tài khoản
+                                {loggedInUser.role === "customer" && ( 
                                     <Dropdown.Item onClick={() => navigate("/profile")}>
                                         Tài khoản
                                     </Dropdown.Item>
                                 )}
-                                {loggedInUser.role === "admin" && ( // admin thì điều hướng tới tài khoản riêng của admin
+                                {loggedInUser.role === "customer" && ( 
+                                    <Dropdown.Item onClick={() => navigate("/myorder")}>
+                                        Đơn hàng
+                                    </Dropdown.Item>
+                                )}
+                                {loggedInUser.role === "admin" && ( 
                                     <Dropdown.Item onClick={() => navigate("/profile")}>
                                         Tài khoản
                                     </Dropdown.Item>

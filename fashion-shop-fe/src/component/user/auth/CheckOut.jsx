@@ -265,6 +265,20 @@ const Checkout = () => {
                         />
                         VNPay
                     </label>
+                    {paymentMethod === "VNPay" && (
+                        <span
+                            style={{
+                                display: "flex",
+                                width: "200px",
+                                height: "200px",
+                                marginLeft: "70px",
+                                marginTop: "15px",
+                                border: "1px solid"
+                            }}
+                        >
+                            <img src="/assets/user/image/VNPay.jpeg" alt="QR VNPay" style={{ width: "100%", height: "100%" }} />
+                        </span>
+                    )}
                 </div>
 
                 <button onClick={handleCheckout} className="checkout-btn">

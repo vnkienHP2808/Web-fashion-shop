@@ -29,7 +29,7 @@ const SignUp =()=>{
                 username,
                 email,
                 password,
-                phonenumber,
+                phonenumber : [phonenumber],
                 address : [address],
                 role: "customer",
                 status: "Active"
