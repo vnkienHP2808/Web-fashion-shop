@@ -8,13 +8,6 @@ const LogIn= ()=>{
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
-    const [users, setUsers] = useState([]); // thấy thông tin người đăng nhập trong db.json
-    useEffect(() => {
-        axios.get("http://localhost:9999/users").then((res) => {
-          setUsers(res.data);
-        });
-    }, []);
-
     useEffect(() => {
         const account = sessionStorage.getItem("account"); //lấy dữ liệu tài khoản từ sessionStorage
         if (account) { //nếu đã đăng nhập
@@ -24,24 +17,26 @@ const LogIn= ()=>{
     
 
     //xử lý việc check thông tin nhập vào với db.json để xem xét đăng nhập
-    const handleLogin = (e) => {
+    const handleLogin = async (e) => {
         e.preventDefault();
-        let check = false;
-        for (let u of users) {
-            if (email === u.email && password === u.password) {
-                console.log("Đăng nhập thành công");
-                sessionStorage.setItem("account", JSON.stringify(u));
-                console.log(JSON.stringify(u));
-                alert("Đăng nhập thành công!");
-                check = true;
-                navigate("/"); // sau khi đăng nhập thành công thì chuyển hướng sang trang chủ
-                break;
-            }
-        }
-        if (!check) {
+    
+        try {
+            const response = await axios.post("http://localhost:8080/auth/sign-in", {
+                email,
+                password
+            });
+    
+            const user = response.data;
+            sessionStorage.setItem("account", JSON.stringify(user));
+            alert("Đăng nhập thành công!");
+            navigate("/");
+    
+        } catch (error) {
             alert("Sai email hoặc mật khẩu");
+            console.error("Đăng nhập thất bại", error);
         }
     };
+    
     return(
         <div style={{
             width: "100%",

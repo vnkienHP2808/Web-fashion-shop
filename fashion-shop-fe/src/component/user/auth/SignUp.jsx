@@ -29,7 +29,7 @@ const SignUp = () => {
         };
 
         try {
-            const response = await axios.post("http://localhost:8080/api/auth/sign-up", payload);
+            const response = await axios.post("http://localhost:8080/auth/sign-up", payload);
             alert("Đăng ký thành công!");
             navigate("/sign-in"); // điều hướng đến đăng nhập sau khi đăng ký
         } catch (err) {
