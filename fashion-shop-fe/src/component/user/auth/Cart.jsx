@@ -238,7 +238,6 @@ const Cart=()=>{
                             <hr />
                             <ul style={{ listStyleType: "disc", paddingLeft: "20px" }}>
                                 <li>Phí vận chuyển sẽ được tính ở trang thanh toán.</li>
-                                <li>Bạn cũng có thể nhập mã giảm giá ở trang thanh toán.</li>
                             </ul>
                             <Button
                                 variant="dark"

@@ -20,10 +20,14 @@ const OrderManagement = () => {
 
         setOrders(updatedOrders); //cập nhật state ngay lập tức
 
-        axios.put(`http://localhost:9999/orders/${id}`, { status }).then(() => {
-            // chỉ cập nhật treuowngf status
+        // Tìm lại đơn hàng đã cập nhật để gửi toàn bộ
+        const updatedOrder = updatedOrders.find(order => order.id === id);
+
+        axios.put(`http://localhost:9999/orders/${id}`, updatedOrder)
+        .then(() => {
             console.log("Trạng thái đơn hàng đã được cập nhật!");
-        }).catch((error) => {
+        })
+        .catch((error) => {
             console.error("Lỗi", error);
         });
     };
