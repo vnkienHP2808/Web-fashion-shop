@@ -6,41 +6,31 @@ const Profile = () => {
     const user = JSON.parse(sessionStorage.getItem("account"));
     const navigate = useNavigate();
 
-    // lấy địa chỉ, có thể có nhiều địa chỉ
-    const addressOptions = user.address;
-    const phoneNumberOptions = user.phonenumber;
-    const [selectedAddress, setSelectedAddress] = useState(user.address);
-    const [selectedPhone, setSelectedPhone] = useState(user.phonenumber)
+    const phoneNumberOptions = user.phones || []; // thay đổi từ `phonenumber` sang `phones`
+    const addressOptions = user.addresses || [];  // thay đổi từ `address` sang `addresses`
+
+    const [selectedPhone, setSelectedPhone] = useState(phoneNumberOptions[0] || "");
+    const [selectedAddress, setSelectedAddress] = useState(addressOptions[0] || "");
 
     return (
-        <div style={{
-            width: "100%",
-        }}>
+        <div style={{ width: "100%" }}>
             <div className="log-in-container">
                 <img className="background-img" src="assets/user/image/background_profile.jpg" alt="Background" />
-                <div className="form-container" style={{
-                    backgroundColor: "rgba(238, 219, 196, 0.6)",
-                }}>
-                    <p style={{
-                        fontSize: "50px",
-                        letterSpacing: "2px",
-                        marginTop: "20px",
-                        marginBottom: "10px",
-                    }}>THÔNG TIN CÁ NHÂN</p>
+                <div className="form-container" style={{ backgroundColor: "rgba(238, 219, 196, 0.6)" }}>
+                    <p style={{ fontSize: "50px", letterSpacing: "2px", marginTop: "20px", marginBottom: "10px" }}>
+                        THÔNG TIN CÁ NHÂN
+                    </p>
 
                     <div>
                         <div className="profile-info">
                             <div className="profile-img">
-                                <i className="bi bi-person-circle" style={{
-                                    fontSize: "150px",
-                                    margin: "0 10px"
-                                }}></i>
+                                <i className="bi bi-person-circle" style={{ fontSize: "150px", margin: "0 10px" }}></i>
                             </div>
 
                             <div className="profile-text">
                                 <div className="input-container-profile">
                                     <span>Họ và tên:</span>
-                                    <p> {user.username} </p>
+                                    <p>{user.name}</p>
                                 </div>
 
                                 <div className="input-container-profile">
@@ -48,10 +38,10 @@ const Profile = () => {
                                     <p>{user.email}</p>
                                 </div>
 
-                                {user.role !== "admin" && (
-                                    <div className="input-container-profile">
-                                        <span>Số điện thoại:</span>
-                                        {user.phonenumber && (
+                                {user.role !== "Admin" && (
+                                    <>
+                                        <div className="input-container-profile">
+                                            <span>Số điện thoại:</span>
                                             <select
                                                 value={selectedPhone}
                                                 onChange={(e) => setSelectedPhone(e.target.value)}
@@ -63,14 +53,10 @@ const Profile = () => {
                                                     </option>
                                                 ))}
                                             </select>
-                                        )}
-                                    </div>
-                                )}
+                                        </div>
 
-                                {user.role !== "admin" && (
-                                    <div className="input-container-profile">
-                                        <span>Địa chỉ:</span>
-                                        {user.address && (
+                                        <div className="input-container-profile">
+                                            <span>Địa chỉ:</span>
                                             <select
                                                 value={selectedAddress}
                                                 onChange={(e) => setSelectedAddress(e.target.value)}
@@ -82,21 +68,22 @@ const Profile = () => {
                                                     </option>
                                                 ))}
                                             </select>
-                                        )}
-                                    </div>
+                                        </div>
+                                    </>
                                 )}
                             </div>
                         </div>
 
-                        <div className="profile-act" style={{marginTop: "30px"}}>
-                            <button className="set-up" style={{
-                                marginRight: "70px",
-                            }} onClick={() => navigate("/profile")} >
+                        <div className="profile-act" style={{ marginTop: "30px" }}>
+                            <button
+                                className="set-up"
+                                style={{ marginRight: "70px" }}
+                                onClick={() => navigate("/profile")}
+                            >
                                 CẬP NHẬT
                             </button>
 
-                            <button className="change-password"
-                                    onClick={()=> navigate("/change-password")}>
+                            <button className="change-password" onClick={() => navigate("/change-password")}>
                                 ĐỔI MẬT KHẨU
                             </button>
                         </div>
@@ -104,9 +91,7 @@ const Profile = () => {
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default Profile
-
-// còn phải thay đổi ảnh đại diện khi cần
+export default Profile;

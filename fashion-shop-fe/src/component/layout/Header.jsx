@@ -82,7 +82,7 @@ const Header = () => {
             {/* Icons */}
             <div className="icon-container">
                 {/* Cart */}
-                {loggedInUser !== null && loggedInUser.role === "customer" && (
+                {loggedInUser !== null && loggedInUser.role === "Customer" && (
                     <span style={{ cursor: "pointer", position: "relative"}}>
                         <div>
                             <i className="bx bx-cart-alt fs-3" onClick={() => navigate("/cart")}></i>
@@ -123,22 +123,22 @@ const Header = () => {
                             </Dropdown.Toggle>
 
                             <Dropdown.Menu>
-                                {loggedInUser.role === "customer" && ( 
+                                {loggedInUser.role === "Customer" && ( 
                                     <Dropdown.Item onClick={() => navigate("/profile")}>
                                         Tài khoản
                                     </Dropdown.Item>
                                 )}
-                                {loggedInUser.role === "customer" && ( 
+                                {loggedInUser.role === "Customer" && ( 
                                     <Dropdown.Item onClick={() => navigate("/myorder")}>
                                         Đơn hàng
                                     </Dropdown.Item>
                                 )}
-                                {loggedInUser.role === "admin" && ( 
+                                {loggedInUser.role === "Admin" && ( 
                                     <Dropdown.Item onClick={() => navigate("/profile")}>
                                         Tài khoản
                                     </Dropdown.Item>
                                 )}
-                                {loggedInUser.role === "admin" && ( // route quản lý về user, product hay order
+                                {loggedInUser.role === "Admin" && ( // route quản lý về user, product hay order
                                     <Dropdown.Item onClick={() => navigate("/admin")}>
                                         Quản lý
                                     </Dropdown.Item>

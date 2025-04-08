@@ -146,7 +146,7 @@ const ProductCard = ({ products, index}) => {
 
                 {/* thêm vào giỏ */}
                 {/* sau này dùng để truy cập thay đổi giỏ hàng */}
-                {user !== null && user.role === "customer" && (
+                {user !== null && user.role === "Customer" && (
                     <button
                         className="product-card-act"
                         style={{
@@ -161,7 +161,7 @@ const ProductCard = ({ products, index}) => {
                     </button>
                 )}
 
-                {user !== null && user.role === "admin" && (
+                {user !== null && user.role === "Admin" && (
                     <button
                         className="product-card-act"
                         style={{

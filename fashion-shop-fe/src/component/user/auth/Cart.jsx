@@ -37,7 +37,7 @@ const Cart=()=>{
         }
 
         const loggedInUser = JSON.parse(storedUser);
-        if (!loggedInUser || loggedInUser.role !== "customer") {
+        if (!loggedInUser || loggedInUser.role !== "Customer") {
             navigate("/404");
             return;
         }
