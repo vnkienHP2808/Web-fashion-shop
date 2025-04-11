@@ -8,25 +8,25 @@ import { useNavigate } from "react-router-dom";
 const ProductInfo=({product, listproduct})=>{
     //ảnh minh họa sản phẩm
     const [selectedImage, setSelectedImage] = useState(
-        product.images && product.images.length > 0 ? product.images[0] : ""
+        product.images && product.images.length > 0 ? product.images[0].imageLink : ""
       );
     // quản lý kho hàng
     const [quantity, setQuantity] = useState(1);
     
     //chọn size
-    const [selectedSize, setSelectedSize] = useState(null);
     const sizes = ["S", "M", "L", "XL"];
+    const [selectedSize, setSelectedSize] = useState("S");
 
     useEffect(() => {
         if (product.images && product.images.length > 0) {
-            setSelectedImage(product.images[0]);
+          setSelectedImage(product.images[0].imageLink);
         }
-    }, [product.images]);
+      }, [product.idProduct]);
 
     // sử dụng để thêm vào giỏ hàng
     const { addToCart } = useContext(CartContext);
     const handleAddToCart = () => {
-        if (product.inStock > 0) {
+        if (product.in_stock > 0) {
           addToCart({ ...product, quantity });
           alert("Sản phẩm đã được thêm vào giỏ hàng!");
         } else {
@@ -39,7 +39,7 @@ const ProductInfo=({product, listproduct})=>{
             if (type === "increase") {
                 //nếu số lượng hiện tại < số lượng còn trong kho => tăng thêm 1.
                 //nếu đã đạt tối đa => giữ nguyên.
-                return prev < product.inStock ? prev + 1 : prev;
+                return prev < product.in_stock ? prev + 1 : prev;
             } else {
                 //nếu số lượng lớn hơn 1, giảm đi 1.
                 //nếu số lượng bằng 1, giữ nguyên <0 giảm về 0 để tránh lỗi mua hàng>.
@@ -67,11 +67,11 @@ const ProductInfo=({product, listproduct})=>{
                         {product.images && product.images.map((image, index) => (
                             <img 
                                 key={index}
-                                src={image}
+                                src={image.imageLink}
                                 alt="Product img"
-                                onClick={() => setSelectedImage(image)}
+                                onClick={() => setSelectedImage(image.imageLink)}
                                 className={`thumbnail ${
-                                    selectedImage === image ? "active" : ""
+                                    selectedImage === image.imageLink ? "active" : ""
                                 }`}
                             />
                         ))}
@@ -81,23 +81,27 @@ const ProductInfo=({product, listproduct})=>{
                 <div className="product-detail">
                     <h2>{product.name}</h2>
                     <h5>
-                        Mã sản phẩm: {product.id} | Tình trạng:{" "}
-                        {product.inStock > 0 ? "Còn Hàng" : "Hết Hàng"}
+                        Mã sản phẩm: {product.idProduct} | Tình trạng:{" "}
+                        {product.in_stock > 0 ? "Còn Hàng" : "Hết Hàng"}
                     </h5>
+
+                    <small className="text-muted" >
+                        Số lượng đã bán:   {product.sold_quantity}
+                    </small>
 
                     <table className="product-info-table">
                         <tbody>
                             <tr>
                                 <td>Giá:</td>
                                 <td>
-                                    {product.salePrice != null && product.isSale ? (
+                                    {product.sale_price != null && product.is_sale ? (
                                         <>
-                                            <span className="sale-price">{product.salePrice}₫</span>
+                                            <span className="sale-price">{product.sale_price}₫</span>
                                             <span className="original-price">{product.price}₫</span>
                                             <span className="discount">
                                                 <i className="bi bi-lightning-charge-fill"></i>-
                                                 {Math.floor(
-                                                    ((product.price - product.salePrice) /
+                                                    ((product.price - product.sale_price) /
                                                         product.price) *
                                                     100
                                                 )}
@@ -142,13 +146,13 @@ const ProductInfo=({product, listproduct})=>{
                                         <Button
                                             variant="light"
                                             onClick={() => handleQuantityChange("increase")}
-                                            disabled={quantity >= product.inStock}
+                                            disabled={quantity >= product.in_stock}
                                         >
                                             <i className="bi bi-plus-lg"></i>
                                         </Button>
                                     </div>
                                     <small className="text-muted" style={{marginLeft: "10px"}}>
-                                        {product.inStock} sản phẩm có sẵn
+                                        {product.in_stock} sản phẩm có sẵn
                                     </small>
                                 </td>
                             </tr>
@@ -203,8 +207,8 @@ const ProductInfo=({product, listproduct})=>{
             <div>
                 <RelateProduct
                     products={listproduct}
-                    catid={product.categoryId}
-                    id={product.id}
+                    catid={product.idCat}
+                    id={product.idProduct}
                 ></RelateProduct>
             </div>
         </div>

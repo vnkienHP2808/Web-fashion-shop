@@ -2079,8 +2079,8 @@
     {
       "id": "1",
       "username": "Customer1",
-      "email": "nguyetanh0945@gmail.com",
-      "password": "nguyetanh2311",
+      "email": "email@gmail.com",
+      "password": "123456",
       "phonenumber": [
         "0972427628"
       ],
@@ -2093,7 +2093,7 @@
         "Vienie",
         "Địa chỉ mới"
       ],
-      "role": "customer",
+      "role": "Customer",
       "status": "Active"
     },
     {
@@ -2104,39 +2104,7 @@
       "phonenumber": [
         "0972427629"
       ],
-      "role": "admin",
-      "status": "Active"
-    },
-    {
-      "id": "3",
-      "username": "Nhân Kiên",
-      "email": "kien@gmail.com",
-      "password": "123",
-      "phonenumber": [
-        "0123456789",
-        "11111111111",
-        "12445"
-      ],
-      "address": [
-        "Hải Phòng",
-        "Hà Nội",
-        "Hà Nội"
-      ],
-      "role": "customer",
-      "status": "Active"
-    },
-    {
-      "id": "4",
-      "username": "Nguyễn Thị Thanh",
-      "email": "thanh@gmail.com",
-      "password": "123",
-      "phonenumber": [
-        "0123456789"
-      ],
-      "address": [
-        "Hải Phòng"
-      ],
-      "role": "customer",
+      "role": "Admin",
       "status": "Active"
     }
   ],

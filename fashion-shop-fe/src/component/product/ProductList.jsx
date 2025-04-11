@@ -1,46 +1,40 @@
-import React, { useState} from "react";
-import ProductCard from "./ProductCard"
-import "../../style/productFormat.css"
-import AllButton from "../ui/AllButton"
+import React, { useState } from "react";
+import ProductCard from "./ProductCard";
+import "../../style/productFormat.css";
+import AllButton from "../ui/AllButton";
 
-const ProductList =({products, filterFn, title, isShowAll, btnhref})=>{
-    // set số lượng sản phẩm muốn đưa ra
+const ProductList = ({ products, filterFn, title, isShowAll, btnhref }) => {
     const [itemsToShow, setItemToShow] = useState(8);
-    return(
-        <div 
-            className="product-list-container"      
-        >
-            {/* title chuyển sang file khác */}
+
+    return (
+        <div className="product-list-container">
             {!isShowAll ? (
                 <>
                     <div className="product-list-grid">
                         {products
-                            .filter( // hàm lọc sản phẩm theo điều kiện
-                                (product) => product.status === "Activate" && filterFn(product)
+                            .filter(
+                                (product) =>
+                                    product.status === "Active" && filterFn(product)
                             )
                             .slice(0, itemsToShow)
-                            .map((product, index) =>(
+                            .map((product, index) => (
                                 <a
-                                    href={`/products/${product.id}`}
+                                    key={product.idProduct}
+                                    href={`/products/${product.idProduct}`}
                                     style={{ textDecoration: "none" }}
                                 >
-                                    <ProductCard 
-                                        key={index}
-                                        products={product}  
-                                        index={index} 
-                                        /*type để phân biệt tính chất hàng, title để set type*/
-                                    >
-                                    </ProductCard>
+                                    <ProductCard
+                                        products={product}
+                                        index={index}
+                                    />
                                 </a>
-                            )
-                        )}
+                            ))}
                     </div>
                     <div>
                         <AllButton
                             text={`Xem tất cả ${title}`.toUpperCase()}
                             href={btnhref}
                         />
-                        {/* đã chuyển button sang file AllButton */}
                     </div>
                 </>
             ) : (
@@ -48,30 +42,33 @@ const ProductList =({products, filterFn, title, isShowAll, btnhref})=>{
                     <div className="product-list-grid">
                         {products
                             .filter(
-                                (product) => product.status === "Activate" && filterFn(product)
+                                (product) =>
+                                    product.status === "Active" && filterFn(product)
                             )
                             .map((product, index) => (
-                                <a 
-                                    href={`/products/${product.id}`}
-                                    style={{textDecoration: "none"}}
-                                >   
+                                <a
+                                    key={product.idProduct}
+                                    href={`/products/${product.idProduct}`}
+                                    style={{ textDecoration: "none" }}
+                                >
                                     <ProductCard
-                                        key={index}
                                         products={product}
                                         index={index}
-                                        type = {
-                                            title === "Hàng mới về" ? "New" :
-                                            title === "Hàng giảm giá" ? "Sale" : ""
+                                        type={
+                                            title === "Hàng mới về"
+                                                ? "New"
+                                                : title === "Hàng giảm giá"
+                                                ? "Sale"
+                                                : ""
                                         }
-                                    ></ProductCard>
+                                    />
                                 </a>
-                            ))
-                        }
+                            ))}
                     </div>
                 </>
             )}
         </div>
-    )
-}
+    );
+};
 
-export default ProductList
+export default ProductList;

@@ -1,9 +1,10 @@
 .filter-sidebar {
     position: fixed;
     top: 0;
-    left: -300px; 
-    width: 300px; 
+    left: -400px; 
+    width: 400px; 
     height: 100vh;
+    overflow-y: auto;
     background-color: white; 
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); 
     transition: left 0.3s ease; 

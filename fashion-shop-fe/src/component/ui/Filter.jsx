@@ -1,11 +1,13 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Form, Row, Col } from "react-bootstrap";
-import "../../style/filter.css"
+import "../../style/filter.css";
 
 const Filter = ({
   categories,
   selectedCategory,
+  selectedSubCategory,
   handleCategoryChange,
+  handleSubCategoryChange,
   selectedPriceRange,
   handlePriceRangeChange,
   selectedOccasion,
@@ -13,10 +15,32 @@ const Filter = ({
   openFilter,
   setOpenFilter,
 }) => {
+  const [activeCategoryId, setActiveCategoryId] = useState(null);
+
+  useEffect(() => {
+    // Mỗi khi selectedCategory thay đổi, cập nhật activeCategoryId
+    if (selectedCategory.length === 1) {
+      setActiveCategoryId(selectedCategory[0]);
+    } else {
+      setActiveCategoryId(null);
+    }
+  }, [selectedCategory]);
+
+  const handleCategorySelect = (categoryId) => {
+    setActiveCategoryId(categoryId);
+    handleCategoryChange({
+      target: {
+        value: categoryId,
+        checked: true,
+      },
+    });
+  };
+
+  const selectedCategoryObj = categories.find((cat) => cat.id === activeCategoryId);
+
   return (
     <div>
       <span
-      // bấm mở bảng filter
         onClick={() => setOpenFilter(!openFilter)}
         style={{
           cursor: "pointer",
@@ -34,24 +58,51 @@ const Filter = ({
 
       <div className={`filter-sidebar ${openFilter ? "active" : ""}`}>
         <button className="close-btn" onClick={() => setOpenFilter(false)}>
-          <i class="bi bi-x"></i>
+          <i className="bi bi-x"></i>
         </button>
+
         <div style={{ padding: "10px" }}>
           <Row>
+            {/* --- LỌC DANH MỤC --- */}
             <Col>
               <h6>Loại sản phẩm</h6>
-              {categories.map((category) => (
+              {categories.map((cat) => (
                 <Form.Check
-                  type="checkbox"
-                  key={category.id}
-                  label={category.name}
-                  value={category.id}
-                  checked={selectedCategory.includes(category.id.toString())}
-                  onChange={handleCategoryChange}
+                  type="radio"
+                  name="category"
+                  key={cat.id}
+                  label={cat.name}
+                  value={cat.id}
+                  checked={selectedCategory.includes(cat.id)}
+                  onChange={() => handleCategorySelect(cat.id)}
                 />
               ))}
+
+              {selectedCategoryObj && (
+                <div style={{ paddingLeft: "10px", marginTop: "10px" }}>
+                  <h6>Loại chi tiết</h6>
+                  {selectedCategoryObj.subCategories.map((sub) => (
+                    <Form.Check
+                      type="checkbox"
+                      key={sub.id_subcat}
+                      label={sub.name}
+                      value={sub.id_subcat}
+                      checked={selectedSubCategory.includes(sub.id_subcat)}
+                      onChange={(e) =>
+                        handleSubCategoryChange({
+                          target: {
+                            value: parseInt(e.target.value),
+                            checked: e.target.checked,
+                          },
+                        })
+                      }
+                    />
+                  ))}
+                </div>
+              )}
             </Col>
 
+            {/* --- LỌC GIÁ --- */}
             <Col>
               <h6>Khoảng giá</h6>
               <Form.Check
@@ -77,6 +128,7 @@ const Filter = ({
               />
             </Col>
 
+            {/* --- LỌC THEO DỊP --- */}
             <Col>
               <h6>Theo dịp</h6>
               <Form.Check

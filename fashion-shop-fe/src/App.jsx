@@ -38,10 +38,9 @@ function App() {
         <Route path="/products/new" element={<AllNewProduct />} />
         <Route path="/products/sale" element={<AllSaleProduct />} />
         <Route path="/products/category/:categoryId" element={<CategoryProduct />} />
+        <Route path="/products/category/:categoryId/subcategory/:subcategoryId" element={<CategoryProduct />} />
+
         <Route path="/myorder" element={<MyOrderPage/>} />
-        <Route
-          path="/products/category/:categoryId/subcategory/:subcategoryId"
-          element={<CategoryProduct />} />
         <Route path="/products/:id" element={<ProductDetail />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/404" element={<NotFound />} />

@@ -20,12 +20,14 @@ const CategoryProduct = () => {
     const [productsPerPage] = useState(20);
     const [openFilter, setOpenFilter] = useState(false);
     const [currentCategorySubcategories, setCurrentCategorySubcategories] = useState([]);
+    const [selectedSubCategory, setSelectedSubCategory] = useState([]);
+
     const [hoverIndex, setHoverIndex] = useState(null);
 
     useEffect(() => {
         const url = subcategoryId
-          ? `http://localhost:9999/products?categoryId=${categoryId}&subcategoryId=${subcategoryId}`
-          : `http://localhost:9999/products?categoryId=${categoryId}`;
+          ? `http://localhost:8080/api/products?categoryId=${categoryId}&subcategoryId=${subcategoryId}`
+          : `http://localhost:8080/api/products?categoryId=${categoryId}`;
     
         axios.get(url).then((res) => {
           setProducts(res.data);
@@ -34,25 +36,40 @@ const CategoryProduct = () => {
     
     //category in db.json
     useEffect(() => {
-        axios.get("http://localhost:9999/categories").then((res) => {
-          setCategories(res.data);
+        axios.get("http://localhost:8080/api/categories").then((res) => {
+            setCategories(res.data);
     
-          const currentCategory = res.data.find(
-            (cat) => cat.id.toString() === categoryId
-          );
-          if (currentCategory) {
-            setCurrentCategorySubcategories(currentCategory.subcategories);
-          }
+            const currentCategory = res.data.find(
+                (cat) => cat.id.toString() === categoryId
+            );
+            if (currentCategory) {
+                setCurrentCategorySubcategories(currentCategory.subCategories);
+            }
         });
     }, [categoryId]);
+    
 
 
   // thay đổi khi 1 sự kiện nhấn vào mục chọn 
   const handleCategoryChange = (event) => {
-    const { value, checked } = event.target; // xem chỉ mục vừa thay đổi
-    setSelectedCategory((prev) =>
-      checked ? [...prev, value] : prev.filter((item) => item !== value)
-    // checked == true (checkbox được chọn) => thêm value vào mảng và ngược lại
+    const { value, checked } = event.target;
+    const numberValue = Number(value);
+
+    if (checked) {
+      setSelectedCategory([numberValue]);
+    } else {
+      setSelectedCategory([]);
+    }
+
+    setSelectedSubCategory([]);
+    setCurrentPage(1);
+  };
+
+  const handleSubCategoryChange = (event) => {
+    const { value, checked } = event.target;
+    const numberValue = Number(value);
+    setSelectedSubCategory((prev) =>
+      checked ? [...prev, numberValue] : prev.filter((item) => item !== numberValue)
     );
     setCurrentPage(1);
   };
@@ -73,44 +90,40 @@ const CategoryProduct = () => {
     setCurrentPage(1);
   };
 
-  // đây là khi trả về các sản phẩm thỏa mãn điều kiện
   const filterFn = (product) => {
-    // ktra sản phẩm nằm trong danh mục được chọn 0
-        // nếu 0 có danh mục nào được chọn (selectedCategory.length === 0) => chấp nhận tất cả sản phẩm.
-        // Nếu có danh mục được chọn => ktra xem product.categoryId có nằm trong danh sách selectedCategory không.
+    const hasCategoryId = !!categoryId;
+    const hasSubCategoryId = !!subcategoryId;
+  
     const categoryMatch =
-      selectedCategory.length === 0 ||
-      selectedCategory.includes(product.categoryId.toString());
-    //tương tự
+      !hasCategoryId || product.idCat === Number(categoryId);
+  
+    const subCategoryMatch =
+      !hasSubCategoryId || product.idSubcat === Number(subcategoryId);
+  
     const priceMatch =
       selectedPriceRange.length === 0 ||
       selectedPriceRange.some((range) => {
         const [min, max] = range.split("-").map(Number);
         return product.price >= min && product.price <= max;
       });
-    // tương tự
+  
     const occasionMatch =
-      selectedOccasion.length === 0 ||
-      selectedOccasion.includes(product.occasion);
-
-    return categoryMatch && priceMatch && occasionMatch;
+      selectedOccasion.length === 0 || selectedOccasion.includes(product.occasion);
+  
+    return categoryMatch && subCategoryMatch && priceMatch && occasionMatch;
   };
+  
+  
 
   // tính toán các chỉ mục cho phân trang kết hợp với việc chọn filter, nếu mặc định = show all
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-
   const filteredProducts = products.filter(filterFn);
-  const currentProducts = filteredProducts.slice(
-      indexOfFirstProduct,
-      indexOfLastProduct
-  );
-
+  const currentProducts = filteredProducts.slice(indexOfFirstProduct, indexOfLastProduct);
   const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
 
-  // xử lý chuyển trang
   const handlePageChange = (pageNumber) => {
-      setCurrentPage(pageNumber);
+    setCurrentPage(pageNumber);
   };
 
   // lấy tên cho phần breadcrump
@@ -118,7 +131,7 @@ const CategoryProduct = () => {
     const category = categories.find((cat) => cat.id.toString() === categoryId);
     return category ? category.name : "";
   };
-
+  
   return (
     <div>
         <Header></Header>
@@ -134,12 +147,13 @@ const CategoryProduct = () => {
                     margin: "10px 50px",
                 }}
             >
-                <h2 style={{marginTop:"10px"}}>
+                  <h2 style={{ marginTop: "10px" }}>
                       {subcategoryId
                           ? currentCategorySubcategories.find(
-                              (sub) => sub.id.toString() === subcategoryId
+                              (sub) => sub.id_subcat.toString() === subcategoryId
                           )?.name
-                          : getCategoryName()}:{" "}
+                          : getCategoryName()}
+
                     <span
                         style={{
                             marginLeft: "20px",
@@ -153,17 +167,20 @@ const CategoryProduct = () => {
                 </h2>
 
                 <div style={{ marginLeft: "auto" }}>
-                    <Filter
-                        categories={currentCategorySubcategories}
-                        selectedCategory={selectedCategory}
-                        handleCategoryChange={handleCategoryChange}
-                        selectedPriceRange={selectedPriceRange}
-                        handlePriceRangeChange={handlePriceRangeChange}
-                        selectedOccasion={selectedOccasion}
-                        handleOccasionChange={handleOccasionChange}
-                        openFilter={openFilter}
-                        setOpenFilter={setOpenFilter}
-                    />
+                      <Filter
+                          categories={categories}
+                          selectedCategory={selectedCategory}
+                          selectedSubCategory={selectedSubCategory}
+                          handleCategoryChange={handleCategoryChange}
+                          handleSubCategoryChange={handleSubCategoryChange}
+                          selectedPriceRange={selectedPriceRange}
+                          handlePriceRangeChange={handlePriceRangeChange}
+                          selectedOccasion={selectedOccasion}
+                          handleOccasionChange={handleOccasionChange}
+                          openFilter={openFilter}
+                          setOpenFilter={setOpenFilter}
+                      />
+
                 </div>
             </div>
 
@@ -175,32 +192,30 @@ const CategoryProduct = () => {
                     marginBottom: "20px",
                     textAlign: "center",
                 }}>
-                {currentCategorySubcategories.map((category, index) => (
-                    <div
-                        key={category.id}
-                        className="d-flex align-items-center ms-2 me-2"
-                    >
-                        <a
-                            href={`/products/category/${categoryId}/subcategory/${category.id}`}
-                            onMouseEnter={() => setHoverIndex(index)}
-                            onMouseLeave={() => setHoverIndex(null)}
-                            style={{
-                                textDecoration: "none",
-                                color: "black",
-                                display: "flex",
-                                alignItems: "center",
-                                gap: "10px",
-                                textDecorationLine: hoverIndex === index ? "underline" : "none",
-                            }}>
-                            {category.name}
-                            <div className="vr" style={{
-                                height: "auto",
-                                fontWeight: "normal"
-                            }}>
-                            </div>
-                        </a>
-                    </div>
-                ))}
+                  {currentCategorySubcategories.map((sub, index) => (
+                      <div
+                          key={sub.id_subcat}
+                          className="d-flex align-items-center ms-2 me-2"
+                      >
+                          <a
+                              href={`/products/category/${categoryId}/subcategory/${sub.id_subcat}`}
+                              onMouseEnter={() => setHoverIndex(index)}
+                              onMouseLeave={() => setHoverIndex(null)}
+                              style={{
+                                  textDecoration: "none",
+                                  color: "black",
+                                  display: "flex",
+                                  alignItems: "center",
+                                  gap: "10px",
+                                  textDecorationLine: hoverIndex === index ? "underline" : "none",
+                              }}
+                          >
+                              {sub.name}
+                              <div className="vr" style={{ height: "auto", fontWeight: "normal" }} />
+                          </a>
+                      </div>
+                  ))}
+
 
                 {/* mục tất cả để quay trở về */}
                 <div className="d-flex align-items-center ms-2 me-2">
@@ -233,7 +248,7 @@ const CategoryProduct = () => {
             ) : (
                 <ProductList
                     products={currentProducts}
-                    filterFn={(product) => true} // vì đây là show tất cả sản phẩm nên để true để không cần lọc gì show ra
+                    filterFn={() => true} // vì đây là show tất cả sản phẩm nên để true để không cần lọc gì show ra
                     title="Sản phẩm"
                     isShowAll={true}
                 />

@@ -11,9 +11,9 @@ const Header = () => {
     const loggedInUser = JSON.parse(sessionStorage.getItem("account")); // lấy thông tin tài khoản trong db.json
     //categoríe in db.json
     useEffect(() => {
-        axios.get("http://localhost:9999/categories").then((res) => {
-            setCategories(res.data);
-        });
+        axios.get("http://localhost:8080/api/categories")
+          .then((res) => setCategories(res.data))
+          .catch((err) => console.error("Error fetching categories:", err));
     }, []);
 
     const handleLogout = () => {

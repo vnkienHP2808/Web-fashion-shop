@@ -16,7 +16,7 @@ const ProductDetail=()=>{
 
     //products in db.json
     useEffect(() => {
-        axios.get("http://localhost:9999/products").then((res) => {
+        axios.get("http://localhost:8080/api/products").then((res) => {
           setProducts(res.data);
         });
     }, []);
@@ -24,14 +24,14 @@ const ProductDetail=()=>{
     //lấy sản phẩm theo id từ db.json để gán vào setProduct.
     useEffect(() => {
         axios
-          .get("http://localhost:9999/products/" + id)
+          .get("http://localhost:8080/api/products/" + id)
           .then((res) => setProduct(res.data))
           .catch((err) => console.log("err"));
-    }, []);
+    }, [id]);
 
     //categoríe in db.json
     useEffect(() => {
-        axios.get("http://localhost:9999/categories").then((res) => {
+        axios.get("http://localhost:8080/api/categories").then((res) => {
           setCategories(res.data);
         });
     }, []);
@@ -48,14 +48,15 @@ const ProductDetail=()=>{
             <Header></Header>
             <Breadcrump 
                 text={product.name}
-                prevtext={getCategoryName(product.categoryId)}
-                prevlink={`/products/category/${product.categoryId}`}
+                prevtext={getCategoryName(product.idCat)}
+                prevlink={`/products/category/${product.idCat}`}
             >
             </Breadcrump>
             <ProductInfo
-                product={product}
-                listproduct={products}
-            ></ProductInfo>
+              key={product.idProduct}
+              product={product}
+              listproduct={products}
+            />
             <Footer></Footer>
         </div>
     )

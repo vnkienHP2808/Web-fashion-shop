@@ -8,193 +8,174 @@ import Breadcrump from "../component/ui/Breadcrump";
 import Filter from "../component/ui/Filter";
 import axios from "axios";
 
-const AllSaleProduct = () => {
-    // 2 biến để duyệt sản phẩm và loại
-    const [products, setProducts] = useState([]);
-    const [categories, setCategory] = useState([]);
-    // 3 biến để làm filter 
-    const [selectedCategory, setSelectedCategory] = useState([]);
-    const [selectedPriceRange, setSelectedPriceRange] = useState([]);
-    const [selectedOccasion, setSelectedOccasion] = useState([]);
-    // set mặc định chưa mở bảng filter
-    const [openFilter, setOpenFilter] = useState(false);
-    // để chuyển page sản phẩm
-    const [currentPage, setCurrentPage] = useState(1);
-    const [productsPerPage] = useState(20);
-    const [hoverIndex, setHoverIndex] = useState(null)
+const ShowSaleProduct = () => {
+  const [products, setProducts] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [subcategories, setSubCategories] = useState([]);
 
-    //products in db.json
-    useEffect(() => {
-        axios.get("http://localhost:9999/products").then((res) => {
-          setProducts(res.data);
-        });
-    }, []);
+  const [selectedCategory, setSelectedCategory] = useState([]);
+  const [selectedSubCategory, setSelectedSubCategory] = useState([]);
+  const [selectedPriceRange, setSelectedPriceRange] = useState([]);
+  const [selectedOccasion, setSelectedOccasion] = useState([]);
+  const [openFilter, setOpenFilter] = useState(false);
 
-    //category in db.json
-    useEffect(() => {
-        axios.get("http://localhost:9999/categories").then((res) => {
-          setCategories(res.data);
-        });
-    }, []);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [productsPerPage] = useState(20);
+  const [hoverIndex, setHoverIndex] = useState(null);
 
-    // thay đổi khi 1 sự kiện nhấn vào mục chọn 
-    const handleCategoryChange = (event) => {
-        const { value, checked } = event.target; // xem chỉ mục vừa thay đổi
-        setSelectedCategory((prev) =>
-          checked ? [...prev, value] : prev.filter((item) => item !== value)
-        // checked == true (checkbox được chọn) => thêm value vào mảng và ngược lại
-        );
-        setCurrentPage(1);
-      };
-    
-      const handlePriceRangeChange = (event) => {
-        const { value, checked } = event.target;
-        setSelectedPriceRange((prev) =>
-          checked ? [...prev, value] : prev.filter((item) => item !== value)
-        );
-        setCurrentPage(1);
-      };
-    
-      const handleOccasionChange = (event) => {
-        const { value, checked } = event.target;
-        setSelectedOccasion((prev) =>
-          checked ? [...prev, value] : prev.filter((item) => item !== value)
-        );
-        setCurrentPage(1);
-      };
-    
-      // đây là khi trả về các sản phẩm thỏa mãn điều kiện
-      const filterFn = (product) => {
-        // ktra sản phẩm nằm trong danh mục được chọn 0
-        // nếu 0 có danh mục nào được chọn (selectedCategory.length === 0) => chấp nhận tất cả sản phẩm.
-        // Nếu có danh mục được chọn => ktra xem product.categoryId có nằm trong danh sách selectedCategory không.
-        const categoryMatch =
-          selectedCategory.length === 0 ||
-          selectedCategory.includes(product.categoryId.toString());
-        // tương tự
-        const priceMatch =
-          selectedPriceRange.length === 0 ||
-          selectedPriceRange.some((range) => {
-            const [min, max] = range.split("-").map(Number);
-            return product.price >= min && product.price <= max;
-          });
-        // tương tự
-        const occasionMatch =
-          selectedOccasion.length === 0 ||
-          selectedOccasion.includes(product.occasion);
-        
-        const saleMatch = product.isSale; // thêm để lọc theo sản phẩm sale
-        return categoryMatch && priceMatch && occasionMatch && saleMatch;
-      };
+  // Get products
+  useEffect(() => {
+    axios.get("http://localhost:8080/api/products")
+      .then((res) => setProducts(res.data))
+      .catch((err) => console.error("Error fetching products:", err));
+  }, []);
 
-    // tính toán các chỉ mục cho phân trang kết hợp với việc chọn filter, nếu mặc định = show all
-    const indexOfLastProduct = currentPage * productsPerPage;
-    const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+  // Get categories
+  useEffect(() => {
+    axios.get("http://localhost:8080/api/categories")
+      .then((res) => setCategories(res.data))
+      .catch((err) => console.error("Error fetching categories:", err));
+  }, []);
 
-    const filteredProducts = products.filter(filterFn);
-    const currentProducts = filteredProducts.slice(
-        indexOfFirstProduct,
-        indexOfLastProduct
-    );
-
-    const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
-
-    // xử lý chuyển trang
-    const handlePageChange = (pageNumber) => {
-        setCurrentPage(pageNumber);
+  // Get all subcategories
+  useEffect(() => {
+    const fetchAllSubcategories = async () => {
+      try {
+        const allSubcats = [];
+        for (let category of categories) {
+          const response = await axios.get(`http://localhost:8080/api/subcategories/category/${category.idCat}`);
+          allSubcats.push(...response.data);
+        }
+        setSubCategories(allSubcats);
+      } catch (error) {
+        console.error("Error fetching subcategories:", error);
+      }
     };
 
-    return (
-        <div>
-            <Header></Header>
-            <Breadcrump text={"Sản phẩm giảm giá"}></Breadcrump>
-            <div style={{backgroundColor: "#FAEFEC"}}>
-                <div
-                    className="d-flex align-items-center justify-content-between"
-                    style={{
-                        margin: "10px 50px",
-                    }}
-                >
-                    <h2 style={{marginTop:"10px"}}>
-                        Sản phẩm giảm giá:{" "}
-                        <span
-                            style={{
-                                marginLeft: "20px",
-                                fontSize: "24px",
-                                fontStyle: "italic",
-                                fontWeight: "lighter",
-                            }}
-                        >
-                            {filteredProducts.length} sản phẩm
-                        </span>
-                    </h2>
+    if (categories.length > 0) {
+      fetchAllSubcategories();
+    }
+  }, [categories]);
 
-                    <div style={{ marginLeft: "auto" }}>
-                        <Filter
-                            categories={categories}
-                            selectedCategory={selectedCategory}
-                            handleCategoryChange={handleCategoryChange}
-                            selectedPriceRange={selectedPriceRange}
-                            handlePriceRangeChange={handlePriceRangeChange}
-                            selectedOccasion={selectedOccasion}
-                            handleOccasionChange={handleOccasionChange}
-                            openFilter={openFilter}
-                            setOpenFilter={setOpenFilter}
-                        />
-                    </div>
-                </div>
-                
-                {/* <div
-                    style={{
-                        display: "flex",
-                        marginLeft: "40px",
-                        justifyContent: "start",
-                        marginBottom: "20px",
-                        textAlign: "center",
-                    }}>
-                    {categories.map((category, index) => (
-                        <div
-                            key={category.id}
-                            className="d-flex align-items-center ms-2 me-2"
-                        >
-                            <a
-                                href={`/products/category/${category.id}`}
-                                onMouseEnter={() => setHoverIndex(index)}
-                                onMouseLeave={() => setHoverIndex(null)}
-                                style={{
-                                    textDecoration: "none",
-                                    color: "black",
-                                    display: "flex",
-                                    alignItems: "center",
-                                    gap: "10px",
-                                    textDecorationLine: hoverIndex === index ? "underline" : "none",
-                                }}>
-                                {category.name}
-                                <div className="vr" style={{
-                                    height: "auto",
-                                    fontWeight: "normal"
-                                }}>
-                                </div>
-                            </a>
-                        </div>
-                    ))}
-                </div> */}
+  // Event handlers
+  const handleCategoryChange = (event) => {
+    const { value, checked } = event.target;
+    const numberValue = Number(value);
+    if (checked) {
+      setSelectedCategory([numberValue]);
+    } else {
+      setSelectedCategory([]);
+    }
+    setSelectedSubCategory([]);
+    setCurrentPage(1);
+  };
 
-                <ProductList
-                    products={currentProducts}
-                    filterFn={(product) => product.isSale} // vì là sản phẩm sale nên phải lọc theo isSale để loại các sp không phải
-                    title="Sản phẩm"
-                    isShowAll={true}
-                />
-
-                <div className="d-flex justify-content-center" style={{ marginTop: "20px" }}>
-                    <Paginated totalPages={totalPages} currentPage={currentPage} handlePageChange={handlePageChange} />
-                </div>
-            </div>
-
-            <Footer></Footer>
-        </div>
+  const handleSubCategoryChange = (event) => {
+    const { value, checked } = event.target;
+    const numberValue = Number(value);
+    setSelectedSubCategory((prev) =>
+      checked ? [...prev, numberValue] : prev.filter((item) => item !== numberValue)
     );
+    setCurrentPage(1);
+  };
+
+  const handlePriceRangeChange = (event) => {
+    const { value, checked } = event.target;
+    setSelectedPriceRange((prev) =>
+      checked ? [...prev, value] : prev.filter((item) => item !== value)
+    );
+    setCurrentPage(1);
+  };
+
+  const handleOccasionChange = (event) => {
+    const { value, checked } = event.target;
+    setSelectedOccasion((prev) =>
+      checked ? [...prev, value] : prev.filter((item) => item !== value)
+    );
+    setCurrentPage(1);
+  };
+
+  // FILTERING logic
+  const filterFn = (product) => {
+    const categoryMatch =
+      selectedCategory.length === 0 || selectedCategory.includes(product.idCat);
+
+    const subCategoryMatch =
+      selectedSubCategory.length === 0 || selectedSubCategory.includes(product.idSubcat);
+
+    const priceMatch =
+      selectedPriceRange.length === 0 ||
+      selectedPriceRange.some((range) => {
+        const [min, max] = range.split("-").map(Number);
+        return product.price >= min && product.price <= max;
+      });
+
+    const occasionMatch =
+      selectedOccasion.length === 0 || selectedOccasion.includes(product.occasion);
+
+    const saleMatch = product.is_sale === true || product.is_sale === 1;
+
+    return categoryMatch && subCategoryMatch && priceMatch && occasionMatch && saleMatch;
+  };
+
+  // Pagination
+  const indexOfLastProduct = currentPage * productsPerPage;
+  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+  const filteredProducts = products.filter(filterFn);
+  const currentProducts = filteredProducts.slice(indexOfFirstProduct, indexOfLastProduct);
+  const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
+
+  const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
+
+  return (
+    <div>
+      <Header />
+      <Breadcrump text={"Sản phẩm giảm giá"} />
+      <div style={{ backgroundColor: "#FAEFEC" }}>
+        <div className="d-flex align-items-center justify-content-between" style={{ margin: "10px 50px" }}>
+          <h2 style={{ marginTop: "10px" }}>
+            Sản phẩm giảm giá:{" "}
+            <span style={{ marginLeft: "20px", fontSize: "24px", fontStyle: "italic", fontWeight: "lighter" }}>
+              {filteredProducts.length} sản phẩm
+            </span>
+          </h2>
+
+          <div style={{ marginLeft: "auto" }}>
+            <Filter
+              categories={categories}
+              subcategories={subcategories}
+              selectedCategory={selectedCategory}
+              selectedSubCategory={selectedSubCategory}
+              handleCategoryChange={handleCategoryChange}
+              handleSubCategoryChange={handleSubCategoryChange}
+              selectedPriceRange={selectedPriceRange}
+              handlePriceRangeChange={handlePriceRangeChange}
+              selectedOccasion={selectedOccasion}
+              handleOccasionChange={handleOccasionChange}
+              openFilter={openFilter}
+              setOpenFilter={setOpenFilter}
+            />
+          </div>
+        </div>
+
+        <ProductList
+          products={currentProducts}
+          filterFn={() => true}
+          title="Sản phẩm"
+          isShowAll={true}
+        />
+
+        <div className="d-flex justify-content-center" style={{ marginTop: "20px" }}>
+          <Paginated
+            totalPages={totalPages}
+            currentPage={currentPage}
+            handlePageChange={handlePageChange}
+          />
+        </div>
+      </div>
+      <Footer />
+    </div>
+  );
 };
 
-export default AllSaleProduct;
+export default ShowSaleProduct;

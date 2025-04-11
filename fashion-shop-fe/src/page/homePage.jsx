@@ -12,17 +12,21 @@ const HomePage = () =>{
 
     // product có cả new sale
     useEffect(() => {
-        axios.get("http://localhost:9999/products").then((res) => {
-          setProduct(res.data);
-        });
-    }, []);
+        axios.get("http://localhost:8080/api/products")
+          .then((res) => {
+            setProduct(res.data);
+          })
+          .catch((err) => console.error("Error fetching products:", err));
+      }, []);
 
     //category
     useEffect(() => {
-        axios.get("http://localhost:9999/categories").then((res) => {
+        axios.get("http://localhost:8080/api/categories")
+          .then((res) => {
             setProductCategories(res.data);
-        });
-    }, []);
+          })
+          .catch((err) => console.error("Error fetching categories:", err));
+      }, []);
 
     return (
         <div className="page-container">
