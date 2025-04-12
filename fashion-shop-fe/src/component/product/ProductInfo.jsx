@@ -51,7 +51,10 @@ const ProductInfo=({product, listproduct})=>{
     const navigate = useNavigate();
 
     const handleBuyNow = () => {
-        const selectedProduct = { ...product, quantity };
+        const selectedProduct = {
+            product: { ...product },
+            quantity: quantity
+        };
         navigate("/checkout", { state: { selectedCartItems: [selectedProduct] } });
     };
 
@@ -79,7 +82,7 @@ const ProductInfo=({product, listproduct})=>{
                 </div>
 
                 <div className="product-detail">
-                    <h2>{product.name}</h2>
+                    <h2>{product.name_product}</h2>
                     <h5>
                         Mã sản phẩm: {product.idProduct} | Tình trạng:{" "}
                         {product.in_stock > 0 ? "Còn Hàng" : "Hết Hàng"}

@@ -25,7 +25,7 @@ const Header = () => {
 
     // set số lượng sp trong cart
     const { cart } = useContext(CartContext);
-    const totalItems = new Set(cart.map(item => item.id)).size; 
+    const totalItems = new Set(cart.map(item => item.product.idProduct)).size; 
     // hiện số lượng trong giỏ hàng theo số sp trong giỏ
     // Set để giữ id duy nhất
     return (
