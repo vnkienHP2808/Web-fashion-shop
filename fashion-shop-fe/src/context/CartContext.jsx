@@ -23,7 +23,7 @@ export const CartProvider = ({ children }) => {
     if (!loggedInUser) return;
     try {
       await axios.post("http://localhost:8080/api/cart/add", {
-        userId: loggedInUser.id_user,
+        id_user: loggedInUser.id_user,
         productId: product.idProduct,
         quantity: 1,
       });
@@ -36,7 +36,7 @@ export const CartProvider = ({ children }) => {
   const updateCartItemQuantity = async (productId, quantity) => {
     try {
       await axios.put("http://localhost:8080/api/cart/update", {
-        userId: loggedInUser.id_user,
+        id_user: loggedInUser.id_user,
         productId,
         quantity,
       });

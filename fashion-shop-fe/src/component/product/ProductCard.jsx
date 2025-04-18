@@ -21,8 +21,6 @@ const ProductCard = ({ products, index }) => {
         addToCart(products);
         alert("Sản phẩm đã được thêm vào giỏ hàng.");
     };
-    console.log("Product ID:", products.idProduct);
-    console.log("Image list:", products.images);
 
     return (
         <div

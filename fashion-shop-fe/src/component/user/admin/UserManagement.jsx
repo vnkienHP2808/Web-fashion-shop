@@ -1,30 +1,33 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-
 const UserManagement = () => {
     const [users, setUsers] = useState([]);
 
     useEffect(() => {
-        axios.get("http://localhost:9999/users").then((res) => {
+        axios.get("http://localhost:8080/api/users").then((res) => {
             setUsers(res.data);
         });
     }, []);
 
     const handleToggleUserStatus = (id) => {
-        const updatedUser = users.find((user) => user.id === id);
+        const updatedUser = users.find((user) => user.id_user === id);
         updatedUser.status =
             updatedUser.status === "Active" ? "Inactive" : "Active";
 
-        if (updatedUser.role === "admin" && updatedUser.status === "Inactive") {
+        if (updatedUser.role === "Admin" && updatedUser.status === "Inactive") {
             alert("Admin không thể tự hủy kích hoạt!");
             return;
         }
 
-        axios.put(`http://localhost:9999/users/${id}`, updatedUser).then(() => {
-            setUsers(users.map((user) => (user.id === id ? updatedUser : user)));
-        });
+        axios
+            .put(`http://localhost:8080/api/users/${id}/status`, { status: updatedUser.status })
+            .then(() => {
+                setUsers(users.map((user) => (user.id_user === id ? updatedUser : user)));
+            });
+
     };
+
     return (
         <div style={{ padding: "20px", margin: "0 auto" }}>
             <h2 style={{ textAlign: "center", marginBottom: "20px" }}>
@@ -63,25 +66,29 @@ const UserManagement = () => {
                 </thead>
                 <tbody>
                     {users.map((user) => (
-                        <tr key={user.id}>
+                        <tr key={user.id_user}>
                             <td style={{ padding: "10px", border: "1px solid #ddd" }}>
-                                {user.id}
+                                {user.id_user}
                             </td>
                             <td style={{ padding: "10px", border: "1px solid #ddd" }}>
-                                {user.username}
+                                {user.name}
                             </td>
                             <td style={{ padding: "10px", border: "1px solid #ddd" }}>
                                 {user.email}
                             </td>
                             <td style={{ padding: "10px", border: "1px solid #ddd" }}>
-                                {Array.isArray(user.phonenumber)
-                                    ? user.phonenumber.join(", ")
-                                    : user.phonenumber}
+                                {Array.isArray(user.phones)
+                                    ? user.phones.map((phone, index) => (
+                                        <div key={index}>{index + 1}: {phone}</div>
+                                    ))
+                                    : user.phones}
                             </td>
                             <td style={{ padding: "10px", border: "1px solid #ddd" }}>
-                                {Array.isArray(user.address)
-                                    ? user.address.join(", ")
-                                    : user.address}
+                                {Array.isArray(user.addresses)
+                                    ? user.addresses.map((address, index) => (
+                                        <div key={index}> {index + 1}: {address}.</div>
+                                    ))
+                                    : user.addresses}
                             </td>
                             <td style={{ padding: "10px", border: "1px solid #ddd" }}>
                                 {user.role}
@@ -91,8 +98,8 @@ const UserManagement = () => {
                             </td>
                             <td style={{ padding: "10px", border: "1px solid #ddd" }}>
                                 <button
-                                    onClick={() => handleToggleUserStatus(user.id)}
-                                    disabled={user.role === "admin" && user.status === "Active"}
+                                    onClick={() => handleToggleUserStatus(user.id_user)}
+                                    disabled={user.role === "Admin" && user.status === "Active"}
                                     style={{
                                         backgroundColor:
                                             user.status === "Active" ? "#f44336" : "#4CAF50",
@@ -101,7 +108,7 @@ const UserManagement = () => {
                                         border: "none",
                                         borderRadius: "4px",
                                         cursor:
-                                            user.role === "admin" && user.status === "Active"
+                                            user.role === "Admin" && user.status === "Active"
                                                 ? "not-allowed"
                                                 : "pointer",
                                     }}
@@ -114,7 +121,7 @@ const UserManagement = () => {
                 </tbody>
             </table>
         </div>
-    )
-}
+    );
+};
 
-export default UserManagement
+export default UserManagement;

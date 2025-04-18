@@ -1,36 +1,37 @@
-import { useState, useEffect, useContext} from "react";
+import { useState, useEffect, useContext } from "react";
 import "../../style/productInfomation.css";
 import { Button } from "react-bootstrap";
 import RelateProduct from "./RelateProduct";
 import { CartContext } from "../../context/CartContext";
 import { useNavigate } from "react-router-dom";
 
-const ProductInfo=({product, listproduct})=>{
+const ProductInfo = ({ product, listproduct }) => {
+    const loggedInUser = JSON.parse(sessionStorage.getItem("account"));
     //ảnh minh họa sản phẩm
     const [selectedImage, setSelectedImage] = useState(
         product.images && product.images.length > 0 ? product.images[0].imageLink : ""
-      );
+    );
     // quản lý kho hàng
     const [quantity, setQuantity] = useState(1);
-    
+
     //chọn size
     const sizes = ["S", "M", "L", "XL"];
     const [selectedSize, setSelectedSize] = useState("S");
 
     useEffect(() => {
         if (product.images && product.images.length > 0) {
-          setSelectedImage(product.images[0].imageLink);
+            setSelectedImage(product.images[0].imageLink);
         }
-      }, [product.idProduct]);
+    }, [product.idProduct]);
 
     // sử dụng để thêm vào giỏ hàng
     const { addToCart } = useContext(CartContext);
     const handleAddToCart = () => {
         if (product.in_stock > 0) {
-          addToCart({ ...product, quantity });
-          alert("Sản phẩm đã được thêm vào giỏ hàng!");
+            addToCart({ ...product, quantity });
+            alert("Sản phẩm đã được thêm vào giỏ hàng!");
         } else {
-          alert("Sản phẩm hiện đã hết hàng.");
+            alert("Sản phẩm hiện đã hết hàng.");
         }
     };
 
@@ -58,24 +59,23 @@ const ProductInfo=({product, listproduct})=>{
         navigate("/checkout", { state: { selectedCartItems: [selectedProduct] } });
     };
 
-    return(
+    return (
         <div>
             <div className="product-infomation">
                 <div className="product-img">
                     <div className="selected-img">
-                        <img src={selectedImage} alt="Main image product"/>
+                        <img src={selectedImage} alt="Main image product" />
                     </div>
 
                     <div className="other-img">
                         {product.images && product.images.map((image, index) => (
-                            <img 
+                            <img
                                 key={index}
                                 src={image.imageLink}
                                 alt="Product img"
                                 onClick={() => setSelectedImage(image.imageLink)}
-                                className={`thumbnail ${
-                                    selectedImage === image.imageLink ? "active" : ""
-                                }`}
+                                className={`thumbnail ${selectedImage === image.imageLink ? "active" : ""
+                                    }`}
                             />
                         ))}
                     </div>
@@ -112,17 +112,17 @@ const ProductInfo=({product, listproduct})=>{
                                             </span>
                                         </>
                                     ) : (
-                                        <span className="price" style={{fontSize: "24px", fontWeight: "bold"}}>{product.price}₫</span>
+                                        <span className="price" style={{ fontSize: "24px", fontWeight: "bold" }}>{product.price}₫</span>
                                     )}
                                 </td>
                             </tr>
-                            
+
                             <tr>
                                 <td>Kích thước:</td>
                                 <td>
                                     <div className="product-size">
                                         {sizes.map((size) => (
-                                            <span 
+                                            <span
                                                 key={size}
                                                 onClick={() => setSelectedSize(size)}
                                                 className={`size-option ${selectedSize === size ? "selected" : ""}`}
@@ -154,7 +154,7 @@ const ProductInfo=({product, listproduct})=>{
                                             <i className="bi bi-plus-lg"></i>
                                         </Button>
                                     </div>
-                                    <small className="text-muted" style={{marginLeft: "10px"}}>
+                                    <small className="text-muted" style={{ marginLeft: "10px" }}>
                                         {product.in_stock} sản phẩm có sẵn
                                     </small>
                                 </td>
@@ -162,22 +162,41 @@ const ProductInfo=({product, listproduct})=>{
                         </tbody>
                     </table>
 
-                    <div
-                        style={{
-                            display: "flex",
-                            justifyContent: "center",
-                            gap: "10px",
-                            marginTop: "20px",
-                        }}
-                    >
-                        <Button className="add-to-cart-btn" onClick={handleAddToCart}>
-                            Thêm vào giỏ
-                        </Button>
-                        <Button 
-                            className="buy-now-btn"
-                            onClick={handleBuyNow}
-                        >   Mua ngay </Button>
-                    </div>
+                    {loggedInUser !== null && loggedInUser.role === "Admin" && (
+                        <div
+                            style={{
+                                display: "flex",
+                                justifyContent: "center",
+                                gap: "10px",
+                                marginTop: "20px",
+                            }}
+                        >
+                            <Button className="add-to-cart-btn" onClick={() => navigate(`/updateproduct/${product.idProduct}`)}>
+                                Sửa sản phẩm
+                            </Button>
+                        </div>
+
+                    )}
+                    {loggedInUser !== null && loggedInUser.role === "Customer" && (
+                        <div
+                            style={{
+                                display: "flex",
+                                justifyContent: "center",
+                                gap: "10px",
+                                marginTop: "20px",
+                            }}
+                        >
+                            <Button className="add-to-cart-btn" onClick={handleAddToCart}>
+                                Thêm vào giỏ
+                            </Button>
+                            <Button
+                                className="buy-now-btn"
+                                onClick={handleBuyNow}
+                            >   Mua ngay </Button>
+                        </div>
+
+
+                    )}
 
                     <hr className="separator" />
                     <h4 style={{ marginTop: "10px" }} className="text-center">

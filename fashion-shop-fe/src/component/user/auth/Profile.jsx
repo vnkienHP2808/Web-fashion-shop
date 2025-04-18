@@ -4,14 +4,15 @@ import React, { useState, useEffect } from "react";
 
 const Profile = () => {
     const user = JSON.parse(sessionStorage.getItem("account"));
+    console.log("User:", user);
     const navigate = useNavigate();
 
-    const phoneNumberOptions = user.phones || []; // thay đổi từ `phonenumber` sang `phones`
-    const addressOptions = user.addresses || [];  // thay đổi từ `address` sang `addresses`
+    const phoneNumberOptions = user.phones || [];
+    const addressOptions = user.addresses || [];
 
     const [selectedPhone, setSelectedPhone] = useState(phoneNumberOptions[0] || "");
     const [selectedAddress, setSelectedAddress] = useState(addressOptions[0] || "");
-
+    
     return (
         <div style={{ width: "100%" }}>
             <div className="log-in-container">

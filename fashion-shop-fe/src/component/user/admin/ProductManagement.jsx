@@ -7,81 +7,82 @@ const ProductManagement = () => {
     const [products, setProducts] = useState([]);
     const [categories, setCategories] = useState([]);
     const [newProduct, setNewProduct] = useState({
-        name: "",
+        name_product: "",
         price: "",
-        inStock: 0,
-        status: "Activate",
+        in_stock: 0,
+        status: "Active",
         occasion: "",
         images: [],
-        categoryId: 1,
-        subcategoryId: 1,
-        salePrice: null,
-        isSale: false,
-        isNew: true,
-        soldQuantity: 0,
+        idCat: 1,
+        idSubcat: 1,
+        sale_price: null,
+        is_sale: false,
+        is_new: true,
+        sold_quantity: 0,
     });
     const [searchTerm, setSearchTerm] = useState("");
     const [showAddModal, setShowAddModal] = useState(false);
 
     useEffect(() => {
-        axios.get("http://localhost:9999/products").then((res) => {
+        axios.get("http://localhost:8080/api/products").then((res) => {
             setProducts(res.data);
         });
-        axios.get("http://localhost:9999/categories").then((res) => {
+        axios.get("http://localhost:8080/api/categories").then((res) => {
             setCategories(res.data);
         });
     }, []);
 
     const handleAddProduct = () => {
         if (
-            !newProduct.name ||
+            !newProduct.name_product ||
             !newProduct.price ||
-            newProduct.inStock <= 0 ||
-            !newProduct.categoryId ||
-            !newProduct.subcategoryId ||
+            newProduct.in_stock <= 0 ||
+            !newProduct.idCat ||
+            !newProduct.idSubcat ||
             !newProduct.status ||
             !newProduct.images ||
-            !newProduct.inStock
+            !newProduct.in_stock
         ) {
             alert("Vui lòng nhập đầy đủ thông tin sản phẩm.");
             return;
         }
-        axios.post("http://localhost:9999/products", newProduct).then((res) => {
+        axios.post("http://localhost:8080/api/products", newProduct).then((res) => {
             setProducts([...products, res.data]);
             setNewProduct({
-                name: "",
+                name_product: "",
                 price: "",
-                inStock: 0,
-                status: "Activate",
+                in_stock: 0,
+                status: "Active",
                 occasion: "",
                 images: [],
-                categoryId: 1,
-                subcategoryId: 1,
-                salePrice: null,
-                isSale: false,
-                isNew: true,
-                soldQuantity: 0,
+                idCat: 1,
+                idSubcat: 1,
+                sale_price: null,
+                is_sale: false,
+                is_new: true,
+                sold_quantity: 0,
             });
             setShowAddModal(false);
         });
     };
 
     const handleDeleteProduct = (id) => {
-        const updatedProduct = products.find((product) => product.id === id);
-        updatedProduct.status = "Deleted";
-        axios
-            .put(`http://localhost:9999/products/${id}`, updatedProduct)
-            .then(() => {
-                setProducts(
-                    products.map((product) =>
-                        product.id === id ? updatedProduct : product
-                    )
-                );
-            });
+        if (window.confirm("Bạn có chắc muốn xóa sản phẩm này không?")) {
+            axios
+                .delete(`http://localhost:8080/api/products/${id}`)
+                .then(() => {
+                    setProducts(products.filter((product) => product.idProduct !== id));
+                })
+                .catch((error) => {
+                    console.error("Lỗi khi xóa sản phẩm:", error);
+                    alert("Xóa sản phẩm thất bại.");
+                });
+        }
     };
 
+
     const searchedProducts = products.filter((product) =>
-        product.name.toLowerCase().includes(searchTerm.toLowerCase())
+        product.name_product.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     return (
@@ -112,15 +113,15 @@ const ProductManagement = () => {
                     </thead>
                     <tbody>
                         {searchedProducts.map((product) => (
-                            <tr key={product.id}>
-                                <td>{product.name}</td>
+                            <tr key={product.idProduct}>
+                                <td>{product.name_product}</td>
                                 <td>{product.price}₫</td>
-                                <td>{product.salePrice ? `${product.salePrice}₫` : "N/A"}</td>
-                                <td>{product.inStock}</td>
+                                <td>{product.sale_price ? `${product.sale_price}₫` : "N/A"}</td>
+                                <td>{product.in_stock}</td>
                                 <td>{product.status}</td>
                                 <td>
                                     <a
-                                        href={`/updateproduct/${product.id}`}
+                                        href={`/updateproduct/${product.idProduct}`}
                                         className="btn btn-success"
                                         style={{ marginRight: "5px" }}
                                     >
@@ -129,7 +130,7 @@ const ProductManagement = () => {
                                     {product.status !== "Deleted" && (
                                         <Button
                                             variant="danger"
-                                            onClick={() => handleDeleteProduct(product.id)}
+                                            onClick={() => handleDeleteProduct(product.idProduct)}
                                         >
                                             Xóa
                                         </Button>
@@ -151,9 +152,9 @@ const ProductManagement = () => {
                                 <Form.Control
                                     type="text"
                                     placeholder="Nhập tên sản phẩm"
-                                    value={newProduct.name}
+                                    value={newProduct.name_product}
                                     onChange={(e) =>
-                                        setNewProduct({ ...newProduct, name: e.target.value })
+                                        setNewProduct({ ...newProduct, name_product: e.target.value })
                                     }
                                 />
                             </Form.Group>
@@ -175,9 +176,9 @@ const ProductManagement = () => {
                                 <Form.Control
                                     type="number"
                                     placeholder="Nhập giá khuyến mãi nếu có"
-                                    value={newProduct.salePrice || ""}
+                                    value={newProduct.sale_price || ""}
                                     onChange={(e) =>
-                                        setNewProduct({ ...newProduct, salePrice: e.target.value })
+                                        setNewProduct({ ...newProduct, sale_price: e.target.value })
                                     }
                                 />
                             </Form.Group>
@@ -187,9 +188,9 @@ const ProductManagement = () => {
                                 <Form.Control
                                     type="number"
                                     placeholder="Nhập số lượng sản phẩm"
-                                    value={newProduct.inStock}
+                                    value={newProduct.in_stock}
                                     onChange={(e) =>
-                                        setNewProduct({ ...newProduct, inStock: e.target.value })
+                                        setNewProduct({ ...newProduct, in_stock: e.target.value })
                                     }
                                 />
                             </Form.Group>
@@ -212,17 +213,14 @@ const ProductManagement = () => {
                                 <Form.Label>Danh mục</Form.Label>
                                 <Form.Control
                                     as="select"
-                                    value={newProduct.categoryId}
+                                    value={newProduct.idCat}
                                     onChange={(e) => {
-                                        const categoryId = parseInt(e.target.value);
-                                        const selectedCategory = categories.find(
-                                            (cat) => cat.id === categoryId
-                                        );
+                                        const selectedCatId = parseInt(e.target.value);
+                                        const selectedCategory = categories.find((cat) => cat.id === selectedCatId);
                                         setNewProduct({
                                             ...newProduct,
-                                            categoryId,
-                                            subcategoryId:
-                                                selectedCategory?.subcategories[0]?.id || 1,
+                                            idCat: selectedCatId,
+                                            idSubcat: selectedCategory?.subCategories[0]?.id_subcat || "", // reset phân loại
                                         });
                                     }}
                                 >
@@ -234,44 +232,62 @@ const ProductManagement = () => {
                                 </Form.Control>
                             </Form.Group>
 
+
                             <Form.Group controlId="formProductSubcategory">
                                 <Form.Label>Phân loại</Form.Label>
                                 <Form.Control
                                     as="select"
-                                    value={newProduct.subcategoryId}
+                                    value={newProduct.idSubcat}
                                     onChange={(e) =>
                                         setNewProduct({
                                             ...newProduct,
-                                            subcategoryId: parseInt(e.target.value),
+                                            idSubcat: parseInt(e.target.value),
                                         })
                                     }
+                                    disabled={!newProduct.idCat}
                                 >
                                     {categories
-                                        .find((cat) => cat.id === newProduct.categoryId.toString())
-                                        ?.subcategories.map((sub) => (
-                                            <option key={sub.id} value={sub.id}>
+                                        .find((cat) => cat.id === newProduct.idCat)
+                                        ?.subCategories.map((sub) => (
+                                            <option key={sub.id_subcat} value={sub.id_subcat}>
                                                 {sub.name}
                                             </option>
                                         ))}
                                 </Form.Control>
                             </Form.Group>
 
+                            <Form.Group controlId="formProductOccasion">
+                                <Form.Label>Dịp sử dụng</Form.Label>
+                                <Form.Control
+                                    as="select"
+                                    value={newProduct.occasion}
+                                    onChange={(e) =>
+                                        setNewProduct({ ...newProduct, occasion: e.target.value })
+                                    }
+                                >
+                                    <option value="Đi chơi">Đi chơi</option>
+                                    <option value="Đi làm">Đi làm</option>
+                                    <option value="Đi tiệc">Đi tiệc</option>
+                                </Form.Control>
+                            </Form.Group>
+
+
                             <Form.Group controlId="formProductImages">
                                 <Form.Label>Hình ảnh (URL, cách nhau dấu phẩy)</Form.Label>
                                 <Form.Control
                                     type="text"
                                     placeholder="Nhập URL hình ảnh, cách nhau dấu phẩy"
-                                    value={newProduct.images.join(", ")}
+                                    value={newProduct.images.map(img => img.imageLink).join(", ")}
                                     onChange={(e) => {
-                                        const urls = e.target.value
-                                            .split(",")
-                                            .map((url) => url.trim());
+                                        const urls = e.target.value.split(",").map((url) => url.trim());
+                                        const imageObjects = urls.map(url => ({ imageLink: url }));
                                         setNewProduct({
                                             ...newProduct,
-                                            images: urls,
+                                            images: imageObjects,
                                         });
                                     }}
                                 />
+
                             </Form.Group>
 
                             <Form.Group controlId="formSoldQuantity">
@@ -279,11 +295,11 @@ const ProductManagement = () => {
                                 <Form.Control
                                     type="number"
                                     placeholder="Nhập số lượng đã bán"
-                                    value={newProduct.soldQuantity}
+                                    value={newProduct.sold_quantity}
                                     onChange={(e) =>
                                         setNewProduct({
                                             ...newProduct,
-                                            soldQuantity: e.target.value,
+                                            sold_quantity: e.target.value,
                                         })
                                     }
                                 />
@@ -294,9 +310,9 @@ const ProductManagement = () => {
                                 <Form.Check
                                     type="checkbox"
                                     label="Đánh dấu là sản phẩm mới"
-                                    checked={newProduct.isNew}
+                                    checked={newProduct.is_new}
                                     onChange={(e) =>
-                                        setNewProduct({ ...newProduct, isNew: e.target.checked })
+                                        setNewProduct({ ...newProduct, is_new: e.target.checked })
                                     }
                                 />
                             </Form.Group>
@@ -306,9 +322,9 @@ const ProductManagement = () => {
                                 <Form.Check
                                     type="checkbox"
                                     label="Đánh dấu là sản phẩm đang giảm giá"
-                                    checked={newProduct.isSale}
+                                    checked={newProduct.is_sale}
                                     onChange={(e) =>
-                                        setNewProduct({ ...newProduct, isSale: e.target.checked })
+                                        setNewProduct({ ...newProduct, is_sale: e.target.checked })
                                     }
                                 />
                             </Form.Group>

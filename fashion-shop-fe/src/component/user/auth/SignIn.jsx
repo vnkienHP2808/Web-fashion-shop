@@ -27,15 +27,21 @@ const LogIn= ()=>{
             });
     
             const user = response.data;
-            sessionStorage.setItem("account", JSON.stringify(user));
-            alert("Đăng nhập thành công!");
-            navigate("/");
+    
+            if (user.status === "Active") {
+                sessionStorage.setItem("account", JSON.stringify(user));
+                alert("Đăng nhập thành công!");
+                navigate("/");
+            } else {
+                alert("Tài khoản bị vô hiệu hóa");
+            }
     
         } catch (error) {
             alert("Sai email hoặc mật khẩu");
             console.error("Đăng nhập thất bại", error);
         }
     };
+    
     
     return(
         <div style={{

@@ -35,9 +35,12 @@ const SetPassword = () => {
             });
 
             if (response.ok) {
+                const updatedUser = { ...user, password: newPassword };
+                sessionStorage.setItem("account", JSON.stringify(updatedUser));
                 setSuccessMessage("Đổi mật khẩu thành công!");
                 setTimeout(() => navigate("/profile"), 2000);
-            } else {
+            }
+             else {
                 const data = await response.json();
                 setErrorMessage(data.message || "Đổi mật khẩu thất bại!");
             }

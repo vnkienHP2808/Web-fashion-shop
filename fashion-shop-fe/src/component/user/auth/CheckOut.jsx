@@ -58,9 +58,7 @@ const Checkout = () => {
     }
 
     const order = {
-      user: {
-        id_user: loggedInUser.id_user,
-      },
+      id_user: loggedInUser.id_user,
       status: "Đang chờ",
       address: selectedAddress,
       phoneNumber: selectedPhoneNumber,
@@ -77,7 +75,11 @@ const Checkout = () => {
     };
 
     try {
-      await axios.post("http://localhost:8080/api/orders", order);
+      await axios.post("http://localhost:8080/api/orders", order, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
       selectedProducts.forEach((item) => removeFromCart(item.product.idProduct));
       alert("Đơn hàng đã đặt thành công!");
       navigate("/");
@@ -87,47 +89,93 @@ const Checkout = () => {
     }
   };
 
+  // const handleAddNewAddress = async () => {
+  //   if (newAddress.trim() === "") {
+  //     alert("Vui lòng nhập địa chỉ mới!");
+  //     return;
+  //   }
+
+  //   const updatedUser = { ...user, addresses: [...user.addresses, newAddress] };
+  //   setUser(updatedUser);
+  //   setSelectedAddress(newAddress);
+
+  //   try {
+  //     await axios.put(`http://localhost:8080/api/users/${loggedInUser.id_user}`, updatedUser);
+  //     alert("Địa chỉ đã được thêm thành công!");
+  //   } catch (error) {
+  //     console.error("Lỗi khi thêm địa chỉ:", error);
+  //     alert("Có lỗi xảy ra khi thêm địa chỉ. Vui lòng thử lại!");
+  //   }
+
+  //   setNewAddress("");
+  // };
   const handleAddNewAddress = async () => {
     if (newAddress.trim() === "") {
       alert("Vui lòng nhập địa chỉ mới!");
       return;
     }
-
-    const updatedUser = { ...user, addresses: [...user.addresses, newAddress] };
-    setUser(updatedUser);
+  
+    const updatedAddresses = [...(user.addresses || []), newAddress];
+    setUser((prev) => ({ ...prev, addresses: updatedAddresses }));
     setSelectedAddress(newAddress);
-
+  
     try {
-      await axios.put(`http://localhost:8080/api/users/${loggedInUser.id_user}`, updatedUser);
+      await axios.put(`http://localhost:8080/api/users/${loggedInUser.id_user}/addresses`, {
+        addresses: updatedAddresses,
+      });
       alert("Địa chỉ đã được thêm thành công!");
     } catch (error) {
       console.error("Lỗi khi thêm địa chỉ:", error);
       alert("Có lỗi xảy ra khi thêm địa chỉ. Vui lòng thử lại!");
     }
-
+  
     setNewAddress("");
   };
+  
 
+  // const handleAddNewPhoneNumber = async () => {
+  //   if (newPhoneNumber.trim() === "") {
+  //     alert("Vui lòng nhập số điện thoại mới!");
+  //     return;
+  //   }
+
+  //   const updatedUser = { ...user, phones: [...user.phones, newPhoneNumber] };
+  //   setUser(updatedUser);
+  //   setSelectedPhoneNumber(newPhoneNumber);
+
+  //   try {
+  //     await axios.put(`http://localhost:8080/api/users/${loggedInUser.id_user}`, updatedUser);
+  //     alert("Số điện thoại đã được thêm thành công!");
+  //   } catch (error) {
+  //     console.error("Lỗi khi số điện thoại:", error);
+  //     alert("Có lỗi xảy ra khi thêm số điện thoại. Vui lòng thử lại!");
+  //   }
+
+  //   setNewPhoneNumber("");
+  // };
   const handleAddNewPhoneNumber = async () => {
     if (newPhoneNumber.trim() === "") {
       alert("Vui lòng nhập số điện thoại mới!");
       return;
     }
-
-    const updatedUser = { ...user, phones: [...user.phones, newPhoneNumber] };
-    setUser(updatedUser);
+  
+    const updatedPhones = [...(user.phones || []), newPhoneNumber];
+    setUser((prev) => ({ ...prev, phones: updatedPhones }));
     setSelectedPhoneNumber(newPhoneNumber);
-
+  
     try {
-      await axios.put(`http://localhost:8080/api/users/${loggedInUser.id_user}`, updatedUser);
+      await axios.put(`http://localhost:8080/api/users/${loggedInUser.id_user}/phones`, {
+        phones: updatedPhones,
+      });
       alert("Số điện thoại đã được thêm thành công!");
     } catch (error) {
-      console.error("Lỗi khi số điện thoại:", error);
+      console.error("Lỗi khi thêm số điện thoại:", error);
       alert("Có lỗi xảy ra khi thêm số điện thoại. Vui lòng thử lại!");
     }
-
+  
     setNewPhoneNumber("");
   };
+  
 
   return (
     <div>
@@ -138,7 +186,7 @@ const Checkout = () => {
         <div className="checkout-items">
           {selectedProducts.map((item) => (
             <div key={item.product.idProduct} className="checkout-item">
-              <h4>{item.product.name_product}</h4>
+              <h4>Sản phẩm: {item.product.name_product}</h4>
               <p>Số lượng: {item.quantity}</p>
               <p>Giá sản phẩm:&nbsp;
                 {item.product.sale_price ? (

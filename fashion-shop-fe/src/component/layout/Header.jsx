@@ -8,7 +8,7 @@ const Header = () => {
     const navigate = useNavigate(); // hàm điều hướng
     const [categories, setCategories] = useState([]); // dùng để lấy dữ liệu trong db.json mục categories
     const isLoggedIn = sessionStorage.getItem("account") !== null; // check đăng nhập
-    const loggedInUser = JSON.parse(sessionStorage.getItem("account")); // lấy thông tin tài khoản trong db.json
+    const loggedInUser = JSON.parse(sessionStorage.getItem("account"));
     //categoríe in db.json
     useEffect(() => {
         axios.get("http://localhost:8080/api/categories")
@@ -28,6 +28,7 @@ const Header = () => {
     const totalItems = new Set(cart.map(item => item.product.idProduct)).size; 
     // hiện số lượng trong giỏ hàng theo số sp trong giỏ
     // Set để giữ id duy nhất
+
     return (
         <div className="header">
             {/* Logo */}
