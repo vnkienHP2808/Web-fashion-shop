@@ -18,23 +18,13 @@ const Filter = ({
   const [activeCategoryId, setActiveCategoryId] = useState(null);
 
   useEffect(() => {
-    // Mỗi khi selectedCategory thay đổi, cập nhật activeCategoryId
-    if (selectedCategory.length === 1) {
-      setActiveCategoryId(selectedCategory[0]);
+    // Cập nhật activeCategoryId khi selectedCategory thay đổi
+    if (selectedCategory !== null) {
+      setActiveCategoryId(selectedCategory);
     } else {
       setActiveCategoryId(null);
     }
   }, [selectedCategory]);
-
-  const handleCategorySelect = (categoryId) => {
-    setActiveCategoryId(categoryId);
-    handleCategoryChange({
-      target: {
-        value: categoryId,
-        checked: true,
-      },
-    });
-  };
 
   const selectedCategoryObj = categories.find((cat) => cat.id === activeCategoryId);
 
@@ -68,13 +58,20 @@ const Filter = ({
               <h6>Loại sản phẩm</h6>
               {categories.map((cat) => (
                 <Form.Check
-                  type="radio"
+                  type="checkbox"
                   name="category"
                   key={cat.id}
                   label={cat.name}
                   value={cat.id}
-                  checked={selectedCategory.includes(cat.id)}
-                  onChange={() => handleCategorySelect(cat.id)}
+                  checked={selectedCategory === cat.id}
+                  onChange={(e) =>
+                    handleCategoryChange({
+                      target: {
+                        value: e.target.value,
+                        checked: e.target.checked,
+                      },
+                    })
+                  }
                 />
               ))}
 
@@ -84,10 +81,11 @@ const Filter = ({
                   {selectedCategoryObj.subCategories.map((sub) => (
                     <Form.Check
                       type="checkbox"
+                      name="subCategory"
                       key={sub.id_subcat}
                       label={sub.name}
                       value={sub.id_subcat}
-                      checked={selectedSubCategory.includes(sub.id_subcat)}
+                      checked={selectedSubCategory === sub.id_subcat}
                       onChange={(e) =>
                         handleSubCategoryChange({
                           target: {
@@ -107,23 +105,26 @@ const Filter = ({
               <h6>Khoảng giá</h6>
               <Form.Check
                 type="checkbox"
+                name="priceRange"
                 label="Dưới 200.000"
                 value="0-200000"
-                checked={selectedPriceRange.includes("0-200000")}
+                checked={selectedPriceRange === "0-200000"}
                 onChange={handlePriceRangeChange}
               />
               <Form.Check
                 type="checkbox"
+                name="priceRange"
                 label="200.000 - 500.000"
                 value="200000-500000"
-                checked={selectedPriceRange.includes("200000-500000")}
+                checked={selectedPriceRange === "200000-500000"}
                 onChange={handlePriceRangeChange}
               />
               <Form.Check
                 type="checkbox"
+                name="priceRange"
                 label="Trên 500.000"
                 value="500000-9999999"
-                checked={selectedPriceRange.includes("500000-9999999")}
+                checked={selectedPriceRange === "500000-9999999"}
                 onChange={handlePriceRangeChange}
               />
             </Col>
@@ -133,23 +134,26 @@ const Filter = ({
               <h6>Theo dịp</h6>
               <Form.Check
                 type="checkbox"
+                name="occasion"
                 label="Đi chơi"
                 value="Đi chơi"
-                checked={selectedOccasion.includes("Đi chơi")}
+                checked={selectedOccasion === "Đi chơi"}
                 onChange={handleOccasionChange}
               />
               <Form.Check
                 type="checkbox"
+                name="occasion"
                 label="Đi làm"
                 value="Đi làm"
-                checked={selectedOccasion.includes("Đi làm")}
+                checked={selectedOccasion === "Đi làm"}
                 onChange={handleOccasionChange}
               />
               <Form.Check
                 type="checkbox"
+                name="occasion"
                 label="Đi tiệc"
                 value="Đi tiệc"
-                checked={selectedOccasion.includes("Đi tiệc")}
+                checked={selectedOccasion === "Đi tiệc"}
                 onChange={handleOccasionChange}
               />
             </Col>

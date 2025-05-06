@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import AdminRoute from "./AdminRoute";
 import { Modal, Button, Form, Table } from "react-bootstrap";
+import Paginated from "../../ui/Pagination";
+import Filter from "../../ui/Filter";
 
 const ProductManagement = () => {
     const [products, setProducts] = useState([]);
@@ -20,16 +22,43 @@ const ProductManagement = () => {
         is_new: true,
         sold_quantity: 0,
     });
-    const [searchTerm, setSearchTerm] = useState("");
-    const [showAddModal, setShowAddModal] = useState(false);
+    const [selectedFiles, setSelectedFiles] = useState([]);
+    const [selectedCategory, setSelectedCategory] = useState(null);
+    const [selectedSubCategory, setSelectedSubCategory] = useState(null); 
+    const [selectedPriceRange, setSelectedPriceRange] = useState(null); 
+    const [selectedOccasion, setSelectedOccasion] = useState(null); 
+    const [openFilter, setOpenFilter] = useState(false);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+    const [totalElements, setTotalElements] = useState(0);
+    const [productsPerPage] = useState(20);
 
     useEffect(() => {
-        axios.get("http://localhost:8080/api/products").then((res) => {
-            setProducts(res.data);
-        });
-        axios.get("http://localhost:8080/api/categories").then((res) => {
-            setCategories(res.data);
-        });
+        const params = {
+            page: currentPage,
+            size: productsPerPage,
+            ...(selectedCategory && { idCat: selectedCategory }),
+            ...(selectedSubCategory && { idSubcat: selectedSubCategory }),
+            ...(selectedPriceRange && { priceRange: selectedPriceRange }),
+            ...(selectedOccasion && { occasion: selectedOccasion }),
+        };
+
+        axios.get(`http://localhost:8080/api/products`, { params })
+            .then((res) => {
+                setProducts(res.data.content);
+                setTotalPages(res.data.totalPages);
+                setTotalElements(res.data.totalElements || 0);
+            })
+            .catch((err) => {
+                console.error("Error fetching products:", err);
+                alert("Lỗi khi tải danh sách sản phẩm. Vui lòng thử lại.");
+            });
+    }, [currentPage, selectedCategory, selectedSubCategory, selectedPriceRange, selectedOccasion]);
+
+    useEffect(() => {
+        axios.get("http://localhost:8080/api/categories")
+            .then((res) => setCategories(res.data))
+            .catch((err) => console.error("Error fetching categories:", err));
     }, []);
 
     const handleAddProduct = () => {
@@ -40,12 +69,13 @@ const ProductManagement = () => {
             !newProduct.idCat ||
             !newProduct.idSubcat ||
             !newProduct.status ||
-            !newProduct.images ||
+            newProduct.images.length === 0 ||
             !newProduct.in_stock
         ) {
             alert("Vui lòng nhập đầy đủ thông tin sản phẩm.");
             return;
         }
+        
         axios.post("http://localhost:8080/api/products", newProduct).then((res) => {
             setProducts([...products, res.data]);
             setNewProduct({
@@ -62,6 +92,7 @@ const ProductManagement = () => {
                 is_new: true,
                 sold_quantity: 0,
             });
+            setSelectedFiles([]);
             setShowAddModal(false);
         });
     };
@@ -80,25 +111,115 @@ const ProductManagement = () => {
         }
     };
 
+    const handleFileChange = (e) => {
+        const files = Array.from(e.target.files);
+        setSelectedFiles([...selectedFiles, ...files]);
+        
+        const imageObjects = files.map(file => ({
+            imageLink: `/assets/user/image/product/${file.name}`
+        }));
+        
+        setNewProduct({
+            ...newProduct,
+            images: [...newProduct.images, ...imageObjects],
+        });
+    };
+    
+    const removeSelectedFile = (index) => {
+        const updatedFiles = [...selectedFiles];
+        updatedFiles.splice(index, 1);
+        setSelectedFiles(updatedFiles);
+        
+        const updatedImages = [...newProduct.images];
+        updatedImages.splice(index, 1);
+        setNewProduct({
+            ...newProduct,
+            images: updatedImages,
+        });
+    };
 
-    const searchedProducts = products.filter((product) =>
-        product.name_product.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    const handleCategoryChange = (event) => {
+        const { value, checked } = event.target;
+        const numberValue = Number(value);
+
+        if (checked) {
+            setSelectedCategory(numberValue);
+        } else {
+            setSelectedCategory(null);
+        }
+        setSelectedSubCategory(null);
+        setCurrentPage(1);
+    };
+
+    const handleSubCategoryChange = (event) => {
+        const { value, checked } = event.target;
+        const numberValue = Number(value);
+
+        if (checked) {
+            setSelectedSubCategory(numberValue);
+        } else {
+            setSelectedSubCategory(null);
+        }
+        setCurrentPage(1);
+    };
+
+    const handlePriceRangeChange = (event) => {
+        const { value, checked } = event.target;
+
+        if (checked) {
+            setSelectedPriceRange(value);
+        } else {
+            setSelectedPriceRange(null);
+        }
+        setCurrentPage(1);
+    };
+
+    const handleOccasionChange = (event) => {
+        const { value, checked } = event.target;
+
+        if (checked) {
+            setSelectedOccasion(value);
+        } else {
+            setSelectedOccasion(null);
+        }
+        setCurrentPage(1);
+    };
+
+    const handlePageChange = (pageNumber) => {
+        setCurrentPage(pageNumber);
+    };
+
+    const [showAddModal, setShowAddModal] = useState(false);
 
     return (
         <AdminRoute>
             <div className="product-management container">
-                <h2>Quản Lý Sản Phẩm</h2>
+                <h2 style={{
+                    color: "#333",
+                    fontSize: "1.8em",
+                    marginBottom: "20px",
+                    textAlign: "center",
+                    fontWeight: "600",
+                }}>Quản Lý Sản Phẩm: <i style={{fontWeight: "normal"}}>{totalElements} sản phẩm</i></h2>
 
-                <input
-                    placeholder="Tìm kiếm sản phẩm"
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    style={{ marginRight: "50px" }}
-                />
-                <Button variant="primary" onClick={() => setShowAddModal(true)}>
-                    Thêm Sản Phẩm
-                </Button>
+                <div className="d-flex align-items-center justify-content-between" style={{ marginBottom: "20px" }}>
+                    <Button variant="primary" onClick={() => setShowAddModal(true)}>
+                        Thêm Sản Phẩm
+                    </Button>
+                    <Filter
+                        categories={categories}
+                        selectedCategory={selectedCategory}
+                        selectedSubCategory={selectedSubCategory}
+                        handleCategoryChange={handleCategoryChange}
+                        handleSubCategoryChange={handleSubCategoryChange}
+                        selectedPriceRange={selectedPriceRange}
+                        handlePriceRangeChange={handlePriceRangeChange}
+                        selectedOccasion={selectedOccasion}
+                        handleOccasionChange={handleOccasionChange}
+                        openFilter={openFilter}
+                        setOpenFilter={setOpenFilter}
+                    />
+                </div>
 
                 <Table striped bordered hover>
                     <thead>
@@ -112,7 +233,7 @@ const ProductManagement = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {searchedProducts.map((product) => (
+                        {products.map((product) => (
                             <tr key={product.idProduct}>
                                 <td>{product.name_product}</td>
                                 <td>{product.price}₫</td>
@@ -165,9 +286,15 @@ const ProductManagement = () => {
                                     type="number"
                                     placeholder="Nhập giá sản phẩm"
                                     value={newProduct.price}
-                                    onChange={(e) =>
-                                        setNewProduct({ ...newProduct, price: e.target.value })
-                                    }
+                                    onChange={(e) => {
+                                        const ip = parseInt(e.target.value, 10);
+                                        if(ip >= 0){
+                                            setNewProduct({ ...newProduct, price: e.target.value })
+                                        }
+                                        else{
+                                            setNewProduct({ ...newProduct, price: 0 })
+                                        }
+                                    }}
                                 />
                             </Form.Group>
 
@@ -177,9 +304,15 @@ const ProductManagement = () => {
                                     type="number"
                                     placeholder="Nhập giá khuyến mãi nếu có"
                                     value={newProduct.sale_price || ""}
-                                    onChange={(e) =>
-                                        setNewProduct({ ...newProduct, sale_price: e.target.value })
-                                    }
+                                    onChange={(e) => {
+                                        const ip = parseInt(e.target.value, 10);
+                                        if(ip >= 0){
+                                            setNewProduct({ ...newProduct, sale_price: e.target.value })
+                                        }
+                                        else{
+                                            setNewProduct({ ...newProduct, sale_price: 0 })
+                                        }
+                                    }}
                                 />
                             </Form.Group>
 
@@ -189,9 +322,15 @@ const ProductManagement = () => {
                                     type="number"
                                     placeholder="Nhập số lượng sản phẩm"
                                     value={newProduct.in_stock}
-                                    onChange={(e) =>
-                                        setNewProduct({ ...newProduct, in_stock: e.target.value })
-                                    }
+                                    onChange={(e) => {
+                                        const ip = parseInt(e.target.value, 10);
+                                        if(ip >= 0){
+                                            setNewProduct({ ...newProduct, in_stock: e.target.value })
+                                        }
+                                        else{
+                                            setNewProduct({ ...newProduct, in_stock: 0 })
+                                        }
+                                    }}
                                 />
                             </Form.Group>
 
@@ -220,7 +359,7 @@ const ProductManagement = () => {
                                         setNewProduct({
                                             ...newProduct,
                                             idCat: selectedCatId,
-                                            idSubcat: selectedCategory?.subCategories[0]?.id_subcat || "", // reset phân loại
+                                            idSubcat: selectedCategory?.subCategories[0]?.id_subcat || "",
                                         });
                                     }}
                                 >
@@ -231,7 +370,6 @@ const ProductManagement = () => {
                                     ))}
                                 </Form.Control>
                             </Form.Group>
-
 
                             <Form.Group controlId="formProductSubcategory">
                                 <Form.Label>Phân loại</Form.Label>
@@ -271,23 +409,34 @@ const ProductManagement = () => {
                                 </Form.Control>
                             </Form.Group>
 
-
                             <Form.Group controlId="formProductImages">
-                                <Form.Label>Hình ảnh (URL, cách nhau dấu phẩy)</Form.Label>
+                                <Form.Label>Hình ảnh sản phẩm</Form.Label>
                                 <Form.Control
-                                    type="text"
-                                    placeholder="Nhập URL hình ảnh, cách nhau dấu phẩy"
-                                    value={newProduct.images.map(img => img.imageLink).join(", ")}
-                                    onChange={(e) => {
-                                        const urls = e.target.value.split(",").map((url) => url.trim());
-                                        const imageObjects = urls.map(url => ({ imageLink: url }));
-                                        setNewProduct({
-                                            ...newProduct,
-                                            images: imageObjects,
-                                        });
-                                    }}
+                                    type="file"
+                                    multiple
+                                    accept="image/*"
+                                    onChange={handleFileChange}
                                 />
-
+                                
+                                {newProduct.images.length > 0 && (
+                                    <div className="selected-files mt-2">
+                                        <p>Các file đã chọn:</p>
+                                        <ul className="list-group">
+                                            {newProduct.images.map((image, index) => (
+                                                <li key={index} className="list-group-item d-flex justify-content-between align-items-center">
+                                                    {image.imageLink}
+                                                    <Button 
+                                                        variant="danger" 
+                                                        size="sm"
+                                                        onClick={() => removeSelectedFile(index)}
+                                                    >
+                                                        Xóa
+                                                    </Button>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                )}
                             </Form.Group>
 
                             <Form.Group controlId="formSoldQuantity">
@@ -296,12 +445,15 @@ const ProductManagement = () => {
                                     type="number"
                                     placeholder="Nhập số lượng đã bán"
                                     value={newProduct.sold_quantity}
-                                    onChange={(e) =>
-                                        setNewProduct({
-                                            ...newProduct,
-                                            sold_quantity: e.target.value,
-                                        })
-                                    }
+                                    onChange={(e) => {
+                                        const ip = parseInt(e.target.value, 10);
+                                        if(ip >= 0){
+                                            setNewProduct({ ...newProduct, sold_quantity: e.target.value })
+                                        }
+                                        else{
+                                            setNewProduct({ ...newProduct, sold_quantity: 0 })
+                                        }
+                                    }}
                                 />
                             </Form.Group>
 
@@ -339,6 +491,10 @@ const ProductManagement = () => {
                         </Button>
                     </Modal.Footer>
                 </Modal>
+
+                <div className="d-flex justify-content-center" style={{ marginTop: "20px" }}>
+                    <Paginated totalPages={totalPages} currentPage={currentPage} handlePageChange={handlePageChange} />
+                </div>
             </div>
         </AdminRoute>
     );

@@ -36,18 +36,21 @@ const ProductInfo = ({ product, listproduct }) => {
     };
 
     const handleQuantityChange = (type) => {
-        setQuantity((prev) => {
-            if (type === "increase") {
-                //nếu số lượng hiện tại < số lượng còn trong kho => tăng thêm 1.
-                //nếu đã đạt tối đa => giữ nguyên.
-                return prev < product.in_stock ? prev + 1 : prev;
-            } else {
-                //nếu số lượng lớn hơn 1, giảm đi 1.
-                //nếu số lượng bằng 1, giữ nguyên <0 giảm về 0 để tránh lỗi mua hàng>.
-                return prev > 1 ? prev - 1 : 1;
-            }
-        });
-    };
+        if (type === "increase") {
+          setQuantity((prev) => (prev < product.in_stock ? prev + 1 : prev));
+        } else if (type === "decrease") {
+          setQuantity((prev) => (prev > 1 ? prev - 1 : 1));
+        } else {
+          const value = parseInt(type, 10);
+          if (!isNaN(value)) {
+            const validValue = Math.max(1, Math.min(value, product.in_stock));
+            setQuantity(validValue);
+          }
+        }
+      };
+      
+      
+    
 
     const navigate = useNavigate();
 
@@ -138,14 +141,26 @@ const ProductInfo = ({ product, listproduct }) => {
                             <tr>
                                 <td>Số lượng:</td>
                                 <td>
-                                    <div className="quantity-selector">
+                                    <div className="quantityselector">
                                         <Button
                                             variant="light"
                                             onClick={() => handleQuantityChange("decrease")}
+                                            disabled={quantity <= 1}
                                         >
                                             <i className="bi bi-dash-lg"></i>
                                         </Button>
-                                        <span className="quantity-display">{quantity}</span>
+                                        {/* <span className="quantity-display">{quantity}</span> */}
+                                        <input
+                                            type="number"
+                                            value={quantity}
+                                            onChange={(e) =>
+                                                handleQuantityChange(e.target.value)
+                                            }
+                                            className="quantity-input mx-2"
+                                            style={{ width: "50px", textAlign: "center" }}
+                                            min="1"
+                                            max={product.in_stock}
+                                        />
                                         <Button
                                             variant="light"
                                             onClick={() => handleQuantityChange("increase")}
@@ -186,17 +201,26 @@ const ProductInfo = ({ product, listproduct }) => {
                                 marginTop: "20px",
                             }}
                         >
-                            <Button className="add-to-cart-btn" onClick={handleAddToCart}>
-                                Thêm vào giỏ
-                            </Button>
-                            <Button
-                                className="buy-now-btn"
-                                onClick={handleBuyNow}
-                            >   Mua ngay </Button>
+                            {product.in_stock > 0 ? (
+                                <>
+                                    <Button className="add-to-cart-btn" onClick={handleAddToCart}>
+                                        Thêm vào giỏ
+                                    </Button>
+                                    <Button
+                                        className="buy-now-btn"
+                                        onClick={handleBuyNow}
+                                    >
+                                        Mua ngay
+                                    </Button>
+                                </>
+                            ) : (
+                                <Button variant="secondary" disabled>
+                                    Sản phẩm đã hết hàng
+                                </Button>
+                            )}
                         </div>
-
-
                     )}
+
 
                     <hr className="separator" />
                     <h4 style={{ marginTop: "10px" }} className="text-center">

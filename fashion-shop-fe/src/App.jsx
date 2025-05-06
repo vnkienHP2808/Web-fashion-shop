@@ -24,6 +24,7 @@ import OrderManagement from "./component/user/admin/OrderManagement";
 import UserManagement from "./component/user/admin/UserManagement";
 import UpdateProduct from "./component/user/admin/UpdateProduct";
 import MyOrderPage from "./page/MyOrderPage";
+import SearchPage from "./page/SearchPage";
 function App() {
   return (
     // route của các trang
@@ -71,6 +72,8 @@ function App() {
         />
 
         <Route path="/updateproduct/:id" element={<UpdateProduct/>} />
+
+        <Route path="/search" element={<SearchPage/>}/>
       </Routes>
     </CartProvider>
   );

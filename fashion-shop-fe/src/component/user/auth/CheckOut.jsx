@@ -89,26 +89,6 @@ const Checkout = () => {
     }
   };
 
-  // const handleAddNewAddress = async () => {
-  //   if (newAddress.trim() === "") {
-  //     alert("Vui lòng nhập địa chỉ mới!");
-  //     return;
-  //   }
-
-  //   const updatedUser = { ...user, addresses: [...user.addresses, newAddress] };
-  //   setUser(updatedUser);
-  //   setSelectedAddress(newAddress);
-
-  //   try {
-  //     await axios.put(`http://localhost:8080/api/users/${loggedInUser.id_user}`, updatedUser);
-  //     alert("Địa chỉ đã được thêm thành công!");
-  //   } catch (error) {
-  //     console.error("Lỗi khi thêm địa chỉ:", error);
-  //     alert("Có lỗi xảy ra khi thêm địa chỉ. Vui lòng thử lại!");
-  //   }
-
-  //   setNewAddress("");
-  // };
   const handleAddNewAddress = async () => {
     if (newAddress.trim() === "") {
       alert("Vui lòng nhập địa chỉ mới!");
@@ -132,27 +112,6 @@ const Checkout = () => {
     setNewAddress("");
   };
   
-
-  // const handleAddNewPhoneNumber = async () => {
-  //   if (newPhoneNumber.trim() === "") {
-  //     alert("Vui lòng nhập số điện thoại mới!");
-  //     return;
-  //   }
-
-  //   const updatedUser = { ...user, phones: [...user.phones, newPhoneNumber] };
-  //   setUser(updatedUser);
-  //   setSelectedPhoneNumber(newPhoneNumber);
-
-  //   try {
-  //     await axios.put(`http://localhost:8080/api/users/${loggedInUser.id_user}`, updatedUser);
-  //     alert("Số điện thoại đã được thêm thành công!");
-  //   } catch (error) {
-  //     console.error("Lỗi khi số điện thoại:", error);
-  //     alert("Có lỗi xảy ra khi thêm số điện thoại. Vui lòng thử lại!");
-  //   }
-
-  //   setNewPhoneNumber("");
-  // };
   const handleAddNewPhoneNumber = async () => {
     if (newPhoneNumber.trim() === "") {
       alert("Vui lòng nhập số điện thoại mới!");
@@ -239,16 +198,27 @@ const Checkout = () => {
 
         <div className="add-address">
           <input
-            type="text"
-            placeholder="Thêm số điện thoại mới"
+            type="number"
+            placeholder="Thêm số điện thoại mới (nhập đủ 10 số)"
             value={newPhoneNumber}
-            onChange={(e) => setNewPhoneNumber(e.target.value)}
+            onChange={(e) => {
+              const value = e.target.value;
+              // Chỉ cho nhập số và tối đa 10 chữ số
+              if (/^\d{0,10}$/.test(value)) {
+                setNewPhoneNumber(value);
+              }
+            }}
             className="address-input"
           />
-          <button onClick={handleAddNewPhoneNumber} className="add-address-btn">
+          <button
+            onClick={handleAddNewPhoneNumber}
+            className="add-address-btn"
+            disabled={!/^\d{10}$/.test(newPhoneNumber)} // disable nếu không đủ 10 số
+          >
             Thêm số điện thoại
           </button>
         </div>
+
 
         <label>Địa chỉ giao hàng:</label>
         <select

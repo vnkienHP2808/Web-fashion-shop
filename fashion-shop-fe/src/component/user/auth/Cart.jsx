@@ -21,14 +21,7 @@ const Cart = () => {
   const [productToDelete, setProductToDelete] = useState(null);
   const [selectedProducts, setSelectedProducts] = useState([]);
 
-  const [categories, setCategories] = useState([]);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    axios.get("http://localhost:8080/api/categories").then((res) => {
-      setCategories(res.data);
-    });
-  }, []);
 
   useEffect(() => {
     const storedUser = sessionStorage.getItem("account");
@@ -43,10 +36,6 @@ const Cart = () => {
       return;
     }
 
-    // Nếu bạn cần fetch lại cart từ server, bạn có thể gọi hàm tại đây
-    // nhưng bạn cần chắc chắn fetchCartFromServer có trong CartContext
-    // hoặc bạn có thể tự định nghĩa hàm như đã trình bày ở trên
-    // Ví dụ: fetchCartFromServer(); nếu có định nghĩa
   }, [navigate]);
 
   const handleShowModal = (product) => {
@@ -70,7 +59,7 @@ const Cart = () => {
   };
 
   const handleQuantityChange = (product, value) => {
-    const quantity = parseInt(value, 10) || 0;
+    const quantity = parseInt(value, 10) || 1;
     if (quantity <= 0) {
       handleShowModal(product);
     } else if (quantity > product.product.in_stock) {
@@ -194,7 +183,7 @@ const Cart = () => {
                         <i className="bi bi-dash-lg"></i>
                       </Button>
                       <input
-                        type="text"
+                        type="number"
                         value={item.quantity}
                         onChange={(e) =>
                           handleQuantityChange(item, e.target.value)

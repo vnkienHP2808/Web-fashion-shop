@@ -12,7 +12,7 @@ const RelateProduct = ({ products, catid, id }) => {
             <div className="product-list-grid">
                 {products
                     .filter(
-                        (product) => product.id !== id && product.idCat === catid
+                        (product) => product.idProduct !== id && product.idCat === catid
                     )
                     .slice(0, 8)
                     .map((product, index) => (

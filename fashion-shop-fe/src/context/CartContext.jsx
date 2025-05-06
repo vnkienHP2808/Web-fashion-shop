@@ -15,7 +15,7 @@ export const CartProvider = ({ children }) => {
       const res = await axios.get(`http://localhost:8080/api/cart/${loggedInUser.id_user}`);
       setCart(res.data);
     } catch (error) {
-      console.error("Lỗi khi lấy giỏ hàng từ server:", error);
+      console.error("Lỗi khi lấy giỏ hàng:", error);
     }
   };
 
@@ -25,13 +25,14 @@ export const CartProvider = ({ children }) => {
       await axios.post("http://localhost:8080/api/cart/add", {
         id_user: loggedInUser.id_user,
         productId: product.idProduct,
-        quantity: 1,
+        quantity: product.quantity // lấy đúng số lượng người dùng chọn
       });
       fetchCartFromServer();
     } catch (err) {
       console.error("Lỗi thêm sản phẩm vào giỏ hàng:", err);
     }
   };
+  
 
   const updateCartItemQuantity = async (productId, quantity) => {
     try {
@@ -65,10 +66,11 @@ export const CartProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    if (loggedInUser) {
+    if (loggedInUser && loggedInUser.role === "Customer") {
       fetchCartFromServer();
     }
   }, []);
+  
 
   return (
     <CartContext.Provider

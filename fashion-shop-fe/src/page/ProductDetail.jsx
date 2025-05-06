@@ -16,9 +16,13 @@ const ProductDetail=()=>{
 
     //products in db.json
     useEffect(() => {
-        axios.get("http://localhost:8080/api/products").then((res) => {
-          setProducts(res.data);
-        });
+      axios
+        .get("http://localhost:8080/api/products?page=1&size=100") // Lấy trang đầu, 100 sản phẩm
+        .then((res) => {
+          const fetchedProducts = Array.isArray(res.data.content) ? res.data.content : [];
+          setProducts(fetchedProducts);
+        })
+        .catch((err) => console.error("Error fetching products:", err));
     }, []);
 
     //lấy sản phẩm theo id từ db.json để gán vào setProduct.

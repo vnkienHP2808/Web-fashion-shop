@@ -8,7 +8,7 @@ import Breadcrump from "../component/ui/Breadcrump";
 import Filter from "../component/ui/Filter";
 import axios from "axios";
 
-const AllProduct = () => {
+const SearchPage = () => {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
@@ -22,7 +22,9 @@ const AllProduct = () => {
   const [totalElements, setTotalElements] = useState(0);
   const [hoverIndex, setHoverIndex] = useState(null);
 
+  const searchTerm = useState(location.state?.normalSearchTerm);
   useEffect(() => {
+    if (!searchTerm) return;
     const params = {
       page: currentPage,
       size: productsPerPage,
@@ -32,7 +34,7 @@ const AllProduct = () => {
       ...(selectedOccasion && { occasion: selectedOccasion }),
   };
 
-    axios.get(`http://localhost:8080/api/products`, { params })
+    axios.get(`http://localhost:8080/api/products/search/${searchTerm}`, { params })
       .then((res) => {
         setProducts(res.data.content);
         setTotalPages(res.data.totalPages);
@@ -166,4 +168,4 @@ const handleOccasionChange = (event) => {
   );
 };
 
-export default AllProduct;
+export default SearchPage;

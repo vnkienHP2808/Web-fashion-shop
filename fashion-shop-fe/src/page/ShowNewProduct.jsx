@@ -8,28 +8,47 @@ import Breadcrump from "../component/ui/Breadcrump";
 import Filter from "../component/ui/Filter";
 import axios from "axios";
 
-const AllNewProduct = () => {
+const ShowNewProduct = () => {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
-
-  const [selectedCategory, setSelectedCategory] = useState([]);
-  const [selectedSubCategory, setSelectedSubCategory] = useState([]);
-  const [selectedPriceRange, setSelectedPriceRange] = useState([]);
-  const [selectedOccasion, setSelectedOccasion] = useState([]);
-
+  const [totalPages, setTotalPages] = useState(1);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [selectedSubCategory, setSelectedSubCategory] = useState(null);
+  const [selectedPriceRange, setSelectedPriceRange] = useState(null);
+  const [selectedOccasion, setSelectedOccasion] = useState(null);
   const [openFilter, setOpenFilter] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [productsPerPage] = useState(20);
-  const [hoverIndex, setHoverIndex] = useState(null);
+  const [totalElements, setTotalElements] = useState(0);
+  const productsPerPage = 20;
 
   useEffect(() => {
-    axios.get("http://localhost:8080/api/products")
-      .then((res) => setProducts(res.data))
-      .catch((err) => console.error("Error fetching products:", err));
-  }, []);
+    const params = {
+      page: currentPage,
+      size: productsPerPage,
+      ...(selectedCategory && { idCat: selectedCategory }),
+      ...(selectedSubCategory && { idSubcat: selectedSubCategory }),
+      ...(selectedPriceRange && { priceRange: selectedPriceRange }),
+      ...(selectedOccasion && { occasion: selectedOccasion }),
+  };
+
+    axios
+      .get("http://localhost:8080/api/products/new", { params })
+      .then((res) => {
+        const fetchedProducts = Array.isArray(res.data.content) ? res.data.content : [];
+        setProducts(fetchedProducts);
+        setTotalPages(res.data.totalPages || 1);
+        setTotalElements(res.data.totalElements || 0);
+      })
+      .catch((err) => {
+        console.error("Error fetching new products:", err);
+        setProducts([]);
+        setTotalPages(1);
+      });
+  }, [currentPage, selectedCategory, selectedSubCategory, selectedPriceRange, selectedOccasion]);
 
   useEffect(() => {
-    axios.get("http://localhost:8080/api/categories")
+    axios
+      .get("http://localhost:8080/api/categories")
       .then((res) => setCategories(res.data))
       .catch((err) => console.error("Error fetching categories:", err));
   }, []);
@@ -39,84 +58,75 @@ const AllNewProduct = () => {
     const numberValue = Number(value);
 
     if (checked) {
-      setSelectedCategory([numberValue]);
+        setSelectedCategory(numberValue);
     } else {
-      setSelectedCategory([]);
+        setSelectedCategory(null);
     }
-
-    setSelectedSubCategory([]);
+    setSelectedSubCategory(null);
     setCurrentPage(1);
-  };
+};
 
-  const handleSubCategoryChange = (event) => {
+const handleSubCategoryChange = (event) => {
     const { value, checked } = event.target;
     const numberValue = Number(value);
-    setSelectedSubCategory((prev) =>
-      checked ? [...prev, numberValue] : prev.filter((item) => item !== numberValue)
-    );
-    setCurrentPage(1);
-  };
 
-  const handlePriceRangeChange = (event) => {
+    if (checked) {
+        setSelectedSubCategory(numberValue);
+    } else {
+        setSelectedSubCategory(null);
+    }
+    setCurrentPage(1);
+};
+
+const handlePriceRangeChange = (event) => {
     const { value, checked } = event.target;
-    setSelectedPriceRange((prev) =>
-      checked ? [...prev, value] : prev.filter((item) => item !== value)
-    );
-    setCurrentPage(1);
-  };
 
-  const handleOccasionChange = (event) => {
+    if (checked) {
+        setSelectedPriceRange(value);
+    } else {
+        setSelectedPriceRange(null);
+    }
+    setCurrentPage(1);
+};
+
+const handleOccasionChange = (event) => {
     const { value, checked } = event.target;
-    setSelectedOccasion((prev) =>
-      checked ? [...prev, value] : prev.filter((item) => item !== value)
-    );
+
+    if (checked) {
+        setSelectedOccasion(value);
+    } else {
+        setSelectedOccasion(null);
+    }
     setCurrentPage(1);
+};
+
+  // Handle page change
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
   };
-
-  const filterFn = (product) => {
-    const categoryMatch =
-      selectedCategory.length === 0 || selectedCategory.includes(product.idCat);
-
-    const subCategoryMatch =
-      selectedSubCategory.length === 0 || selectedSubCategory.includes(product.idSubcat);
-
-    const priceMatch =
-      selectedPriceRange.length === 0 ||
-      selectedPriceRange.some((range) => {
-        const [min, max] = range.split("-").map(Number);
-        return product.price >= min && product.price <= max;
-      });
-
-    const occasionMatch =
-      selectedOccasion.length === 0 || selectedOccasion.includes(product.occasion);
-
-    const newMatch = product.is_new === 1 || product.is_new === true;
-
-    return categoryMatch && subCategoryMatch && priceMatch && occasionMatch && newMatch;
-  };
-
-  const indexOfLastProduct = currentPage * productsPerPage;
-  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-
-  const filteredProducts = products.filter(filterFn);
-  const currentProducts = filteredProducts.slice(indexOfFirstProduct, indexOfLastProduct);
-  const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
-
-  const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
     <div>
       <Header />
       <Breadcrump text={"Sản phẩm mới"} />
       <div style={{ backgroundColor: "#FAEFEC" }}>
-        <div className="d-flex align-items-center justify-content-between" style={{ margin: "10px 50px" }}>
+        <div
+          className="d-flex align-items-center justify-content-between"
+          style={{ margin: "10px 50px" }}
+        >
           <h2 style={{ marginTop: "10px" }}>
             Sản phẩm mới:{" "}
-            <span style={{ marginLeft: "20px", fontSize: "24px", fontStyle: "italic", fontWeight: "lighter" }}>
-              {filteredProducts.length} sản phẩm
+            <span
+              style={{
+                marginLeft: "20px",
+                fontSize: "24px",
+                fontStyle: "italic",
+                fontWeight: "lighter",
+              }}
+            >
+              {totalElements} sản phẩm
             </span>
           </h2>
-
           <div style={{ marginLeft: "auto" }}>
             <Filter
               categories={categories}
@@ -133,16 +143,18 @@ const AllNewProduct = () => {
             />
           </div>
         </div>
-
         <ProductList
-          products={currentProducts}
+          products={products}
           filterFn={() => true}
           title="Sản phẩm"
           isShowAll={true}
         />
-
         <div className="d-flex justify-content-center" style={{ marginTop: "20px" }}>
-          <Paginated totalPages={totalPages} currentPage={currentPage} handlePageChange={handlePageChange} />
+          <Paginated
+            totalPages={totalPages}
+            currentPage={currentPage}
+            handlePageChange={handlePageChange}
+          />
         </div>
       </div>
       <Footer />
@@ -150,4 +162,4 @@ const AllNewProduct = () => {
   );
 };
 
-export default AllNewProduct;
+export default ShowNewProduct;

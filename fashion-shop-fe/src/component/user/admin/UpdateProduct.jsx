@@ -19,6 +19,7 @@ const UpdateProduct = () => {
     sold_quantity: 0,
     in_stock: 0,
   });
+  const [selectedFiles, setSelectedFiles] = useState([]);
   const nav = useNavigate();
 
   // Fetch product and categories
@@ -48,6 +49,30 @@ const UpdateProduct = () => {
         nav("/admin");
       })
       .catch((err) => console.error("Update failed", err));
+  };
+
+  const handleFileChange = (e) => {
+    const files = Array.from(e.target.files);
+    setSelectedFiles([...selectedFiles, ...files]);
+    
+    // Tạo đường dẫn theo định dạng yêu cầu và cập nhật state
+    const newImageObjects = files.map(file => ({
+      imageLink: `/assets/user/image/product/${file.name}`
+    }));
+    
+    setEditProduct({
+      ...editProduct,
+      images: [...editProduct.images, ...newImageObjects],
+    });
+  };
+  
+  const removeImage = (index) => {
+    const updatedImages = [...editProduct.images];
+    updatedImages.splice(index, 1);
+    setEditProduct({
+      ...editProduct,
+      images: updatedImages,
+    });
   };
 
   const selectedCategory = categories.find(
@@ -122,9 +147,15 @@ const UpdateProduct = () => {
                 <input
                   type="number"
                   value={editProduct.price}
-                  onChange={(e) =>
-                    setEditProduct({ ...editProduct, price: +e.target.value })
-                  }
+                  onChange={(e) => {
+                    const ip = parseInt(e.target.value, 10);
+                    if (ip >= 0) {
+                      setEditProduct({ ...editProduct, price: ip })
+                    }
+                    else {
+                      setEditProduct({ ...editProduct, price: 0 })
+                    }
+                  }}
                 />
               </td>
             </tr>
@@ -134,9 +165,15 @@ const UpdateProduct = () => {
                 <input
                   type="number"
                   value={editProduct.sale_price}
-                  onChange={(e) =>
-                    setEditProduct({ ...editProduct, sale_price: +e.target.value })
-                  }
+                  onChange={(e) => {
+                    const ip = parseInt(e.target.value, 10);
+                    if (ip >= 0) {
+                      setEditProduct({ ...editProduct, sale_price: ip })
+                    }
+                    else {
+                      setEditProduct({ ...editProduct, sale_price: 0 })
+                    }
+                  }}
                 />
               </td>
             </tr>
@@ -180,21 +217,40 @@ const UpdateProduct = () => {
               </td>
             </tr>
             <tr>
-              <td><label>Ảnh (URLs, cách nhau bằng dấu phẩy)</label></td>
+              <td><label>Ảnh sản phẩm</label></td>
               <td>
-                <input
-                  type="text"
-                  value={editProduct.images.join(", ")}
-                  onChange={(e) =>
-                    setEditProduct({
-                      ...editProduct,
-                      images: e.target.value
-                        .split(",")
-                        .map((url) => url.trim()),
-                    })
-                  }
-                />
+                <div style={{marginTop: "10px"}}>
+                  {editProduct.images && editProduct.images.length > 0 ? (
+                    <ul style={{listStyle: "none", padding: 0}}>
+                      {editProduct.images.map((image, index) => (
+                        <li key={index} style={{display: "flex", justifyContent: "space-between", marginBottom: "5px", padding: "5px", border: "1px solid #ddd", borderRadius: "4px"}}>
+                          <span style={{maxWidth: "400px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap"}}>
+                            {image.imageLink}
+                          </span>
+                          <button 
+                            type="button" 
+                            onClick={() => removeImage(index)}
+                            style={{background: "#dc3545", color: "white", border: "none", borderRadius: "4px", padding: "2px 8px", cursor: "pointer"}}
+                          >
+                            Xóa
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p>Chưa có ảnh nào</p>
+                  )}
+                </div>
               </td>
+            </tr>
+            <tr>
+              <td><label>Thêm ảnh</label></td>
+              <input
+                  type="file"
+                  multiple
+                  accept="image/*"
+                  onChange={handleFileChange}
+                />
             </tr>
             <tr>
               <td><label>Đã bán</label></td>
@@ -202,9 +258,15 @@ const UpdateProduct = () => {
                 <input
                   type="number"
                   value={editProduct.sold_quantity}
-                  onChange={(e) =>
-                    setEditProduct({ ...editProduct, sold_quantity: +e.target.value })
-                  }
+                  onChange={(e) => {
+                    const ip = parseInt(e.target.value, 10);
+                    if (ip >= 0) {
+                      setEditProduct({ ...editProduct, sold_quantity: ip })
+                    }
+                    else {
+                      setEditProduct({ ...editProduct, sold_quantity: 0 })
+                    }
+                  }}
                 />
               </td>
             </tr>
@@ -214,9 +276,15 @@ const UpdateProduct = () => {
                 <input
                   type="number"
                   value={editProduct.in_stock}
-                  onChange={(e) =>
-                    setEditProduct({ ...editProduct, in_stock: +e.target.value })
-                  }
+                  onChange={(e) => {
+                    const ip = parseInt(e.target.value, 10);
+                    if (ip >= 0) {
+                      setEditProduct({ ...editProduct, in_stock: ip })
+                    }
+                    else {
+                      setEditProduct({ ...editProduct, in_stock: 0 })
+                    }
+                  }}
                 />
               </td>
             </tr>

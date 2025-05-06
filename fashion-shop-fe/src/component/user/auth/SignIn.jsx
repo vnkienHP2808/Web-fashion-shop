@@ -16,7 +16,7 @@ const LogIn= ()=>{
     }, [navigate]); // useEffect phụ thuộc vào navigate
     
 
-    //xử lý việc check thông tin nhập vào với db.json để xem xét đăng nhập
+    //xử lý việc check thông tin nhập
     const handleLogin = async (e) => {
         e.preventDefault();
     
@@ -32,13 +32,13 @@ const LogIn= ()=>{
                 sessionStorage.setItem("account", JSON.stringify(user));
                 alert("Đăng nhập thành công!");
                 navigate("/");
+                window.location.reload();
             } else {
                 alert("Tài khoản bị vô hiệu hóa");
             }
     
         } catch (error) {
             alert("Sai email hoặc mật khẩu");
-            console.error("Đăng nhập thất bại", error);
         }
     };
     

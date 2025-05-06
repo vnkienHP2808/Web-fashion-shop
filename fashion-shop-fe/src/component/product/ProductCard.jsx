@@ -18,8 +18,12 @@ const ProductCard = ({ products, index }) => {
             navigate("/sign-in");
             return;
         }
-        addToCart(products);
-        alert("Sản phẩm đã được thêm vào giỏ hàng.");
+        if (products.in_stock > 0) {
+            addToCart({ ...products, quantity: 1 });
+            alert("Sản phẩm đã được thêm vào giỏ hàng!");
+        } else {
+            alert("Sản phẩm hiện đã hết hàng.");
+        }
     };
 
     return (
@@ -151,7 +155,7 @@ const ProductCard = ({ products, index }) => {
             </div>
 
             <div className="product-card-info">
-                <a href="#" className="product-name">
+                <a href={`/products/${products.idProduct}`} className="product-name">
                     {products.name_product}
                 </a>
                 <div className="product-price">

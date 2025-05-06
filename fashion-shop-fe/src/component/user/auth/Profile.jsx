@@ -4,7 +4,6 @@ import React, { useState, useEffect } from "react";
 
 const Profile = () => {
     const user = JSON.parse(sessionStorage.getItem("account"));
-    console.log("User:", user);
     const navigate = useNavigate();
 
     const phoneNumberOptions = user.phones || [];
