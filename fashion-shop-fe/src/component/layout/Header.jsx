@@ -28,37 +28,37 @@ const Header = () => {
     const totalItems = new Set(cart.map(item => item.product.idProduct)).size;
 
     // Hàm loại bỏ dấu tiếng Việt
-  const removeAccents = (str) => {
-    if (!str) return "";
-    const diacritics = [
-      { base: "a", letters: /[áàảãạâấầẩẫậăắằẳẵặ]/g },
-      { base: "e", letters: /[éèẻẽẹêếềểễệ]/g },
-      { base: "i", letters: /[íìỉĩị]/g },
-      { base: "o", letters: /[óòỏõọôốồổỗộơớờởỡợ]/g },
-      { base: "u", letters: /[úùủũụưứừửữự]/g },
-      { base: "y", letters: /[ýỳỷỹỵ]/g },
-      { base: "d", letters: /[đ]/g },
-    ];
+    const removeAccents = (str) => {
+        if (!str) return "";
+        const diacritics = [
+            { base: "a", letters: /[áàảãạâấầẩẫậăắằẳẵặ]/g },
+            { base: "e", letters: /[éèẻẽẹêếềểễệ]/g },
+            { base: "i", letters: /[íìỉĩị]/g },
+            { base: "o", letters: /[óòỏõọôốồổỗộơớờởỡợ]/g },
+            { base: "u", letters: /[úùủũụưứừửữự]/g },
+            { base: "y", letters: /[ýỳỷỹỵ]/g },
+            { base: "d", letters: /[đ]/g },
+        ];
 
-    let result = str;
-    diacritics.forEach(({ base, letters }) => {
-      result = result.replace(letters, base);
-    });
+        let result = str;
+        diacritics.forEach(({ base, letters }) => {
+            result = result.replace(letters, base);
+        });
 
-    return result;
-  };
+        return result;
+    };
 
-  const handleSearch = (e) => {
-    e.preventDefault();
-    if (searchTerm.trim()) {
+    const handleSearch = (e) => {
+        e.preventDefault();
+        if (searchTerm.trim()) {
       // Chuẩn hóa searchTerm: loại bỏ dấu và chuyển thành chữ thường
-      const normalSearchTerm = removeAccents(searchTerm).toLowerCase();
+            const normalSearchTerm = removeAccents(searchTerm).toLowerCase();
       // Gửi cả searchTerm gốc và searchTerm đã chuẩn hóa qua state
-      navigate("/search", {
+            navigate("/search", {
         state: {normalSearchTerm },
-      });
-    }
-  };
+            });
+        }
+    };
 
     return (
         <div className="header">

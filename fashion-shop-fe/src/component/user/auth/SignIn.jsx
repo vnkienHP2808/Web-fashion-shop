@@ -14,7 +14,7 @@ const LogIn= ()=>{
           navigate("/"); //điều hướng về trang chủ
         }
     }, [navigate]); // useEffect phụ thuộc vào navigate
-    
+
 
     //xử lý việc check thông tin nhập
     const handleLogin = async (e) => {
@@ -38,7 +38,7 @@ const LogIn= ()=>{
             }
     
         } catch (error) {
-            alert("Sai email hoặc mật khẩu");
+                alert("Sai email hoặc mật khẩu");
         }
     };
     
