@@ -9,6 +9,19 @@ export const CartProvider = ({ children }) => {
   const storedUser = sessionStorage.getItem("account");
   const loggedInUser = storedUser ? JSON.parse(storedUser) : null;
 
+  // Thiết lập interceptor cho axios để thêm header Authorization
+  useEffect(() => {
+    const auth = sessionStorage.getItem("auth");
+    if (auth) {
+      const interceptor = axios.interceptors.request.use((config) => {
+        config.headers.Authorization = `Basic ${auth}`;
+        return config;
+      });
+      // Cleanup interceptor khi component unmount
+      return () => axios.interceptors.request.eject(interceptor);
+    }
+  }, []);
+
   const fetchCartFromServer = async () => {
     if (!loggedInUser) return;
     try {
@@ -25,14 +38,13 @@ export const CartProvider = ({ children }) => {
       await axios.post("http://localhost:8080/api/cart/add", {
         id_user: loggedInUser.id_user,
         productId: product.idProduct,
-        quantity: product.quantity // lấy đúng số lượng người dùng chọn
+        quantity: product.quantity,
       });
       fetchCartFromServer();
     } catch (err) {
       console.error("Lỗi thêm sản phẩm vào giỏ hàng:", err);
     }
   };
-  
 
   const updateCartItemQuantity = async (productId, quantity) => {
     try {
@@ -70,7 +82,6 @@ export const CartProvider = ({ children }) => {
       fetchCartFromServer();
     }
   }, []);
-  
 
   return (
     <CartContext.Provider

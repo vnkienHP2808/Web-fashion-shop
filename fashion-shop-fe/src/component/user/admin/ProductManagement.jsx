@@ -33,6 +33,18 @@ const ProductManagement = () => {
     const [totalElements, setTotalElements] = useState(0);
     const [productsPerPage] = useState(20);
 
+    // Thêm interceptor để gửi header Authorization
+    useEffect(() => {
+        const auth = sessionStorage.getItem("auth");
+        if (auth) {
+            const interceptor = axios.interceptors.request.use((config) => {
+                config.headers.Authorization = `Basic ${auth}`;
+                return config;
+            });
+            return () => axios.interceptors.request.eject(interceptor);
+        }
+    }, []);
+
     useEffect(() => {
         const params = {
             page: currentPage,
@@ -50,7 +62,7 @@ const ProductManagement = () => {
                 setTotalElements(res.data.totalElements || 0);
             })
             .catch((err) => {
-                console.error("Error fetching products:", err);
+                console.error("Lỗi khi tải danh sách sản phẩm:", err);
                 alert("Lỗi khi tải danh sách sản phẩm. Vui lòng thử lại.");
             });
     }, [currentPage, selectedCategory, selectedSubCategory, selectedPriceRange, selectedOccasion]);
@@ -58,7 +70,7 @@ const ProductManagement = () => {
     useEffect(() => {
         axios.get("http://localhost:8080/api/categories")
             .then((res) => setCategories(res.data))
-            .catch((err) => console.error("Error fetching categories:", err));
+            .catch((err) => console.error("Lỗi khi lấy danh mục:", err));
     }, []);
 
     const handleAddProduct = () => {
@@ -76,25 +88,27 @@ const ProductManagement = () => {
             return;
         }
         
-        axios.post("http://localhost:8080/api/products/create", newProduct).then((res) => {
-            setProducts([...products, res.data]);
-            setNewProduct({
-                name_product: "",
-                price: "",
-                in_stock: 0,
-                status: "Active",
-                occasion: "",
-                images: [],
-                idCat: 1,
-                idSubcat: 1,
-                sale_price: null,
-                is_sale: false,
-                is_new: true,
-                sold_quantity: 0,
-            });
-            setSelectedFiles([]);
-            setShowAddModal(false);
-        });
+        axios.post("http://localhost:8080/api/products/create", newProduct)
+            .then((res) => {
+                setProducts([...products, res.data]);
+                setNewProduct({
+                    name_product: "",
+                    price: "",
+                    in_stock: 0,
+                    status: "Active",
+                    occasion: "",
+                    images: [],
+                    idCat: 1,
+                    idSubcat: 1,
+                    sale_price: null,
+                    is_sale: false,
+                    is_new: true,
+                    sold_quantity: 0,
+                });
+                setSelectedFiles([]);
+                setShowAddModal(false);
+            })
+            .catch((err) => console.error("Lỗi khi thêm sản phẩm:", err));
     };
 
     const handleDeleteProduct = (id) => {

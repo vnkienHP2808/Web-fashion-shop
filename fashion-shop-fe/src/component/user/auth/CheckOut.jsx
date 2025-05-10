@@ -20,6 +20,18 @@ const Checkout = () => {
   const selectedProducts = location.state?.selectedCartItems || [];
   const loggedInUser = JSON.parse(sessionStorage.getItem("account"));
 
+  // Thêm interceptor để gửi header Authorization
+  useEffect(() => {
+    const auth = sessionStorage.getItem("auth");
+    if (auth) {
+      const interceptor = axios.interceptors.request.use((config) => {
+        config.headers.Authorization = `Basic ${auth}`;
+        return config;
+      });
+      return () => axios.interceptors.request.eject(interceptor);
+    }
+  }, []);
+
   useEffect(() => {
     if (!loggedInUser) {
       navigate("/sign-in");
@@ -33,10 +45,12 @@ const Checkout = () => {
   }, [navigate]);
 
   useEffect(() => {
-    axios.get(`http://localhost:8080/api/users/${loggedInUser.id_user}`).then((res) => {
-      setUser(res.data);
-    });
-  }, []);
+    if (loggedInUser) {
+      axios.get(`http://localhost:8080/api/users/${loggedInUser.id_user}`)
+        .then((res) => setUser(res.data))
+        .catch((err) => console.error("Lỗi khi lấy thông tin người dùng:", err));
+    }
+  }, [loggedInUser]);
 
   const totalAmount = selectedProducts.reduce(
     (acc, item) =>
@@ -75,11 +89,7 @@ const Checkout = () => {
     };
 
     try {
-      await axios.post("http://localhost:8080/api/orders", order, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      await axios.post("http://localhost:8080/api/orders", order);
       selectedProducts.forEach((item) => removeFromCart(item.product.idProduct));
       alert("Đơn hàng đã đặt thành công!");
       navigate("/");
@@ -105,7 +115,7 @@ const Checkout = () => {
       });
       alert("Địa chỉ đã được thêm thành công!");
     } catch (error) {
-      console.error("Lỗi khi thêm địa chỉ:", error);
+      console.error("Lỗi khi thêm địa chỉ:", error.response?.data);
       alert("Có lỗi xảy ra khi thêm địa chỉ. Vui lòng thử lại!");
     }
   
@@ -128,13 +138,12 @@ const Checkout = () => {
       });
       alert("Số điện thoại đã được thêm thành công!");
     } catch (error) {
-      console.error("Lỗi khi thêm số điện thoại:", error);
+      console.error("Lỗi khi thêm số điện thoại:", error.response?.data);
       alert("Có lỗi xảy ra khi thêm số điện thoại. Vui lòng thử lại!");
     }
   
     setNewPhoneNumber("");
   };
-  
 
   return (
     <div>
@@ -203,7 +212,6 @@ const Checkout = () => {
             value={newPhoneNumber}
             onChange={(e) => {
               const value = e.target.value;
-              // Chỉ cho nhập số và tối đa 10 chữ số
               if (/^\d{0,10}$/.test(value)) {
                 setNewPhoneNumber(value);
               }
@@ -213,12 +221,11 @@ const Checkout = () => {
           <button
             onClick={handleAddNewPhoneNumber}
             className="add-address-btn"
-            disabled={!/^\d{10}$/.test(newPhoneNumber)} // disable nếu không đủ 10 số
+            disabled={!/^\d{10}$/.test(newPhoneNumber)}
           >
             Thêm số điện thoại
           </button>
         </div>
-
 
         <label>Địa chỉ giao hàng:</label>
         <select

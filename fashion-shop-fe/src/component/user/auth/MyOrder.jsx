@@ -7,6 +7,19 @@ const MyOrders = () => {
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null);
 
+  // Thiết lập interceptor cho axios để thêm header Authorization
+  useEffect(() => {
+    const auth = sessionStorage.getItem("auth");
+    if (auth) {
+      const interceptor = axios.interceptors.request.use((config) => {
+        config.headers.Authorization = `Basic ${auth}`;
+        return config;
+      });
+      // Cleanup interceptor khi component unmount
+      return () => axios.interceptors.request.eject(interceptor);
+    }
+  }, []);
+
   useEffect(() => {
     const account = JSON.parse(sessionStorage.getItem("account"));
     if (account) {
@@ -67,7 +80,9 @@ const MyOrders = () => {
                           <span>Số lượng: {item.quantity}</span>
                         </>
                       ) : (
-                        <span style={{ color: "red" }}>Sản phẩm không tồn tại</span>
+                        <span style={{ color: "red" }}>
+                          Sản phẩm không tồn tại
+                        </span>
                       )}
                     </div>
                   ))
@@ -95,7 +110,8 @@ const MyOrders = () => {
                 <strong>Địa chỉ giao hàng:</strong> {selectedOrder.address}
               </p>
               <p style={{ fontSize: "18px" }}>
-                <strong>Số điện thoại nhận hàng:</strong> {selectedOrder.phoneNumber}
+                <strong>Số điện thoại nhận hàng:</strong>{" "}
+                {selectedOrder.phoneNumber}
               </p>
               <p style={{ fontSize: "18px" }}>
                 <strong>Cước giao hàng:</strong> {selectedOrder.shippingFee}₫
@@ -126,7 +142,9 @@ const MyOrders = () => {
                       <>
                         <div style={{ textAlign: "center" }}>
                           <img
-                            src={selectedImage || item.product.images[0].imageLink}
+                            src={
+                              selectedImage || item.product.images[0].imageLink
+                            }
                             alt={item.product.name_product}
                             style={{
                               width: "150px",
@@ -148,15 +166,19 @@ const MyOrders = () => {
                           {item.product.name_product}
                         </div>
 
-                        <div style={{ textAlign: "center", marginBottom: "10px" }}>
+                        <div
+                          style={{ textAlign: "center", marginBottom: "10px" }}
+                        >
                           Số lượng: {item.quantity} <br />
                           Giá:{" "}
-                          {item.product.is_sale && item.product.sale_price != null ? (
+                          {item.product.is_sale &&
+                          item.product.sale_price != null ? (
                             <>
-                              <span style={{ color: "red", fontWeight: "bold" }}>
+                              <span
+                                style={{ color: "red", fontWeight: "bold" }}
+                              >
                                 {item.product.sale_price.toLocaleString()}₫
-                              </span>
-                              {" "}
+                              </span>{" "}
                               <span
                                 style={{
                                   textDecoration: "line-through",
@@ -165,12 +187,17 @@ const MyOrders = () => {
                                 }}
                               >
                                 {item.product.price.toLocaleString()}₫
-                              </span>
-                              {" "}
-                              <span style={{ color: "#f39c12", fontWeight: "bold" }}>
+                              </span>{" "}
+                              <span
+                                style={{
+                                  color: "#f39c12",
+                                  fontWeight: "bold",
+                                }}
+                              >
                                 Sale: -
                                 {Math.floor(
-                                  ((item.product.price - item.product.sale_price) /
+                                  ((item.product.price -
+                                    item.product.sale_price) /
                                     item.product.price) *
                                     100
                                 )}

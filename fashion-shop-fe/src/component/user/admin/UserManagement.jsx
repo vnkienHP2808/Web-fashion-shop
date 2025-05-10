@@ -1,33 +1,46 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Paginated from "../../ui/Pagination";
+
 const UserManagement = () => {
     const [users, setUsers] = useState([]);
-
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const [totalElements, setTotalElements] = useState(0);
     const [usersPerPage] = useState(10);
     const [searchTerm, setSearchTerm] = useState("");
+
+    // Thêm interceptor để gửi header Authorization
+    useEffect(() => {
+        const auth = sessionStorage.getItem("auth");
+        if (auth) {
+            const interceptor = axios.interceptors.request.use((config) => {
+                config.headers.Authorization = `Basic ${auth}`;
+                return config;
+            });
+            return () => axios.interceptors.request.eject(interceptor);
+        }
+    }, []);
+
     useEffect(() => {
         const params = {
             page: currentPage,
             size: usersPerPage,
-            ...(searchTerm.length > 0 && {name: searchTerm})
+            ...(searchTerm.length > 0 && { name: searchTerm }),
         };
 
-        axios.get(`http://localhost:8080/api/users`, {params}).then((res) => {
-            setUsers(res.data.content);
-            setTotalPages(res.data.totalPages);
-            setTotalElements(res.data.totalElements || 0);
-        })
-        .catch((err) => console.error("Error fetching users:", err));
+        axios.get(`http://localhost:8080/api/users`, { params })
+            .then((res) => {
+                setUsers(res.data.content);
+                setTotalPages(res.data.totalPages);
+                setTotalElements(res.data.totalElements || 0);
+            })
+            .catch((err) => console.error("Lỗi khi lấy danh sách người dùng:", err));
     }, [currentPage, searchTerm]);
 
     const handleToggleUserStatus = (id) => {
         const updatedUser = users.find((user) => user.id_user === id);
-        updatedUser.status =
-            updatedUser.status === "Active" ? "Inactive" : "Active";
+        updatedUser.status = updatedUser.status === "Active" ? "Inactive" : "Active";
 
         if (updatedUser.role === "Admin" && updatedUser.status === "Inactive") {
             alert("Admin không thể tự hủy kích hoạt!");
@@ -38,8 +51,8 @@ const UserManagement = () => {
             .put(`http://localhost:8080/api/users/${id}/status`, { status: updatedUser.status })
             .then(() => {
                 setUsers(users.map((user) => (user.id_user === id ? updatedUser : user)));
-            });
-
+            })
+            .catch((err) => console.error("Lỗi khi cập nhật trạng thái:", err));
     };
 
     const handlePageChange = (pageNumber) => {
@@ -49,13 +62,13 @@ const UserManagement = () => {
     return (
         <div style={{ padding: "20px", margin: "0 auto" }}>
             <h2 style={{ textAlign: "center", marginBottom: "20px" }}>
-                Quản Lý Người Dùng: <i style={{fontWeight: "normal"}}>{totalElements} người dùng</i>
+                Quản Lý Người Dùng: <i style={{ fontWeight: "normal" }}>{totalElements} người dùng</i>
             </h2>
             <input
                 placeholder="Tìm kiếm tên người dùng"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                style={{ marginRight: "50px", width: "auto"}}
+                style={{ marginRight: "50px", width: "auto" }}
             />
 
             <table
