@@ -76,7 +76,7 @@ const ProductManagement = () => {
             return;
         }
         
-        axios.post("http://localhost:8080/api/products", newProduct).then((res) => {
+        axios.post("http://localhost:8080/api/products/create", newProduct).then((res) => {
             setProducts([...products, res.data]);
             setNewProduct({
                 name_product: "",
