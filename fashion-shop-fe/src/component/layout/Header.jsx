@@ -25,7 +25,10 @@ const Header = () => {
     };
 
     const { cart } = useContext(CartContext);
-    const totalItems = new Set(cart.map(item => item.product.idProduct)).size;
+    const totalItems = Array.isArray(cart)
+        ? new Set(cart.map(item => item.product.idProduct)).size
+        : 0;
+
 
     // Hàm loại bỏ dấu tiếng Việt
     const removeAccents = (str) => {

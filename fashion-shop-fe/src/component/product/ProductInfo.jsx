@@ -7,24 +7,28 @@ import { useNavigate } from "react-router-dom";
 
 const ProductInfo = ({ product, listproduct }) => {
     const loggedInUser = JSON.parse(sessionStorage.getItem("account"));
-    //ảnh minh họa sản phẩm
+    const imageBaseUrl = "http://localhost:8080/images/"; // Đường dẫn cơ bản cho hình ảnh sản phẩm
+
+    // Ảnh minh họa sản phẩm
     const [selectedImage, setSelectedImage] = useState(
-        product.images && product.images.length > 0 ? product.images[0].imageLink : ""
+        product.images && product.images.length > 0 ? `${imageBaseUrl}${product.images[0].imageLink}` : ""
     );
-    // quản lý kho hàng
+    // Quản lý kho hàng
     const [quantity, setQuantity] = useState(1);
 
-    //chọn size
+    // Chọn size
     const sizes = ["S", "M", "L", "XL"];
     const [selectedSize, setSelectedSize] = useState("S");
 
     useEffect(() => {
         if (product.images && product.images.length > 0) {
-            setSelectedImage(product.images[0].imageLink);
+            setSelectedImage(`${imageBaseUrl}${product.images[0].imageLink}`);
+        } else {
+            setSelectedImage(""); // Đặt rỗng nếu không có hình ảnh
         }
     }, [product.idProduct]);
 
-    // sử dụng để thêm vào giỏ hàng
+    // Sử dụng để thêm vào giỏ hàng
     const { addToCart } = useContext(CartContext);
     const handleAddToCart = () => {
         if (product.in_stock > 0) {
@@ -37,27 +41,24 @@ const ProductInfo = ({ product, listproduct }) => {
 
     const handleQuantityChange = (type) => {
         if (type === "increase") {
-          setQuantity((prev) => (prev < product.in_stock ? prev + 1 : prev));
+            setQuantity((prev) => (prev < product.in_stock ? prev + 1 : prev));
         } else if (type === "decrease") {
-          setQuantity((prev) => (prev > 1 ? prev - 1 : 1));
+            setQuantity((prev) => (prev > 1 ? prev - 1 : 1));
         } else {
-          const value = parseInt(type, 10);
-          if (!isNaN(value)) {
-            const validValue = Math.max(1, Math.min(value, product.in_stock));
-            setQuantity(validValue);
-          }
+            const value = parseInt(type, 10);
+            if (!isNaN(value)) {
+                const validValue = Math.max(1, Math.min(value, product.in_stock));
+                setQuantity(validValue);
+            }
         }
-      };
-      
-      
-    
+    };
 
     const navigate = useNavigate();
 
     const handleBuyNow = () => {
         const selectedProduct = {
             product: { ...product },
-            quantity: quantity
+            quantity: quantity,
         };
         navigate("/checkout", { state: { selectedCartItems: [selectedProduct] } });
     };
@@ -67,20 +68,52 @@ const ProductInfo = ({ product, listproduct }) => {
             <div className="product-infomation">
                 <div className="product-img">
                     <div className="selected-img">
-                        <img src={selectedImage} alt="Main image product" />
+                        {selectedImage ? (
+                            <img
+                                src={selectedImage}
+                                alt="Main image product"
+                                style={{
+                                    width: "100%",
+                                    height: "auto",
+                                    border: "1px solid #ccc",
+                                }}
+                                onError={(e) => {
+                                    console.error("Error loading main image:", e.target.src);
+                                    e.target.src = "/path/to/placeholder-image.png";
+                                }}
+                            />
+                        ) : (
+                            <p>Không có hình ảnh</p>
+                        )}
                     </div>
 
                     <div className="other-img">
-                        {product.images && product.images.map((image, index) => (
-                            <img
-                                key={index}
-                                src={image.imageLink}
-                                alt="Product img"
-                                onClick={() => setSelectedImage(image.imageLink)}
-                                className={`thumbnail ${selectedImage === image.imageLink ? "active" : ""
+                        {product.images && product.images.length > 0 ? (
+                            product.images.map((image, index) => (
+                                <img
+                                    key={index}
+                                    src={`${imageBaseUrl}${image.imageLink}`}
+                                    alt="Product img"
+                                    onClick={() => setSelectedImage(`${imageBaseUrl}${image.imageLink}`)}
+                                    className={`thumbnail ${
+                                        selectedImage === `${imageBaseUrl}${image.imageLink}` ? "active" : ""
                                     }`}
-                            />
-                        ))}
+                                    style={{
+                                        width: "80px",
+                                        height: "80px",
+                                        objectFit: "cover",
+                                        margin: "5px",
+                                        border: "1px solid #ccc",
+                                    }}
+                                    onError={(e) => {
+                                        console.error("Error loading thumbnail image:", e.target.src);
+                                        e.target.src = "/path/to/placeholder-image.png";
+                                    }}
+                                />
+                            ))
+                        ) : (
+                            <p>Không có hình ảnh thu nhỏ</p>
+                        )}
                     </div>
                 </div>
 
@@ -91,8 +124,8 @@ const ProductInfo = ({ product, listproduct }) => {
                         {product.in_stock > 0 ? "Còn Hàng" : "Hết Hàng"}
                     </h5>
 
-                    <small className="text-muted" >
-                        Số lượng đã bán:   {product.sold_quantity}
+                    <small className="text-muted">
+                        Số lượng đã bán: {product.sold_quantity}
                     </small>
 
                     <table className="product-info-table">
@@ -107,15 +140,15 @@ const ProductInfo = ({ product, listproduct }) => {
                                             <span className="discount">
                                                 <i className="bi bi-lightning-charge-fill"></i>-
                                                 {Math.floor(
-                                                    ((product.price - product.sale_price) /
-                                                        product.price) *
-                                                    100
+                                                    ((product.price - product.sale_price) / product.price) * 100
                                                 )}
                                                 %
                                             </span>
                                         </>
                                     ) : (
-                                        <span className="price" style={{ fontSize: "24px", fontWeight: "bold" }}>{product.price}₫</span>
+                                        <span className="price" style={{ fontSize: "24px", fontWeight: "bold" }}>
+                                            {product.price}₫
+                                        </span>
                                     )}
                                 </td>
                             </tr>
@@ -131,7 +164,7 @@ const ProductInfo = ({ product, listproduct }) => {
                                                 className={`size-option ${selectedSize === size ? "selected" : ""}`}
                                             >
                                                 {size}
-                                                {selectedSize === size && <i class="bi bi-check checkmark"></i>}
+                                                {selectedSize === size && <i className="bi bi-check checkmark"></i>}
                                             </span>
                                         ))}
                                     </div>
@@ -149,13 +182,10 @@ const ProductInfo = ({ product, listproduct }) => {
                                         >
                                             <i className="bi bi-dash-lg"></i>
                                         </Button>
-                                        {/* <span className="quantity-display">{quantity}</span> */}
                                         <input
                                             type="number"
                                             value={quantity}
-                                            onChange={(e) =>
-                                                handleQuantityChange(e.target.value)
-                                            }
+                                            onChange={(e) => handleQuantityChange(e.target.value)}
                                             className="quantity-input mx-2"
                                             style={{ width: "50px", textAlign: "center" }}
                                             min="1"
@@ -186,11 +216,13 @@ const ProductInfo = ({ product, listproduct }) => {
                                 marginTop: "20px",
                             }}
                         >
-                            <Button className="add-to-cart-btn" onClick={() => navigate(`/updateproduct/${product.idProduct}`)}>
+                            <Button
+                                className="add-to-cart-btn"
+                                onClick={() => navigate(`/updateproduct/${product.idProduct}`)}
+                            >
                                 Sửa sản phẩm
                             </Button>
                         </div>
-
                     )}
                     {loggedInUser !== null && loggedInUser.role === "Customer" && (
                         <div
@@ -206,10 +238,7 @@ const ProductInfo = ({ product, listproduct }) => {
                                     <Button className="add-to-cart-btn" onClick={handleAddToCart}>
                                         Thêm vào giỏ
                                     </Button>
-                                    <Button
-                                        className="buy-now-btn"
-                                        onClick={handleBuyNow}
-                                    >
+                                    <Button className="buy-now-btn" onClick={handleBuyNow}>
                                         Mua ngay
                                     </Button>
                                 </>
@@ -220,7 +249,6 @@ const ProductInfo = ({ product, listproduct }) => {
                             )}
                         </div>
                     )}
-
 
                     <hr className="separator" />
                     <h4 style={{ marginTop: "10px" }} className="text-center">
@@ -234,6 +262,10 @@ const ProductInfo = ({ product, listproduct }) => {
                         }}
                         src="/assets/user/image/ship.png"
                         alt="ship"
+                        onError={(e) => {
+                            console.error("Error loading shipping image:", e.target.src);
+                            e.target.src = "/path/to/placeholder-image.png";
+                        }}
                     />
 
                     <h4 style={{ marginTop: "30px" }} className="text-center">
@@ -246,19 +278,19 @@ const ProductInfo = ({ product, listproduct }) => {
                             border: "1px black solid",
                         }}
                         src="/assets/user/image/chinhsach.png"
-                        alt="ship"
+                        alt="policy"
+                        onError={(e) => {
+                            console.error("Error loading policy image:", e.target.src);
+                            e.target.src = "/path/to/placeholder-image.png";
+                        }}
                     />
                 </div>
             </div>
             <div>
-                <RelateProduct
-                    products={listproduct}
-                    catid={product.idCat}
-                    id={product.idProduct}
-                ></RelateProduct>
+                <RelateProduct products={listproduct} catid={product.idCat} id={product.idProduct} />
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default ProductInfo
+export default ProductInfo;

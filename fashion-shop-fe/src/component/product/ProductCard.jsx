@@ -8,6 +8,7 @@ const ProductCard = ({ products, index }) => {
     const user = JSON.parse(sessionStorage.getItem("account"));
     const navigate = useNavigate();
     const { addToCart } = useContext(CartContext);
+    const imageBaseUrl = "http://localhost:8080/images/";
 
     const handleAddToCart = (e) => {
         e.stopPropagation();
@@ -102,22 +103,22 @@ const ProductCard = ({ products, index }) => {
                 <div className="product-card-thumb">
                     <img
                         className="product-card-img"
-                        src={products.images[0].imageLink}
+                        src={`${imageBaseUrl}${products.images[0].imageLink}`}
                         alt={products.name_product}
                         style={{
                             transition: "opacity 0.5s ease-in-out",
-                            opacity: hoverIndex === index ? 0 : 1,
                             position: "absolute",
                         }}
+                        onError={(e) => console.error("Image load error:", e.target.src)}
                     />
                     <img
                         className="product-card-img"
-                        src={products.images[1].imageLink || products.images[0].imageLink}
+                        src={`${imageBaseUrl}${products.images[1]?.imageLink || products.images[0].imageLink}`}
                         alt={products.name_product}
                         style={{
                             transition: "opacity 0.5s ease-in-out",
-                            opacity: hoverIndex === index ? 1 : 0,
                         }}
+                        onError={(e) => console.error("Image load error:", e.target.src)}
                     />
                 </div>
 
@@ -131,7 +132,7 @@ const ProductCard = ({ products, index }) => {
                     >
                         <div onClick={handleAddToCart}>
                             <i className="bx bx-cart-alt text-center text-black fs-5 py-3 justify-content-center align-items-center"></i>
-                            &nbsp; Thêm vào giỏ
+                              Thêm vào giỏ
                         </div>
                     </button>
                 )}
@@ -160,12 +161,12 @@ const ProductCard = ({ products, index }) => {
                 </a>
                 <div className="product-price">
                     <p>
-                        Giá: &nbsp;
+                        Giá:  
                         {!products.sale_price ? (
                             <span style={{ color: "black" }}>{products.price}đ</span>
                         ) : (
                             <span>
-                                {products.sale_price}đ &nbsp;
+                                {products.sale_price}đ  
                                 <span style={{
                                     color: "black",
                                     fontSize: "16px",
