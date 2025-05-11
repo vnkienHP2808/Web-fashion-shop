@@ -6,7 +6,7 @@ const MyOrders = () => {
   const [userId, setUserId] = useState(null);
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null);
-
+  const imageBaseUrl = "http://localhost:8080/images/"; // link cho hình ảnh sản phẩm
   // Thiết lập interceptor cho axios để thêm header Authorization
   useEffect(() => {
     const auth = sessionStorage.getItem("auth");
@@ -66,7 +66,7 @@ const MyOrders = () => {
                       {item.product ? (
                         <>
                           <img
-                            src={item.product.images[0].imageLink}
+                            src = {`${imageBaseUrl}${item.product.images[0].imageLink}`}
                             alt={item.product.name_product}
                             style={{
                               width: "40px",
@@ -143,7 +143,7 @@ const MyOrders = () => {
                         <div style={{ textAlign: "center" }}>
                           <img
                             src={
-                              selectedImage || item.product.images[0].imageLink
+                              selectedImage || `${imageBaseUrl}${item.product.images[0].imageLink}`
                             }
                             alt={item.product.name_product}
                             style={{
@@ -221,15 +221,15 @@ const MyOrders = () => {
                           {item.product.images.map((image, index) => (
                             <img
                               key={index}
-                              src={image.imageLink}
+                              src = {`${imageBaseUrl}${image.imageLink}`}
                               alt="thumbnail"
-                              onClick={() => setSelectedImage(image.imageLink)}
+                              onClick={() => setSelectedImage(`${imageBaseUrl}${image.imageLink}`)}
                               style={{
                                 width: "40px",
                                 height: "40px",
                                 objectFit: "cover",
                                 border:
-                                  selectedImage === image.imageLink
+                                  selectedImage === `${imageBaseUrl}${image.imageLink}`
                                     ? "2px solid #000"
                                     : "1px solid #ccc",
                                 borderRadius: "4px",

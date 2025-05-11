@@ -20,7 +20,7 @@ const Cart = () => {
   const [showClearAllModal, setShowClearAllModal] = useState(false);
   const [productToDelete, setProductToDelete] = useState(null);
   const [selectedProducts, setSelectedProducts] = useState([]);
-
+  const imageBaseUrl = "http://localhost:8080/images/"; // link cho hình ảnh sản phẩm
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -143,7 +143,7 @@ const Cart = () => {
                     className="me-3"
                   />
                   <img
-                    src={item.product.images?.[0]?.imageLink}
+                    src = {`${imageBaseUrl}${item.product.images[0].imageLink}`}
                     alt={item.product.name_product}
                     className="cart-item-image"
                   />
