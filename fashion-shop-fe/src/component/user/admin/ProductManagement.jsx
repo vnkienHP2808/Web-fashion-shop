@@ -32,6 +32,7 @@ const ProductManagement = () => {
     const [totalPages, setTotalPages] = useState(1);
     const [totalElements, setTotalElements] = useState(0);
     const [productsPerPage] = useState(20);
+    const [showAddModal, setShowAddModal] = useState(false);
 
     // Thêm interceptor để gửi header Authorization
     useEffect(() => {
@@ -81,14 +82,20 @@ const ProductManagement = () => {
             !newProduct.idCat ||
             !newProduct.idSubcat ||
             !newProduct.status ||
-            newProduct.images.length === 0 ||
+            selectedFiles.length === 0 ||
             !newProduct.in_stock
         ) {
             alert("Vui lòng nhập đầy đủ thông tin sản phẩm.");
             return;
         }
-        
-        axios.post("http://localhost:8080/api/products/create", newProduct)
+
+        const formData = new FormData();
+        formData.append("product", JSON.stringify({ ...newProduct, images: [] }));
+        selectedFiles.forEach((file) => {
+            formData.append("images", file);
+        });
+
+        axios.post("http://localhost:8080/api/products/create", formData)
             .then((res) => {
                 setProducts([...products, res.data]);
                 setNewProduct({
@@ -108,7 +115,10 @@ const ProductManagement = () => {
                 setSelectedFiles([]);
                 setShowAddModal(false);
             })
-            .catch((err) => console.error("Lỗi khi thêm sản phẩm:", err));
+            .catch((err) => {
+                console.error("Lỗi khi thêm sản phẩm:", err);
+                alert("Lỗi khi thêm sản phẩm. Vui lòng thử lại.");
+            });
     };
 
     const handleDeleteProduct = (id) => {
@@ -128,28 +138,12 @@ const ProductManagement = () => {
     const handleFileChange = (e) => {
         const files = Array.from(e.target.files);
         setSelectedFiles([...selectedFiles, ...files]);
-        
-        const imageObjects = files.map(file => ({
-            imageLink: `/assets/user/image/product/${file.name}`
-        }));
-        
-        setNewProduct({
-            ...newProduct,
-            images: [...newProduct.images, ...imageObjects],
-        });
     };
     
     const removeSelectedFile = (index) => {
         const updatedFiles = [...selectedFiles];
         updatedFiles.splice(index, 1);
         setSelectedFiles(updatedFiles);
-        
-        const updatedImages = [...newProduct.images];
-        updatedImages.splice(index, 1);
-        setNewProduct({
-            ...newProduct,
-            images: updatedImages,
-        });
     };
 
     const handleCategoryChange = (event) => {
@@ -202,8 +196,6 @@ const ProductManagement = () => {
     const handlePageChange = (pageNumber) => {
         setCurrentPage(pageNumber);
     };
-
-    const [showAddModal, setShowAddModal] = useState(false);
 
     return (
         <AdminRoute>
@@ -432,13 +424,13 @@ const ProductManagement = () => {
                                     onChange={handleFileChange}
                                 />
                                 
-                                {newProduct.images.length > 0 && (
+                                {selectedFiles.length > 0 && (
                                     <div className="selected-files mt-2">
                                         <p>Các file đã chọn:</p>
                                         <ul className="list-group">
-                                            {newProduct.images.map((image, index) => (
+                                            {selectedFiles.map((file, index) => (
                                                 <li key={index} className="list-group-item d-flex justify-content-between align-items-center">
-                                                    {image.imageLink}
+                                                    {file.name}
                                                     <Button 
                                                         variant="danger" 
                                                         size="sm"

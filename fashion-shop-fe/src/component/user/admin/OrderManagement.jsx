@@ -9,7 +9,7 @@ const OrderManagement = () => {
     const [totalPages, setTotalPages] = useState(1);
     const [totalElements, setTotalElements] = useState(0);
     const [ordersPerPage] = useState(5);
-
+    const imageBaseUrl = "http://localhost:8080/images/"; // Đường dẫn cơ bản cho hình ảnh sản phẩm
     // Thêm interceptor để gửi header Authorization
     useEffect(() => {
         const auth = sessionStorage.getItem("auth");
@@ -233,7 +233,7 @@ const OrderManagement = () => {
                                                 >
                                                     <img
                                                         src={
-                                                            item.product.images[0].imageLink
+                                                            `${imageBaseUrl}${item.product.images[0].imageLink}`
                                                         }
                                                         alt={item.product.name_product}
                                                         width="50"

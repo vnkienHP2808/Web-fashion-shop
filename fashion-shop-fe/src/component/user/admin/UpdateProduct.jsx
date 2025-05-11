@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { Button, Form } from "react-bootstrap";
 
 const UpdateProduct = () => {
     const { id } = useParams();
@@ -18,11 +19,12 @@ const UpdateProduct = () => {
         images: [],
         sold_quantity: 0,
         in_stock: 0,
+        status: "Active",
     });
     const [selectedFiles, setSelectedFiles] = useState([]);
     const nav = useNavigate();
 
-    // Thêm interceptor để gửi header Authorization
+    // Add interceptor to send Authorization header
     useEffect(() => {
         const auth = sessionStorage.getItem("auth");
         if (auth) {
@@ -54,36 +56,40 @@ const UpdateProduct = () => {
 
     const handleUpdate = (e) => {
         e.preventDefault();
+
+        const formData = new FormData();
+        formData.append("product", JSON.stringify({ ...editProduct, images: [] }));
+        selectedFiles.forEach((file) => {
+            formData.append("images", file);
+        });
+
         axios
-            .put(`http://localhost:8080/api/products/${id}`, editProduct)
+            .put(`http://localhost:8080/api/products/${id}`, formData)
             .then(() => {
                 alert("Cập nhật thành công!");
                 nav("/admin");
             })
-            .catch((err) => console.error("Cập nhật thất bại:", err));
+            .catch((err) => {
+                console.error("Cập nhật thất bại:", err);
+                alert("Cập nhật thất bại. Vui lòng thử lại.");
+            });
     };
 
     const handleFileChange = (e) => {
         const files = Array.from(e.target.files);
         setSelectedFiles([...selectedFiles, ...files]);
-        
-        const newImageObjects = files.map(file => ({
-            imageLink: `/assets/user/image/product/${file.name}`
-        }));
-        
-        setEditProduct({
-            ...editProduct,
-            images: [...editProduct.images, ...newImageObjects],
-        });
     };
-    
-    const removeImage = (index) => {
+
+    const removeSelectedFile = (index) => {
+        const updatedFiles = [...selectedFiles];
+        updatedFiles.splice(index, 1);
+        setSelectedFiles(updatedFiles);
+    };
+
+    const removeExistingImage = (index) => {
         const updatedImages = [...editProduct.images];
         updatedImages.splice(index, 1);
-        setEditProduct({
-            ...editProduct,
-            images: updatedImages,
-        });
+        setEditProduct({ ...editProduct, images: updatedImages });
     };
 
     const selectedCategory = categories.find(
@@ -91,224 +97,268 @@ const UpdateProduct = () => {
     );
 
     return (
-        <div>
-            <h2>Cập nhật sản phẩm {id}</h2>
-            <form onSubmit={handleUpdate}>
-                <table>
-                    <tbody>
-                        <tr>
-                            <td><label>Id</label></td>
-                            <td>
-                                <input type="text" value={editProduct.idProduct} readOnly disabled />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><label>Tên</label></td>
-                            <td>
-                                <input
-                                    type="text"
-                                    value={editProduct.name_product}
-                                    onChange={(e) =>
-                                        setEditProduct({ ...editProduct, name_product: e.target.value })
-                                    }
-                                />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><label>Danh mục</label></td>
-                            <td>
-                                <select
-                                    value={editProduct.idCat}
-                                    onChange={(e) =>
-                                        setEditProduct({
-                                            ...editProduct,
-                                            idCat: e.target.value,
-                                        })
-                                    }
+        <div className="update-product container">
+            <h2 style={{ textAlign: "center", marginBottom: "20px" }}>
+                Cập nhật sản phẩm {id}
+            </h2>
+            <Form onSubmit={handleUpdate}>
+                <Form.Group controlId="formProductId">
+                    <Form.Label>ID</Form.Label>
+                    <Form.Control
+                        type="text"
+                        value={editProduct.idProduct}
+                        readOnly
+                        disabled
+                    />
+                </Form.Group>
+
+                <Form.Group controlId="formProductName">
+                    <Form.Label>Tên</Form.Label>
+                    <Form.Control
+                        type="text"
+                        value={editProduct.name_product}
+                        onChange={(e) =>
+                            setEditProduct({
+                                ...editProduct,
+                                name_product: e.target.value,
+                            })
+                        }
+                    />
+                </Form.Group>
+
+                <Form.Group controlId="formProductCategory">
+                    <Form.Label>Danh mục</Form.Label>
+                    <Form.Control
+                        as="select"
+                        value={editProduct.idCat}
+                        onChange={(e) =>
+                            setEditProduct({
+                                ...editProduct,
+                                idCat: e.target.value,
+                            })
+                        }
+                    >
+                        {categories.map((cat) => (
+                            <option key={cat.id} value={cat.id}>
+                                {cat.name}
+                            </option>
+                        ))}
+                    </Form.Control>
+                </Form.Group>
+
+                <Form.Group controlId="formProductSubcategory">
+                    <Form.Label>Phân loại</Form.Label>
+                    <Form.Control
+                        as="select"
+                        value={editProduct.idSubcat}
+                        onChange={(e) =>
+                            setEditProduct({
+                                ...editProduct,
+                                idSubcat: e.target.value,
+                            })
+                        }
+                        disabled={!selectedCategory?.subCategories?.length}
+                    >
+                        {selectedCategory?.subCategories?.map((sub) => (
+                            <option key={sub.id_subcat} value={sub.id_subcat}>
+                                {sub.name}
+                            </option>
+                        ))}
+                    </Form.Control>
+                </Form.Group>
+
+                <Form.Group controlId="formProductPrice">
+                    <Form.Label>Giá</Form.Label>
+                    <Form.Control
+                        type="number"
+                        value={editProduct.price}
+                        onChange={(e) => {
+                            const ip = parseInt(e.target.value, 10);
+                            setEditProduct({
+                                ...editProduct,
+                                price: ip >= 0 ? ip : 0,
+                            });
+                        }}
+                    />
+                </Form.Group>
+
+                <Form.Group controlId="formProductSalePrice">
+                    <Form.Label>Giá khuyến mãi</Form.Label>
+                    <Form.Control
+                        type="number"
+                        value={editProduct.sale_price || ""}
+                        onChange={(e) => {
+                            const ip = parseInt(e.target.value, 10);
+                            setEditProduct({
+                                ...editProduct,
+                                sale_price: ip >= 0 ? ip : 0,
+                            });
+                        }}
+                    />
+                </Form.Group>
+
+                <Form.Group controlId="formIsSale">
+                    <Form.Label>Đang giảm giá</Form.Label>
+                    <Form.Check
+                        type="checkbox"
+                        label="Đánh dấu là sản phẩm đang giảm giá"
+                        checked={editProduct.is_sale}
+                        onChange={(e) =>
+                            setEditProduct({
+                                ...editProduct,
+                                is_sale: e.target.checked,
+                            })
+                        }
+                    />
+                </Form.Group>
+
+                <Form.Group controlId="formIsNew">
+                    <Form.Label>Hàng mới</Form.Label>
+                    <Form.Check
+                        type="checkbox"
+                        label="Đánh dấu là sản phẩm mới"
+                        checked={editProduct.is_new}
+                        onChange={(e) =>
+                            setEditProduct({
+                                ...editProduct,
+                                is_new: e.target.checked,
+                            })
+                        }
+                    />
+                </Form.Group>
+
+                <Form.Group controlId="formProductOccasion">
+                    <Form.Label>Dịp sử dụng</Form.Label>
+                    <Form.Control
+                        as="select"
+                        value={editProduct.occasion}
+                        onChange={(e) =>
+                            setEditProduct({
+                                ...editProduct,
+                                occasion: e.target.value,
+                            })
+                        }
+                    >
+                        <option value="Đi chơi">Đi chơi</option>
+                        <option value="Đi làm">Đi làm</option>
+                        <option value="Đi tiệc">Đi tiệc</option>
+                    </Form.Control>
+                </Form.Group>
+
+                <Form.Group controlId="formProductImages">
+                    <Form.Label>Ảnh hiện tại</Form.Label>
+                    {editProduct.images && editProduct.images.length > 0 ? (
+                        <ul className="list-group">
+                            {editProduct.images.map((image, index) => (
+                                <li
+                                    key={index}
+                                    className="list-group-item d-flex justify-content-between align-items-center"
                                 >
-                                    {categories.map((cat) => (
-                                        <option key={cat.id} value={cat.id}>
-                                            {cat.name}
-                                        </option>
-                                    ))}
-                                </select>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><label>Phân loại</label></td>
-                            <td>
-                                <select
-                                    value={editProduct.idSubcat}
-                                    onChange={(e) =>
-                                        setEditProduct({ ...editProduct, idSubcat: e.target.value })
-                                    }
-                                    disabled={!selectedCategory?.subCategories?.length}
-                                >
-                                    {selectedCategory?.subCategories?.map((sub) => (
-                                        <option key={sub.id_subcat} value={sub.id_subcat}>
-                                            {sub.name}
-                                        </option>
-                                    ))}
-                                </select>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><label>Giá</label></td>
-                            <td>
-                                <input
-                                    type="number"
-                                    value={editProduct.price}
-                                    onChange={(e) => {
-                                        const ip = parseInt(e.target.value, 10);
-                                        if (ip >= 0) {
-                                            setEditProduct({ ...editProduct, price: ip })
-                                        }
-                                        else {
-                                            setEditProduct({ ...editProduct, price: 0 })
-                                        }
-                                    }}
-                                />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><label>Giá khuyến mãi</label></td>
-                            <td>
-                                <input
-                                    type="number"
-                                    value={editProduct.sale_price}
-                                    onChange={(e) => {
-                                        const ip = parseInt(e.target.value, 10);
-                                        if (ip >= 0) {
-                                            setEditProduct({ ...editProduct, sale_price: ip })
-                                        }
-                                        else {
-                                            setEditProduct({ ...editProduct, sale_price: 0 })
-                                        }
-                                    }}
-                                />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><label>Đang giảm giá</label></td>
-                            <td>
-                                <input
-                                    type="checkbox"
-                                    checked={editProduct.is_sale}
-                                    onChange={(e) =>
-                                        setEditProduct({ ...editProduct, is_sale: e.target.checked })
-                                    }
-                                />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><label>Hàng mới</label></td>
-                            <td>
-                                <input
-                                    type="checkbox"
-                                    checked={editProduct.is_new}
-                                    onChange={(e) =>
-                                        setEditProduct({ ...editProduct, is_new: e.target.checked })
-                                    }
-                                />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><label>Occasion</label></td>
-                            <td>
-                                <select
-                                    value={editProduct.occasion}
-                                    onChange={(e) =>
-                                        setEditProduct({ ...editProduct, occasion: e.target.value })
-                                    }
-                                >
-                                    <option value="Đi chơi">Đi chơi</option>
-                                    <option value="Đi làm">Đi làm</option>
-                                    <option value="Đi tiệc">Đi tiệc</option>
-                                </select>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><label>Ảnh sản phẩm</label></td>
-                            <td>
-                                <div style={{ marginTop: "10px" }}>
-                                    {editProduct.images && editProduct.images.length > 0 ? (
-                                        <ul style={{ listStyle: "none", padding: 0 }}>
-                                            {editProduct.images.map((image, index) => (
-                                                <li key={index} style={{ display: "flex", justifyContent: "space-between", marginBottom: "5px", padding: "5px", border: "1px solid #ddd", borderRadius: "4px" }}>
-                                                    <span style={{ maxWidth: "400px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                                                        {image.imageLink}
-                                                    </span>
-                                                    <button 
-                                                        type="button" 
-                                                        onClick={() => removeImage(index)}
-                                                        style={{ background: "#dc3545", color: "white", border: "none", borderRadius: "4px", padding: "2px 8px", cursor: "pointer" }}
-                                                    >
-                                                        Xóa
-                                                    </button>
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    ) : (
-                                        <p>Chưa có ảnh nào</p>
-                                    )}
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><label>Thêm ảnh</label></td>
-                            <td>
-                                <input
-                                    type="file"
-                                    multiple
-                                    accept="image/*"
-                                    onChange={handleFileChange}
-                                />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><label>Đã bán</label></td>
-                            <td>
-                                <input
-                                    type="number"
-                                    value={editProduct.sold_quantity}
-                                    onChange={(e) => {
-                                        const ip = parseInt(e.target.value, 10);
-                                        if (ip >= 0) {
-                                            setEditProduct({ ...editProduct, sold_quantity: ip })
-                                        }
-                                        else {
-                                            setEditProduct({ ...editProduct, sold_quantity: 0 })
-                                        }
-                                    }}
-                                />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><label>Trong kho</label></td>
-                            <td>
-                                <input
-                                    type="number"
-                                    value={editProduct.in_stock}
-                                    onChange={(e) => {
-                                        const ip = parseInt(e.target.value, 10);
-                                        if (ip >= 0) {
-                                            setEditProduct({ ...editProduct, in_stock: ip })
-                                        }
-                                        else {
-                                            setEditProduct({ ...editProduct, in_stock: 0 })
-                                        }
-                                    }}
-                                />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colSpan="2">
-                                <button type="submit">Cập nhật</button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </form>
+                                    <span
+                                        style={{
+                                            maxWidth: "400px",
+                                            overflow: "hidden",
+                                            textOverflow: "ellipsis",
+                                            whiteSpace: "nowrap",
+                                        }}
+                                    >
+                                        {image.imageLink}
+                                    </span>
+                                    <Button
+                                        variant="danger"
+                                        size="sm"
+                                        onClick={() => removeExistingImage(index)}
+                                    >
+                                        Xóa
+                                    </Button>
+                                </li>
+                            ))}
+                        </ul>
+                    ) : (
+                        <p>Chưa có ảnh nào</p>
+                    )}
+                </Form.Group>
+
+                <Form.Group controlId="formProductNewImages">
+                    <Form.Label>Thêm ảnh mới</Form.Label>
+                    <Form.Control
+                        type="file"
+                        multiple
+                        accept="image/*"
+                        onChange={handleFileChange}
+                    />
+                    {selectedFiles.length > 0 && (
+                        <div className="selected-files mt-2">
+                            <p>Các file đã chọn:</p>
+                            <ul className="list-group">
+                                {selectedFiles.map((file, index) => (
+                                    <li
+                                        key={index}
+                                        className="list-group-item d-flex justify-content-between align-items-center"
+                                    >
+                                        {file.name}
+                                        <Button
+                                            variant="danger"
+                                            size="sm"
+                                            onClick={() => removeSelectedFile(index)}
+                                        >
+                                            Xóa
+                                        </Button>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    )}
+                </Form.Group>
+
+                <Form.Group controlId="formSoldQuantity">
+                    <Form.Label>Đã bán</Form.Label>
+                    <Form.Control
+                        type="number"
+                        value={editProduct.sold_quantity}
+                        onChange={(e) => {
+                            const ip = parseInt(e.target.value, 10);
+                            setEditProduct({
+                                ...editProduct,
+                                sold_quantity: ip >= 0 ? ip : 0,
+                            });
+                        }}
+                    />
+                </Form.Group>
+
+                <Form.Group controlId="formInStock">
+                    <Form.Label>Trong kho</Form.Label>
+                    <Form.Control
+                        type="number"
+                        value={editProduct.in_stock}
+                        onChange={(e) => {
+                            const ip = parseInt(e.target.value, 10);
+                            setEditProduct({
+                                ...editProduct,
+                                in_stock: ip >= 0 ? ip : 0,
+                            });
+                        }}
+                    />
+                </Form.Group>
+
+                <Form.Group controlId="formProductStatus">
+                    <Form.Label>Trạng thái</Form.Label>
+                    <Form.Control
+                        as="select"
+                        value={editProduct.status}
+                        onChange={(e) =>
+                            setEditProduct({ ...editProduct, status: e.target.value })
+                        }
+                    >
+                        <option value="Active">Kích hoạt</option>
+                        <option value="Deactivate">Hủy kích hoạt</option>
+                    </Form.Control>
+                </Form.Group>
+
+                <Button variant="primary" type="submit" style={{ marginTop: "20px" }}>
+                    Cập nhật
+                </Button>
+            </Form>
         </div>
     );
 };
