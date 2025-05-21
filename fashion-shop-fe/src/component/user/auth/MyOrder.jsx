@@ -15,7 +15,6 @@ const MyOrders = () => {
         config.headers.Authorization = `Basic ${auth}`;
         return config;
       });
-      // Cleanup interceptor khi component unmount
       return () => axios.interceptors.request.eject(interceptor);
     }
   }, []);
@@ -45,7 +44,10 @@ const MyOrders = () => {
           orders.map((order) => (
             <div
               key={order.idOrder}
-              onClick={() => setSelectedOrder(order)}
+              onClick={() => {
+                setSelectedOrder(order);
+                setSelectedImage(null); // Đặt lại selectedImage khi chọn đơn hàng mới
+              }}
               style={{
                 border: "1px solid #ddd",
                 padding: "10px",
@@ -66,7 +68,7 @@ const MyOrders = () => {
                       {item.product ? (
                         <>
                           <img
-                            src = {`${imageBaseUrl}${item.product.images[0].imageLink}`}
+                            src={`${imageBaseUrl}${item.product.images[0].imageLink}`}
                             alt={item.product.name_product}
                             style={{
                               width: "40px",
@@ -76,7 +78,7 @@ const MyOrders = () => {
                             }}
                           />
                           <span>{item.product.name_product}</span>
-                          <span> &nbsp;|&nbsp;</span>
+                          <span>  | </span>
                           <span>Số lượng: {item.quantity}</span>
                         </>
                       ) : (
@@ -101,8 +103,9 @@ const MyOrders = () => {
       <div style={{ flex: 2, borderLeft: "1px solid #ccc", paddingLeft: "20px" }}>
         <h2>Chi Tiết Đơn Hàng</h2>
         {selectedOrder ? (
-          <>
-            <div>
+          <div style={{ display: "flex", gap: "20px" }}>
+            {/* Phần thông tin chi tiết */}
+            <div style={{ flex: 1 }}>
               <p style={{ fontSize: "18px" }}>
                 <strong>Ngày đặt:</strong> {selectedOrder.orderDate}
               </p>
@@ -124,17 +127,17 @@ const MyOrders = () => {
               </p>
             </div>
 
-            <div style={{ display: "flex", flexWrap: "wrap", marginTop: "10px" }}>
+            {/* Phần hình ảnh sản phẩm */}
+            <div style={{ flex: 1 }}>
               {selectedOrder.orderDetails.length > 0 ? (
                 selectedOrder.orderDetails.map((item) => (
                   <div
                     key={item.idOrderDetail}
                     style={{
-                      margin: "15px",
+                      margin: "15px 0",
                       padding: "15px",
                       border: "1px solid #ddd",
                       borderRadius: "10px",
-                      width: "220px",
                       backgroundColor: "#fff",
                     }}
                   >
@@ -147,36 +150,23 @@ const MyOrders = () => {
                             }
                             alt={item.product.name_product}
                             style={{
-                              width: "150px",
-                              height: "150px",
+                              width: "200px",
+                              height: "200px",
                               objectFit: "cover",
                               borderRadius: "10px",
                               marginBottom: "10px",
                             }}
                           />
                         </div>
-
-                        <div
-                          style={{
-                            textAlign: "center",
-                            fontWeight: "bold",
-                            marginBottom: "5px",
-                          }}
-                        >
+                        <div style={{ textAlign: "center", fontWeight: "bold", marginBottom: "5px" }}>
                           {item.product.name_product}
                         </div>
-
-                        <div
-                          style={{ textAlign: "center", marginBottom: "10px" }}
-                        >
+                        <div style={{ textAlign: "center", marginBottom: "10px" }}>
                           Số lượng: {item.quantity} <br />
                           Giá:{" "}
-                          {item.product.is_sale &&
-                          item.product.sale_price != null ? (
+                          {item.product.is_sale && item.product.sale_price != null ? (
                             <>
-                              <span
-                                style={{ color: "red", fontWeight: "bold" }}
-                              >
+                              <span style={{ color: "red", fontWeight: "bold" }}>
                                 {item.product.sale_price.toLocaleString()}₫
                               </span>{" "}
                               <span
@@ -196,8 +186,7 @@ const MyOrders = () => {
                               >
                                 Sale: -
                                 {Math.floor(
-                                  ((item.product.price -
-                                    item.product.sale_price) /
+                                  ((item.product.price - item.product.sale_price) /
                                     item.product.price) *
                                     100
                                 )}
@@ -210,23 +199,16 @@ const MyOrders = () => {
                             </span>
                           )}
                         </div>
-
-                        <div
-                          style={{
-                            display: "flex",
-                            justifyContent: "center",
-                            gap: "6px",
-                          }}
-                        >
+                        <div style={{ display: "flex", justifyContent: "center", gap: "6px" }}>
                           {item.product.images.map((image, index) => (
                             <img
                               key={index}
-                              src = {`${imageBaseUrl}${image.imageLink}`}
+                              src={`${imageBaseUrl}${image.imageLink}`}
                               alt="thumbnail"
                               onClick={() => setSelectedImage(`${imageBaseUrl}${image.imageLink}`)}
                               style={{
-                                width: "40px",
-                                height: "40px",
+                                width: "50px",
+                                height: "50px",
                                 objectFit: "cover",
                                 border:
                                   selectedImage === `${imageBaseUrl}${image.imageLink}`
@@ -266,7 +248,7 @@ const MyOrders = () => {
                 </p>
               )}
             </div>
-          </>
+          </div>
         ) : (
           <p style={{ fontSize: "22px", textAlign: "center" }}>
             <i>Vui lòng chọn một đơn hàng để xem chi tiết.</i>

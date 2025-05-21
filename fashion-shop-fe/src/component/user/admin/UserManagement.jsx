@@ -48,7 +48,11 @@ const UserManagement = () => {
         }
 
         axios
-            .put(`http://localhost:8080/api/users/${id}/status`, { status: updatedUser.status })
+            .put(`http://localhost:8080/api/users/${id}/status`, updatedUser.status, {
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            })
             .then(() => {
                 setUsers(users.map((user) => (user.id_user === id ? updatedUser : user)));
             })

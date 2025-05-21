@@ -18,8 +18,8 @@ const Checkout = () => {
   const [selectedAddress, setSelectedAddress] = useState("");
   const location = useLocation();
   const selectedProducts = location.state?.selectedCartItems || [];
-  const loggedInUser = JSON.parse(sessionStorage.getItem("account"));
-
+  const [loggedInUser] = useState(() => JSON.parse(sessionStorage.getItem("account")));
+  
   // Thêm interceptor để gửi header Authorization
   useEffect(() => {
     const auth = sessionStorage.getItem("auth");

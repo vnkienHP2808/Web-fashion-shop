@@ -22,9 +22,9 @@ const UpdateProduct = () => {
         status: "Active",
     });
     const [selectedFiles, setSelectedFiles] = useState([]);
+    const [imagesToDelete, setImagesToDelete] = useState([]); // ảnh cần xóa
     const nav = useNavigate();
 
-    // Add interceptor to send Authorization header
     useEffect(() => {
         const auth = sessionStorage.getItem("auth");
         if (auth) {
@@ -36,7 +36,6 @@ const UpdateProduct = () => {
         }
     }, []);
 
-    // Fetch product and categories
     useEffect(() => {
         axios
             .get(`http://localhost:8080/api/products/${id}`)
@@ -49,7 +48,7 @@ const UpdateProduct = () => {
             .catch((err) => console.error("Lỗi khi lấy danh mục:", err));
     }, [id]);
 
-    // Reset subcategory if category changes
+
     useEffect(() => {
         setEditProduct((prev) => ({ ...prev, idSubcat: "" }));
     }, [editProduct.idCat]);
@@ -58,7 +57,11 @@ const UpdateProduct = () => {
         e.preventDefault();
 
         const formData = new FormData();
-        formData.append("product", JSON.stringify({ ...editProduct, images: [] }));
+        // Gửi cả ảnh hiện tại và ảnh mới (trừ ảnh cần xóa)
+        const updatedImages = editProduct.images.filter(
+            (img) => !imagesToDelete.includes(img.imageLink)
+        );
+        formData.append("product", JSON.stringify({ ...editProduct, images: updatedImages }));
         selectedFiles.forEach((file) => {
             formData.append("images", file);
         });
@@ -88,8 +91,9 @@ const UpdateProduct = () => {
 
     const removeExistingImage = (index) => {
         const updatedImages = [...editProduct.images];
-        updatedImages.splice(index, 1);
+        const imageToDelete = updatedImages.splice(index, 1)[0].imageLink;
         setEditProduct({ ...editProduct, images: updatedImages });
+        setImagesToDelete([...imagesToDelete, imageToDelete]);
     };
 
     const selectedCategory = categories.find(

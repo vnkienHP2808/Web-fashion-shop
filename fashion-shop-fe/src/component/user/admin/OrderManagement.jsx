@@ -9,7 +9,9 @@ const OrderManagement = () => {
     const [totalPages, setTotalPages] = useState(1);
     const [totalElements, setTotalElements] = useState(0);
     const [ordersPerPage] = useState(5);
+    const [selectedImages, setSelectedImages] = useState({}); // Thêm trạng thái để quản lý ảnh được chọn cho từng sản phẩm
     const imageBaseUrl = "http://localhost:8080/images/"; // Đường dẫn cơ bản cho hình ảnh sản phẩm
+
     // Thêm interceptor để gửi header Authorization
     useEffect(() => {
         const auth = sessionStorage.getItem("auth");
@@ -57,9 +59,17 @@ const OrderManagement = () => {
                 console.error("Lỗi khi cập nhật trạng thái:", error.response?.data || error.message);
             });
     };
-    
+
     const handlePageChange = (pageNumber) => {
         setCurrentPage(pageNumber);
+    };
+
+    // Hàm để cập nhật ảnh được chọn cho một sản phẩm
+    const handleImageSelect = (productId, imageLink) => {
+        setSelectedImages((prev) => ({
+            ...prev,
+            [productId]: imageLink,
+        }));
     };
 
     return (
@@ -83,7 +93,7 @@ const OrderManagement = () => {
                     fontWeight: "600",
                 }}
             >
-                Quản Lý Đơn Hàng: <i style={{fontWeight: "normal"}}>{totalElements} đơn hàng</i>
+                Quản Lý Đơn Hàng: <i style={{ fontWeight: "normal" }}>{totalElements} đơn hàng</i>
             </h2>
 
             <ul style={{ listStyleType: "none", padding: "0" }}>
@@ -122,161 +132,202 @@ const OrderManagement = () => {
                             </p>
 
                             {expandedOrders.includes(order.idOrder) && (
-                                <>
-                                    <p
-                                        style={{
-                                            fontSize: "0.9em",
-                                            color: "#666",
-                                            margin: "5px 0",
-                                        }}
-                                    >
-                                        <strong style={{ fontWeight: "bold", color: "#444" }}>
-                                            Số điện thoại:
-                                        </strong>{" "}
-                                        {order.phoneNumber}
-                                    </p>
-                                    <p
-                                        style={{
-                                            fontSize: "0.9em",
-                                            color: "#666",
-                                            margin: "5px 0",
-                                        }}
-                                    >
-                                        <strong style={{ fontWeight: "bold", color: "#444" }}>
-                                            Địa chỉ:
-                                        </strong>{" "}
-                                        {order.address}
-                                    </p>
-                                    <p
-                                        style={{
-                                            fontSize: "0.9em",
-                                            color: "#666",
-                                            margin: "5px 0",
-                                        }}
-                                    >
-                                        <strong style={{ fontWeight: "bold", color: "#444" }}>
-                                            Ngày đặt hàng:
-                                        </strong>{" "}
-                                        {order.orderDate}
-                                    </p>
-                                    <p
-                                        style={{
-                                            fontSize: "0.9em",
-                                            color: "#666",
-                                            margin: "5px 0",
-                                        }}
-                                    >
-                                        <strong style={{ fontWeight: "bold", color: "#444" }}>
-                                            Phương thức thanh toán:
-                                        </strong>{" "}
-                                        {order.paymentMethod}
-                                    </p>
-                                    <p
-                                        style={{
-                                            fontSize: "0.9em",
-                                            color: "#666",
-                                            margin: "5px 0",
-                                        }}
-                                    >
-                                        <strong style={{ fontWeight: "bold", color: "#444" }}>
-                                            Tổng giá sản phẩm:
-                                        </strong>{" "}
-                                        {order.orderDetails.reduce(
-                                            (sum, item) => sum + item.totalAmount,
-                                            0
-                                        )}{" "}
-                                        VND
-                                    </p>
-                                    <p
-                                        style={{
-                                            fontSize: "0.9em",
-                                            color: "#666",
-                                            margin: "5px 0",
-                                        }}
-                                    >
-                                        <strong style={{ fontWeight: "bold", color: "#444" }}>
-                                            Phí vận chuyển:
-                                        </strong>{" "}
-                                        {order.shippingFee} VND
-                                    </p>
-                                    <p
-                                        style={{
-                                            fontSize: "0.9em",
-                                            color: "#666",
-                                            margin: "5px 0",
-                                        }}
-                                    >
-                                        <strong style={{ fontWeight: "bold", color: "#444" }}>
-                                            Tổng tiền đơn hàng:
-                                        </strong>{" "}
-                                        {order.grandTotal} VND
-                                    </p>
-                                    <h4
-                                        style={{
-                                            fontSize: "1.1em",
-                                            color: "#444",
-                                            margin: "10px 0",
-                                        }}
-                                    >
-                                        Danh sách sản phẩm đặt hàng:
-                                    </h4>
-                                    <div style={{ display: "flex", flexWrap: "wrap" }}>
+                                <div style={{ display: "flex", gap: "20px" }}>
+                                    {/* Phần thông tin chi tiết bên trái */}
+                                    <div style={{ flex: 1 }}>
+                                        <p
+                                            style={{
+                                                fontSize: "0.9em",
+                                                color: "#666",
+                                                margin: "5px 0",
+                                            }}
+                                        >
+                                            <strong style={{ fontWeight: "bold", color: "#444" }}>
+                                                Số điện thoại:
+                                            </strong>{" "}
+                                            {order.phoneNumber}
+                                        </p>
+                                        <p
+                                            style={{
+                                                fontSize: "0.9em",
+                                                color: "#666",
+                                                margin: "5px 0",
+                                            }}
+                                        >
+                                            <strong style={{ fontWeight: "bold", color: "#444" }}>
+                                                Địa chỉ:
+                                            </strong>{" "}
+                                            {order.address}
+                                        </p>
+                                        <p
+                                            style={{
+                                                fontSize: "0.9em",
+                                                color: "666",
+                                                margin: "5px 0",
+                                            }}
+                                        >
+                                            <strong style={{ fontWeight: "bold", color: "#444" }}>
+                                                Ngày đặt hàng:
+                                            </strong>{" "}
+                                            {order.orderDate}
+                                        </p>
+                                        <p
+                                            style={{
+                                                fontSize: "0.9em",
+                                                color: "#666",
+                                                margin: "5px 0",
+                                            }}
+                                        >
+                                            <strong style={{ fontWeight: "bold", color: "#444" }}>
+                                                Phương thức thanh toán:
+                                            </strong>{" "}
+                                            {order.paymentMethod}
+                                        </p>
+                                        <p
+                                            style={{
+                                                fontSize: "0.9em",
+                                                color: "#666",
+                                                margin: "5px 0",
+                                            }}
+                                        >
+                                            <strong style={{ fontWeight: "bold", color: "#444" }}>
+                                                Tổng giá sản phẩm:
+                                            </strong>{" "}
+                                            {order.orderDetails.reduce(
+                                                (sum, item) => sum + item.totalAmount,
+                                                0
+                                            )}{" "}
+                                            VND
+                                        </p>
+                                        <p
+                                            style={{
+                                                fontSize: "0.9em",
+                                                color: "#666",
+                                                margin: "5px 0",
+                                            }}
+                                        >
+                                            <strong style={{ fontWeight: "bold", color: "#444" }}>
+                                                Phí vận chuyển:
+                                            </strong>{" "}
+                                            {order.shippingFee} VND
+                                        </p>
+                                        <p
+                                            style={{
+                                                fontSize: "0.9em",
+                                                color: "#666",
+                                                margin: "5px 0",
+                                            }}
+                                        >
+                                            <strong style={{ fontWeight: "bold", color: "#444" }}>
+                                                Tổng tiền đơn hàng:
+                                            </strong>{" "}
+                                            {order.grandTotal} VND
+                                        </p>
+                                    </div>
+
+                                    {/* Phần hình ảnh sản phẩm bên phải */}
+                                    <div style={{ flex: 1 }}>
+                                        <h4
+                                            style={{
+                                                fontSize: "1.1em",
+                                                color: "#444",
+                                                margin: "10px 0",
+                                            }}
+                                        >
+                                            Danh sách sản phẩm đặt hàng:
+                                        </h4>
                                         {order.orderDetails.length > 0 ? (
                                             order.orderDetails.map((item) => (
                                                 <div
                                                     key={item.product.idProduct}
                                                     style={{
-                                                        margin: "0 10px",
-                                                        display: "flex",
-                                                        alignItems: "center",
+                                                        margin: "15px 0",
+                                                        padding: "15px",
+                                                        border: "1px solid #ddd",
+                                                        borderRadius: "10px",
+                                                        backgroundColor: "#fff",
                                                     }}
                                                 >
-                                                    <img
-                                                        src={
-                                                            `${imageBaseUrl}${item.product.images[0].imageLink}`
-                                                        }
-                                                        alt={item.product.name_product}
-                                                        width="50"
-                                                        style={{
-                                                            marginRight: "8px",
-                                                            borderRadius: "4px",
-                                                        }}
-                                                    />
-                                                    <div style={{ margin: 0 }}>
-                                                        {item.product.name_product} (x
-                                                        {item.quantity})
-                                                        <br />
-                                                        {item.product.is_sale &&
-                                                        item.product.sale_price != null ? (
+                                                    <div style={{ textAlign: "center" }}>
+                                                        <img
+                                                            src={
+                                                                selectedImages[item.product.idProduct] ||
+                                                                `${imageBaseUrl}${item.product.images[0].imageLink}`
+                                                            }
+                                                            alt={item.product.name_product}
+                                                            style={{
+                                                                width: "200px",
+                                                                height: "200px",
+                                                                objectFit: "cover",
+                                                                borderRadius: "10px",
+                                                                marginBottom: "10px",
+                                                            }}
+                                                        />
+                                                    </div>
+                                                    <div style={{ textAlign: "center", fontWeight: "bold", marginBottom: "5px" }}>
+                                                        {item.product.name_product}
+                                                    </div>
+                                                    <div style={{ textAlign: "center", marginBottom: "10px" }}>
+                                                        Số lượng: {item.quantity} <br />
+                                                        Giá:{" "}
+                                                        {item.product.is_sale && item.product.sale_price != null ? (
                                                             <>
-                                                                <span
-                                                                    style={{
-                                                                        color: "red",
-                                                                        fontWeight: "bold",
-                                                                    }}
-                                                                >
+                                                                <span style={{ color: "red", fontWeight: "bold" }}>
                                                                     {item.product.sale_price.toLocaleString()}₫
                                                                 </span>{" "}
                                                                 <span
                                                                     style={{
-                                                                        textDecoration:
-                                                                            "line-through",
+                                                                        textDecoration: "line-through",
                                                                         color: "gray",
                                                                         marginLeft: "5px",
                                                                     }}
                                                                 >
                                                                     {item.product.price.toLocaleString()}₫
                                                                 </span>{" "}
+                                                                <span
+                                                                    style={{
+                                                                        color: "#f39c12",
+                                                                        fontWeight: "bold",
+                                                                    }}
+                                                                >
+                                                                    Sale: -
+                                                                    {Math.floor(
+                                                                        ((item.product.price - item.product.sale_price) /
+                                                                            item.product.price) *
+                                                                            100
+                                                                    )}
+                                                                    %
+                                                                </span>
                                                             </>
                                                         ) : (
-                                                            <span
-                                                                style={{
-                                                                    fontWeight: "bold",
-                                                                }}
-                                                            >
+                                                            <span style={{ fontWeight: "bold" }}>
                                                                 {item.product.price?.toLocaleString()}₫
                                                             </span>
                                                         )}
+                                                    </div>
+                                                    <div style={{ display: "flex", justifyContent: "center", gap: "6px" }}>
+                                                        {item.product.images.map((image, index) => (
+                                                            <img
+                                                                key={index}
+                                                                src={`${imageBaseUrl}${image.imageLink}`}
+                                                                alt="thumbnail"
+                                                                onClick={() =>
+                                                                    handleImageSelect(item.product.idProduct, `${imageBaseUrl}${image.imageLink}`)
+                                                                }
+                                                                style={{
+                                                                    width: "50px",
+                                                                    height: "50px",
+                                                                    objectFit: "cover",
+                                                                    border:
+                                                                        selectedImages[item.product.idProduct] ===
+                                                                        `${imageBaseUrl}${image.imageLink}`
+                                                                            ? "2px solid #000"
+                                                                            : "1px solid #ccc",
+                                                                    borderRadius: "4px",
+                                                                    cursor: "pointer",
+                                                                }}
+                                                            />
+                                                        ))}
                                                     </div>
                                                 </div>
                                             ))
@@ -287,12 +338,11 @@ const OrderManagement = () => {
                                                     color: "red",
                                                 }}
                                             >
-                                                {" "}
                                                 <i>Sản phẩm hiện không tồn tại</i>
                                             </span>
                                         )}
                                     </div>
-                                </>
+                                </div>
                             )}
                             <select
                                 value={statusValue}
