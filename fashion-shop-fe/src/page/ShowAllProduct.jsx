@@ -30,21 +30,31 @@ const AllProduct = () => {
       ...(selectedSubCategory && { idSubcat: selectedSubCategory }),
       ...(selectedPriceRange && { priceRange: selectedPriceRange }),
       ...(selectedOccasion && { occasion: selectedOccasion }),
-  };
+    };
 
     axios.get(`http://localhost:8080/api/products`, { params })
       .then((res) => {
-        setProducts(res.data.content);
-        setTotalPages(res.data.totalPages);
+        setProducts(Array.isArray(res.data.content) ? res.data.content : []);
+        setTotalPages(res.data.totalPages || 1);
         setTotalElements(res.data.totalElements || 0);
       })
-      .catch((err) => console.error("Error fetching products:", err));
+      .catch((err) => {
+        console.error("Error fetching products:", err);
+        setProducts([]);
+        setTotalPages(1);
+        setTotalElements(0);
+      });
   }, [currentPage, selectedCategory, selectedSubCategory, selectedPriceRange, selectedOccasion]);
 
   useEffect(() => {
     axios.get("http://localhost:8080/api/categories")
-      .then((res) => setCategories(res.data))
-      .catch((err) => console.error("Error fetching categories:", err));
+      .then((res) => {
+        setCategories(Array.isArray(res.data) ? res.data : []);
+      })
+      .catch((err) => {
+        console.error("Error fetching categories:", err);
+        setCategories([]);
+      });
   }, []);
 
   const handleCategoryChange = (event) => {
@@ -52,47 +62,47 @@ const AllProduct = () => {
     const numberValue = Number(value);
 
     if (checked) {
-        setSelectedCategory(numberValue);
+      setSelectedCategory(numberValue);
     } else {
-        setSelectedCategory(null);
+      setSelectedCategory(null);
     }
     setSelectedSubCategory(null);
     setCurrentPage(1);
-};
+  };
 
-const handleSubCategoryChange = (event) => {
+  const handleSubCategoryChange = (event) => {
     const { value, checked } = event.target;
     const numberValue = Number(value);
 
     if (checked) {
-        setSelectedSubCategory(numberValue);
+      setSelectedSubCategory(numberValue);
     } else {
-        setSelectedSubCategory(null);
+      setSelectedSubCategory(null);
     }
     setCurrentPage(1);
-};
+  };
 
-const handlePriceRangeChange = (event) => {
+  const handlePriceRangeChange = (event) => {
     const { value, checked } = event.target;
 
     if (checked) {
-        setSelectedPriceRange(value);
+      setSelectedPriceRange(value);
     } else {
-        setSelectedPriceRange(null);
+      setSelectedPriceRange(null);
     }
     setCurrentPage(1);
-};
+  };
 
-const handleOccasionChange = (event) => {
+  const handleOccasionChange = (event) => {
     const { value, checked } = event.target;
 
     if (checked) {
-        setSelectedOccasion(value);
+      setSelectedOccasion(value);
     } else {
-        setSelectedOccasion(null);
+      setSelectedOccasion(null);
     }
     setCurrentPage(1);
-};
+  };
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
@@ -128,34 +138,53 @@ const handleOccasionChange = (event) => {
         </div>
 
         <div style={{ display: "flex", marginLeft: "40px", justifyContent: "start", marginBottom: "20px", textAlign: "center" }}>
-          {categories.map((category, index) => (
-            <div key={category.id} className="d-flex align-items-center ms-2 me-2">
-              <a
-                href={`/products/category/${category.id}`}
-                onMouseEnter={() => setHoverIndex(index)}
-                onMouseLeave={() => setHoverIndex(null)}
-                style={{
-                  textDecoration: "none",
-                  color: "black",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "10px",
-                  textDecorationLine: hoverIndex === index ? "underline" : "none",
-                }}
-              >
-                {category.name}
-                <div className="vr" style={{ height: "auto", fontWeight: "normal" }}></div>
-              </a>
-            </div>
-          ))}
+          {Array.isArray(categories) && categories.length > 0 ? (
+            categories.map((category, index) => (
+              <div key={category.id} className="d-flex align-items-center ms-2 me-2">
+                <a
+                  href={`/products/category/${category.id}`}
+                  onMouseEnter={() => setHoverIndex(index)}
+                  onMouseLeave={() => setHoverIndex(null)}
+                  style={{
+                    textDecoration: "none",
+                    color: "black",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "10px",
+                    textDecorationLine: hoverIndex === index ? "underline" : "none",
+                  }}
+                >
+                  {category.name || "Danh mục"}
+                  <div className="vr" style={{ height: "auto", fontWeight: "normal" }}></div>
+                </a>
+              </div>
+            ))
+          ) : (
+            <div style={{ color: "#666" }}>Không có danh mục</div>
+          )}
         </div>
 
-        <ProductList
-          products={products}
-          filterFn={() => true}
-          title="Sản phẩm"
-          isShowAll={true}
-        />
+        {Array.isArray(products) && products.length > 0 ? (
+          <ProductList
+            products={products}
+            filterFn={() => true}
+            title="Sản phẩm"
+            isShowAll={true}
+          />
+        ) : (
+          <div
+            className="text-center"
+            style={{
+              margin: "0 auto",
+              fontSize: "20px",
+              fontStyle: "italic",
+              fontWeight: "lighter",
+              height: "50vh",
+            }}
+          >
+            Chưa có sản phẩm nào.
+          </div>
+        )}
 
         <div className="d-flex justify-content-center" style={{ marginTop: "20px" }}>
           <Paginated totalPages={totalPages} currentPage={currentPage} handlePageChange={handlePageChange} />

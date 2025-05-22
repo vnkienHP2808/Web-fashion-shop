@@ -13,24 +13,26 @@ const CategoryProduct = () => {
   const { categoryId, subcategoryId } = useParams();
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState([]);
-  const [selectedPriceRange, setSelectedPriceRange] = useState([]);
-  const [selectedOccasion, setSelectedOccasion] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [selectedPriceRange, setSelectedPriceRange] = useState(null);
+  const [selectedOccasion, setSelectedOccasion] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [productsPerPage] = useState(20);
   const [openFilter, setOpenFilter] = useState(false);
   const [currentCategorySubcategories, setCurrentCategorySubcategories] = useState([]);
-  const [selectedSubCategory, setSelectedSubCategory] = useState([]);
+  const [selectedSubCategory, setSelectedSubCategory] = useState(null);
   const [hoverIndex, setHoverIndex] = useState(null);
   const [totalElements, setTotalElements] = useState(0);
+
   // Lấy sản phẩm theo category hoặc subcategory với phân trang và bộ lọc
   useEffect(() => {
     const params = {
       page: currentPage,
       size: productsPerPage,
-      ...(selectedPriceRange.length > 0 && { priceRange: selectedPriceRange[0] }),
-      ...(selectedOccasion.length > 0 && { occasion: selectedOccasion[0] }),
+      ...(selectedPriceRange && { priceRange: selectedPriceRange }),
+      ...(selectedOccasion && { occasion: selectedOccasion }),
+      ...(selectedSubCategory && { idSubcat: selectedSubCategory }),
     };
 
     const url = subcategoryId
@@ -40,7 +42,7 @@ const CategoryProduct = () => {
     axios
       .get(url, { params })
       .then((res) => {
-        setProducts(res.data.content);
+        setProducts(Array.isArray(res.data.content) ? res.data.content : []);
         setTotalPages(res.data.totalPages || 1);
         setTotalElements(res.data.totalElements || 0);
       })
@@ -48,23 +50,29 @@ const CategoryProduct = () => {
         console.error("Error fetching products:", err);
         setProducts([]);
         setTotalPages(1);
+        setTotalElements(0);
       });
-  }, [categoryId, subcategoryId, currentPage, selectedPriceRange, selectedOccasion]);
+  }, [categoryId, subcategoryId, currentPage, selectedPriceRange, selectedOccasion, selectedSubCategory]);
 
   // Lấy danh sách categories
   useEffect(() => {
     axios
       .get("http://localhost:8080/api/categories")
       .then((res) => {
-        setCategories(res.data);
-        const currentCategory = res.data.find(
+        const fetchedCategories = Array.isArray(res.data) ? res.data : [];
+        setCategories(fetchedCategories);
+        const currentCategory = fetchedCategories.find(
           (cat) => cat.id?.toString() === categoryId
         );
-        if (currentCategory) {
-          setCurrentCategorySubcategories(currentCategory.subCategories || []);
-        }
+        setCurrentCategorySubcategories(
+          Array.isArray(currentCategory?.subCategories) ? currentCategory.subCategories : []
+        );
       })
-      .catch((err) => console.error("Error fetching categories:", err));
+      .catch((err) => {
+        console.error("Error fetching categories:", err);
+        setCategories([]);
+        setCurrentCategorySubcategories([]);
+      });
   }, [categoryId]);
 
   // Xử lý bộ lọc
@@ -73,37 +81,46 @@ const CategoryProduct = () => {
     const numberValue = Number(value);
 
     if (checked) {
-      setSelectedCategory([numberValue]);
+      setSelectedCategory(numberValue);
     } else {
-      setSelectedCategory([]);
+      setSelectedCategory(null);
     }
 
-    setSelectedSubCategory([]);
+    setSelectedSubCategory(null);
     setCurrentPage(1);
   };
 
   const handleSubCategoryChange = (event) => {
     const { value, checked } = event.target;
     const numberValue = Number(value);
-    setSelectedSubCategory((prev) =>
-      checked ? [...prev, numberValue] : prev.filter((item) => item !== numberValue)
-    );
+
+    if (checked) {
+      setSelectedSubCategory(numberValue);
+    } else {
+      setSelectedSubCategory(null);
+    }
     setCurrentPage(1);
   };
 
   const handlePriceRangeChange = (event) => {
     const { value, checked } = event.target;
-    setSelectedPriceRange((prev) =>
-      checked ? [...prev, value] : prev.filter((item) => item !== value)
-    );
+
+    if (checked) {
+      setSelectedPriceRange(value);
+    } else {
+      setSelectedPriceRange(null);
+    }
     setCurrentPage(1);
   };
 
   const handleOccasionChange = (event) => {
     const { value, checked } = event.target;
-    setSelectedOccasion((prev) =>
-      checked ? [...prev, value] : prev.filter((item) => item !== value)
-    );
+
+    if (checked) {
+      setSelectedOccasion(value);
+    } else {
+      setSelectedOccasion(null);
+    }
     setCurrentPage(1);
   };
 
@@ -116,7 +133,7 @@ const CategoryProduct = () => {
     const category = categories.find(
       (cat) => cat.id?.toString() === categoryId
     );
-    return category ? category.name : "";
+    return category ? category.name : "Danh mục";
   };
 
   return (
@@ -136,7 +153,7 @@ const CategoryProduct = () => {
             {subcategoryId
               ? currentCategorySubcategories.find(
                   (sub) => sub.id_subcat?.toString() === subcategoryId
-                )?.name
+                )?.name || "Phân loại"
               : getCategoryName()}
             <span
               style={{
@@ -176,32 +193,36 @@ const CategoryProduct = () => {
             textAlign: "center",
           }}
         >
-          {currentCategorySubcategories.map((sub, index) => (
-            <div
-              key={sub.id_subcat}
-              className="d-flex align-items-center ms-2 me-2"
-            >
-              <a
-                href={`/products/category/${categoryId}/subcategory/${sub.id_subcat}`}
-                onMouseEnter={() => setHoverIndex(index)}
-                onMouseLeave={() => setHoverIndex(null)}
-                style={{
-                  textDecoration: "none",
-                  color: "black",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "10px",
-                  textDecorationLine: hoverIndex === index ? "underline" : "none",
-                }}
+          {Array.isArray(currentCategorySubcategories) && currentCategorySubcategories.length > 0 ? (
+            currentCategorySubcategories.map((sub, index) => (
+              <div
+                key={sub.id_subcat}
+                className="d-flex align-items-center ms-2 me-2"
               >
-                {sub.name}
-                <div
-                  className="vr"
-                  style={{ height: "auto", fontWeight: "normal" }}
-                />
-              </a>
-            </div>
-          ))}
+                <a
+                  href={`/products/category/${categoryId}/subcategory/${sub.id_subcat}`}
+                  onMouseEnter={() => setHoverIndex(index)}
+                  onMouseLeave={() => setHoverIndex(null)}
+                  style={{
+                    textDecoration: "none",
+                    color: "black",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "10px",
+                    textDecorationLine: hoverIndex === index ? "underline" : "none",
+                  }}
+                >
+                  {sub.name || "Phân loại"}
+                  <div
+                    className="vr"
+                    style={{ height: "auto", fontWeight: "normal" }}
+                  />
+                </a>
+              </div>
+            ))
+          ) : (
+            <div style={{ color: "#666" }}>Không có phân loại</div>
+          )}
 
           <div className="d-flex align-items-center ms-2 me-2">
             <a
@@ -217,7 +238,14 @@ const CategoryProduct = () => {
           </div>
         </div>
 
-        {products.length === 0 ? (
+        {Array.isArray(products) && products.length > 0 ? (
+          <ProductList
+            products={products}
+            filterFn={() => true}
+            title="Sản phẩm"
+            isShowAll={true}
+          />
+        ) : (
           <div
             className="text-center"
             style={{
@@ -230,13 +258,6 @@ const CategoryProduct = () => {
           >
             Chưa có sản phẩm nào trong danh mục này.
           </div>
-        ) : (
-          <ProductList
-            products={products}
-            filterFn={() => true}
-            title="Sản phẩm"
-            isShowAll={true}
-          />
         )}
 
         <div

@@ -24,9 +24,9 @@ const ProductManagement = () => {
     });
     const [selectedFiles, setSelectedFiles] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState(null);
-    const [selectedSubCategory, setSelectedSubCategory] = useState(null); 
-    const [selectedPriceRange, setSelectedPriceRange] = useState(null); 
-    const [selectedOccasion, setSelectedOccasion] = useState(null); 
+    const [selectedSubCategory, setSelectedSubCategory] = useState(null);
+    const [selectedPriceRange, setSelectedPriceRange] = useState(null);
+    const [selectedOccasion, setSelectedOccasion] = useState(null);
     const [openFilter, setOpenFilter] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
@@ -139,7 +139,7 @@ const ProductManagement = () => {
         const files = Array.from(e.target.files);
         setSelectedFiles([...selectedFiles, ...files]);
     };
-    
+
     const removeSelectedFile = (index) => {
         const updatedFiles = [...selectedFiles];
         updatedFiles.splice(index, 1);
@@ -206,7 +206,7 @@ const ProductManagement = () => {
                     marginBottom: "20px",
                     textAlign: "center",
                     fontWeight: "600",
-                }}>Quản Lý Sản Phẩm: <i style={{fontWeight: "normal"}}>{totalElements} sản phẩm</i></h2>
+                }}>Quản Lý Sản Phẩm: <i style={{ fontWeight: "normal" }}>{totalElements} sản phẩm</i></h2>
 
                 <div className="d-flex align-items-center justify-content-between" style={{ marginBottom: "20px" }}>
                     <Button variant="primary" onClick={() => setShowAddModal(true)}>
@@ -239,32 +239,40 @@ const ProductManagement = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {products.map((product) => (
-                            <tr key={product.idProduct}>
-                                <td>{product.name_product}</td>
-                                <td>{product.price}₫</td>
-                                <td>{product.sale_price ? `${product.sale_price}₫` : "N/A"}</td>
-                                <td>{product.in_stock}</td>
-                                <td>{product.status}</td>
-                                <td>
-                                    <a
-                                        href={`/updateproduct/${product.idProduct}`}
-                                        className="btn btn-success"
-                                        style={{ marginRight: "5px" }}
-                                    >
-                                        Update
-                                    </a>
-                                    {product.status !== "Deleted" && (
-                                        <Button
-                                            variant="danger"
-                                            onClick={() => handleDeleteProduct(product.idProduct)}
+                        {Array.isArray(products) && products.length > 0 ? (
+                            products.map((product) => (
+                                <tr key={product.idProduct}>
+                                    <td>{product.name_product || "N/A"}</td>
+                                    <td>{product.price ? `${product.price}₫` : "N/A"}</td>
+                                    <td>{product.sale_price ? `${product.sale_price}₫` : "N/A"}</td>
+                                    <td>{product.in_stock || 0}</td>
+                                    <td>{product.status || "N/A"}</td>
+                                    <td>
+                                        <a
+                                            href={`/updateproduct/${product.idProduct}`}
+                                            className="btn btn-success"
+                                            style={{ marginRight: "5px" }}
                                         >
-                                            Xóa
-                                        </Button>
-                                    )}
+                                            Update
+                                        </a>
+                                        {product.status !== "Deleted" && (
+                                            <Button
+                                                variant="danger"
+                                                onClick={() => handleDeleteProduct(product.idProduct)}
+                                            >
+                                                Xóa
+                                            </Button>
+                                        )}
+                                    </td>
+                                </tr>
+                            ))
+                        ) : (
+                            <tr>
+                                <td colSpan="6" style={{ textAlign: "center" }}>
+                                    Không có sản phẩm nào
                                 </td>
                             </tr>
-                        ))}
+                        )}
                     </tbody>
                 </Table>
 
@@ -294,10 +302,10 @@ const ProductManagement = () => {
                                     value={newProduct.price}
                                     onChange={(e) => {
                                         const ip = parseInt(e.target.value, 10);
-                                        if(ip >= 0){
+                                        if (ip >= 0) {
                                             setNewProduct({ ...newProduct, price: e.target.value })
                                         }
-                                        else{
+                                        else {
                                             setNewProduct({ ...newProduct, price: 0 })
                                         }
                                     }}
@@ -312,10 +320,10 @@ const ProductManagement = () => {
                                     value={newProduct.sale_price || ""}
                                     onChange={(e) => {
                                         const ip = parseInt(e.target.value, 10);
-                                        if(ip >= 0){
+                                        if (ip >= 0) {
                                             setNewProduct({ ...newProduct, sale_price: e.target.value })
                                         }
-                                        else{
+                                        else {
                                             setNewProduct({ ...newProduct, sale_price: 0 })
                                         }
                                     }}
@@ -330,10 +338,10 @@ const ProductManagement = () => {
                                     value={newProduct.in_stock}
                                     onChange={(e) => {
                                         const ip = parseInt(e.target.value, 10);
-                                        if(ip >= 0){
+                                        if (ip >= 0) {
                                             setNewProduct({ ...newProduct, in_stock: e.target.value })
                                         }
-                                        else{
+                                        else {
                                             setNewProduct({ ...newProduct, in_stock: 0 })
                                         }
                                     }}
@@ -423,7 +431,7 @@ const ProductManagement = () => {
                                     accept="image/*"
                                     onChange={handleFileChange}
                                 />
-                                
+
                                 {selectedFiles.length > 0 && (
                                     <div className="selected-files mt-2">
                                         <p>Các file đã chọn:</p>
@@ -431,8 +439,8 @@ const ProductManagement = () => {
                                             {selectedFiles.map((file, index) => (
                                                 <li key={index} className="list-group-item d-flex justify-content-between align-items-center">
                                                     {file.name}
-                                                    <Button 
-                                                        variant="danger" 
+                                                    <Button
+                                                        variant="danger"
                                                         size="sm"
                                                         onClick={() => removeSelectedFile(index)}
                                                     >
@@ -453,10 +461,10 @@ const ProductManagement = () => {
                                     value={newProduct.sold_quantity}
                                     onChange={(e) => {
                                         const ip = parseInt(e.target.value, 10);
-                                        if(ip >= 0){
+                                        if (ip >= 0) {
                                             setNewProduct({ ...newProduct, sold_quantity: e.target.value })
                                         }
-                                        else{
+                                        else {
                                             setNewProduct({ ...newProduct, sold_quantity: 0 })
                                         }
                                     }}
