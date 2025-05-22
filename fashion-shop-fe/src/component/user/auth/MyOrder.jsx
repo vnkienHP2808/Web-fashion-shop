@@ -123,7 +123,7 @@ const MyOrders = () => {
               openFilter={openFilter}
               setOpenFilter={setOpenFilter}
             />
-          </div>
+          </div> 
           {Array.isArray(orders) && orders.length > 0 ? (
             orders.map((order) => (
               <div
