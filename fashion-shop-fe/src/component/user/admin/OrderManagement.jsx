@@ -88,6 +88,8 @@ const OrderManagement = () => {
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
+    setSelectedOrder(null);
+    setSelectedImages(null);
   };
 
   const handleImageSelect = (productId, imageLink) => {

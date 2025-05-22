@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Paginated from "../../ui/Pagination";
+import OrderFilter from "../../ui/OrderFilter";
 
 const MyOrders = () => {
   const [orders, setOrders] = useState([]);
@@ -12,6 +13,14 @@ const MyOrders = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [totalElements, setTotalElements] = useState(0);
   const [ordersPerPage] = useState(5);
+
+  const [openFilter, setOpenFilter] = useState(false); 
+  const [selectedGrandTotalRange, setSelectedGrandTotalRange] = useState(null);
+  const [selectedStatus, setSelectedStatus] = useState(null); 
+  const [selectedDateRange, setSelectedDateRange] = useState({
+    startDate: "",
+    endDate: "",
+  }); 
 
   const imageBaseUrl = "http://localhost:8080/images/"; // link cho hình ảnh sản phẩm
   // Thiết lập interceptor cho axios để thêm header Authorization
@@ -35,21 +44,63 @@ const MyOrders = () => {
 
   useEffect(() => {
     if (userId) {
+      const params = {
+      page: currentPage,
+      size: ordersPerPage,
+      ...(selectedGrandTotalRange && { grandTotalRange: selectedGrandTotalRange }),
+      ...(selectedStatus && { status: selectedStatus }),
+      ...(selectedDateRange.startDate && { startDate: selectedDateRange.startDate }),
+      ...(selectedDateRange.endDate && { endDate: selectedDateRange.endDate }),
+    };
       axios
-        .get(`http://localhost:8080/api/orders/user/${userId}?page=${currentPage}&size=${ordersPerPage}`)
+        .get(`http://localhost:8080/api/orders/user/${userId}`, {params})
         .then((res) => {
-            setOrders(res.data.content);
+            setOrders(Array.isArray(res.data.content) ? res.data.content : []);
             setTotalPages(res.data.totalPages);
             setTotalElements(res.data.totalElements || 0);
         })
         .catch((error) => console.error("Lỗi khi lấy đơn hàng:", error));
     }
-  }, [userId, currentPage]);
+  }, [userId,
+      currentPage,
+      selectedGrandTotalRange,
+      selectedStatus,
+      selectedDateRange,
+  ]);
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
     setSelectedOrder(null);
     setSelectedImage(null);
+  };
+
+  const handleGrandTotalRangeChange = (event) => {
+    const { value, checked } = event.target;
+    if (checked) {
+      setSelectedGrandTotalRange(value);
+    } else {
+      setSelectedGrandTotalRange(null);
+    }
+    setCurrentPage(1); 
+  };
+
+  const handleStatusChange = (event) => {
+    const { value, checked } = event.target;
+    if (checked) {
+      setSelectedStatus(value);
+    } else {
+      setSelectedStatus(null);
+    }
+    setCurrentPage(1); 
+  };
+
+  const handleDateRangeChange = (event) => {
+    const { name, value } = event.target;
+    setSelectedDateRange((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+    setCurrentPage(1); 
   };
 
   return (
@@ -58,7 +109,22 @@ const MyOrders = () => {
         {/* Cột trái - Danh sách đơn */}
         <div style={{ flex: 1, maxWidth: "400px" }}>
           <h2>Đơn Hàng Của Tôi: {totalElements}</h2>
-          {orders.length > 0 ? (
+          <div
+            className="d-flex align-items-center justify-content-end"
+            style={{ marginBottom: "10px" }}
+          >
+            <OrderFilter
+              selectedGrandTotalRange={selectedGrandTotalRange}
+              handleGrandTotalRangeChange={handleGrandTotalRangeChange}
+              selectedStatus={selectedStatus}
+              handleStatusChange={handleStatusChange}
+              selectedDateRange={selectedDateRange}
+              handleDateRangeChange={handleDateRangeChange}
+              openFilter={openFilter}
+              setOpenFilter={setOpenFilter}
+            />
+          </div>
+          {Array.isArray(orders) && orders.length > 0 ? (
             orders.map((order) => (
               <div
                 key={order.idOrder}
@@ -113,7 +179,9 @@ const MyOrders = () => {
               </div>
             ))
           ) : (
-            <p>Bạn chưa có đơn hàng nào.</p>
+            <p style={{ fontSize: "18px", textAlign: "center", color: "red"}}>
+              <i>Bạn chưa có đơn hàng nào!</i>
+            </p>
           )}
         </div>
 
