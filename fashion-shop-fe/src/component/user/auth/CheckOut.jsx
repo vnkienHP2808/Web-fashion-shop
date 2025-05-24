@@ -20,7 +20,7 @@ const Checkout = () => {
   const selectedProducts = location.state?.selectedCartItems || [];
   const [loggedInUser] = useState(() => JSON.parse(sessionStorage.getItem("account")));
   
-  // Thêm interceptor để gửi header Authorization
+  const imageBaseUrl = "http://localhost:8080/images/"; // Thêm base URL cho ảnh
   useEffect(() => {
     const auth = sessionStorage.getItem("auth");
     if (auth) {
@@ -92,7 +92,7 @@ const Checkout = () => {
       await axios.post("http://localhost:8080/api/orders", order);
       selectedProducts.forEach((item) => removeFromCart(item.product.idProduct));
       alert("Đơn hàng đã đặt thành công!");
-      navigate("/");
+      navigate("/myorder");
     } catch (error) {
       console.error("Lỗi khi đặt hàng:", error.response?.data || error.message);
       alert("Có lỗi xảy ra khi đặt hàng. Vui lòng thử lại!");
@@ -149,54 +149,140 @@ const Checkout = () => {
     <div>
       <Header />
       <Breadcrump prevtext="Giỏ hàng" text="Thanh toán" prevlink="/cart" />
-      <div className="checkout-container">
-        <h2>Đặt hàng</h2>
-        <div className="checkout-items">
+      <div className="checkout-container" style={{ 
+        maxWidth: "1200px", 
+        margin: "0 auto", 
+        padding: "30px 20px", 
+        backgroundColor: "#fff", 
+        borderRadius: "10px", 
+        boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
+        fontFamily: "'Roboto', sans-serif"
+      }}>
+        <h2 style={{ 
+          fontSize: "2em", 
+          color: "#2c3e50", 
+          textAlign: "center", 
+          marginBottom: "30px",
+          fontWeight: "600"
+        }}>Đặt hàng</h2>
+        <div className="checkout-items" style={{ 
+          display: "grid", 
+          gridTemplateColumns: "repeat(auto-fit, minmax(350px, 1fr))", 
+          gap: "20px", 
+          marginBottom: "30px"
+        }}>
           {selectedProducts.map((item) => (
-            <div key={item.product.idProduct} className="checkout-item">
-              <h4>Sản phẩm: {item.product.name_product}</h4>
-              <p>Số lượng: {item.quantity}</p>
-              <p>Giá sản phẩm:&nbsp;
-                {item.product.sale_price ? (
-                  <>
-                    <span style={{ color: "red", fontWeight: "bold" }}>
-                      {item.product.sale_price}₫
-                    </span>
-                    <span
-                      style={{
-                        color: "gray",
-                        textDecoration: "line-through",
-                        marginLeft: "10px",
-                      }}
-                    >
-                      {item.product.price}₫
-                    </span>
-                  </>
-                ) : (
-                  <span>{item.product.price}₫</span>
-                )}
-              </p>
-              <p>
-                Tổng tiền:{" "}
-                {(item.product.sale_price || item.product.price) * item.quantity}₫
-              </p>
+            <div key={item.product.idProduct} className="checkout-item" style={{ 
+              border: "1px solid #e0e0e0", 
+              borderRadius: "8px", 
+              padding: "15px", 
+              backgroundColor: "#f9f9f9",
+              display: "flex",
+              alignItems: "center",
+              gap: "15px",
+              transition: "box-shadow 0.3s ease"
+            }}>
+              <div>
+                <div >
+                  <a href={`/products/${item.product.idProduct}`} className="product-name" style={{ 
+                    fontSize: "1.2em", 
+                    color: "#34495e", 
+                    marginBottom: "10px" }}>Sản phẩm: {item.product.name_product}
+                  </a>
+                  <p style={{ margin: "5px 0", color: "#7f8c8d" }}>Số lượng: {item.quantity}</p>
+                  <p style={{ margin: "5px 0", color: "#7f8c8d" }}>
+                    Giá sản phẩm: 
+                    {item.product.sale_price ? (
+                      <>
+                        <span style={{ color: "#e74c3c", fontWeight: "bold" }}>
+                          {item.product.sale_price.toLocaleString()}₫
+                        </span>
+                        <span
+                          style={{
+                            color: "#95a5a6",
+                            textDecoration: "line-through",
+                            marginLeft: "10px"
+                          }}
+                        >
+                          {item.product.price.toLocaleString()}₫
+                        </span>
+                      </>
+                    ) : (
+                      <span style={{ fontWeight: "bold", color: "#2c3e50" }}>
+                        {item.product.price.toLocaleString()}₫
+                      </span>
+                    )}
+                  </p>
+                  <p style={{ 
+                    margin: "5px 0", 
+                    color: "#34495e", 
+                    fontWeight: "500"
+                  }}>
+                    Tổng tiền:{" "}
+                    {(item.product.sale_price || item.product.price) * item.quantity.toLocaleString()}₫
+                  </p>
+                </div>
+              </div>
+              <a href={`/products/${item.product.idProduct}`} className="product-name">
+                <img
+                  src={`${imageBaseUrl}${item.product.images[0]?.imageLink}`}
+                  alt={item.product.name_product}
+                  style={{
+                    width: "200px",
+                    height: "200px",
+                    objectFit: "cover",
+                    borderRadius: "6px",
+                    border: "1px solid #ddd"
+                  }}
+                />
+              </a>
             </div>
           ))}
         </div>
 
-        <div className="summary">
-          <p style={{ fontSize: "15px" }}>Tổng tiền hàng: {totalAmount.toLocaleString()}₫</p>
-          <p style={{ fontSize: "15px" }}>
+        <div className="summary" style={{ 
+          border: "1px solid #e0e0e0", 
+          borderRadius: "8px", 
+          padding: "20px", 
+          backgroundColor: "#f9f9f9",
+          marginBottom: "30px"
+        }}>
+          <p style={{ fontSize: "1.1em", color: "#34495e", margin: "8px 0" }}>
+            Tổng tiền hàng: {totalAmount.toLocaleString()}₫
+          </p>
+          <p style={{ fontSize: "1.1em", color: "#34495e", margin: "8px 0" }}>
             Phí vận chuyển: {shippingFee.toLocaleString()}₫ (Miễn phí với đơn hàng trên 699000đ)
           </p>
-          <h3 style={{ border: "none" }}>Tổng thanh toán: {grandTotal.toLocaleString()}₫</h3>
+          <h3 style={{ 
+            fontSize: "1.4em", 
+            color: "#e74c3c", 
+            margin: "15px 0", 
+            fontWeight: "600",
+            borderTop: "1px solid #e0e0e0",
+            paddingTop: "15px"
+          }}>Tổng thanh toán: {grandTotal.toLocaleString()}₫</h3>
         </div>
 
-        <label>Số điện thoại người nhận:</label>
+        <label style={{ 
+          fontSize: "1.1em", 
+          color: "#2c3e50", 
+          marginBottom: "10px", 
+          display: "block"
+        }}>Số điện thoại người nhận:</label>
         <select
           value={selectedPhoneNumber}
           onChange={(e) => setSelectedPhoneNumber(e.target.value)}
           className="address-select"
+          style={{ 
+            width: "100%", 
+            padding: "10px", 
+            marginBottom: "15px", 
+            border: "1px solid #ddd", 
+            borderRadius: "6px",
+            fontSize: "1em",
+            color: "#34495e",
+            backgroundColor: "#fff"
+          }}
         >
           {user?.phones?.map((num, index) => (
             <option key={index} value={num}>
@@ -205,7 +291,11 @@ const Checkout = () => {
           ))}
         </select>
 
-        <div className="add-address">
+        <div className="add-address" style={{ 
+          display: "flex", 
+          gap: "10px", 
+          marginBottom: "20px"
+        }}>
           <input
             type="number"
             placeholder="Thêm số điện thoại mới (nhập đủ 10 số)"
@@ -217,21 +307,54 @@ const Checkout = () => {
               }
             }}
             className="address-input"
+            style={{ 
+              flex: 1, 
+              padding: "10px", 
+              border: "1px solid #ddd", 
+              borderRadius: "6px",
+              fontSize: "1em",
+              color: "#34495e"
+            }}
           />
           <button
             onClick={handleAddNewPhoneNumber}
             className="add-address-btn"
             disabled={!/^\d{10}$/.test(newPhoneNumber)}
+            style={{ 
+              padding: "10px 20px", 
+              border: "none", 
+              borderRadius: "6px",
+              backgroundColor: "#2ecc71",
+              color: "#fff",
+              cursor: "pointer",
+              transition: "background-color 0.3s ease",
+              opacity: !/^\d{10}$/.test(newPhoneNumber) ? 0.6 : 1
+            }}
           >
             Thêm số điện thoại
           </button>
         </div>
 
-        <label>Địa chỉ giao hàng:</label>
+        <label style={{ 
+          fontSize: "1.1em", 
+          color: "#2c3e50", 
+          marginBottom: "10px", 
+          display: "block"
+        }}>Địa chỉ giao hàng:</label>
         <select
           value={selectedAddress}
           onChange={(e) => setSelectedAddress(e.target.value)}
           className="address-select"
+          style={{ 
+            width: "100%", 
+            padding: "10px", 
+            marginBottom: "15px", 
+            border: "1px solid #ddd", 
+            borderRadius: "6px",
+            fontSize: "1em",
+            color: "#34495e",
+            backgroundColor: "#fff"
+          }}
         >
           {user?.addresses?.map((addr, index) => (
             <option key={index} value={addr}>
@@ -240,60 +363,117 @@ const Checkout = () => {
           ))}
         </select>
 
-        <div className="add-address">
+        <div className="add-address" style={{ 
+          display: "flex", 
+          gap: "10px", 
+          marginBottom: "20px"
+        }}>
           <input
             type="text"
             placeholder="Thêm địa chỉ mới"
             value={newAddress}
             onChange={(e) => setNewAddress(e.target.value)}
             className="address-input"
+            style={{ 
+              flex: "1", 
+              padding: "10px", 
+              border: "1px solid #ddd", 
+              borderRadius: "6px",
+              fontSize: "1em",
+              color: "#34495e"
+            }}
           />
-          <button onClick={handleAddNewAddress} className="add-address-btn">
+          <button onClick={handleAddNewAddress} className="add-address-btn" style={{ 
+            padding: "10px 20px", 
+            border: "none", 
+            borderRadius: "6px",
+            backgroundColor: "#3498db",
+            color: "#fff",
+            cursor: "pointer",
+            transition: "background-color 0.3s ease"
+          }}>
             Thêm địa chỉ
           </button>
         </div>
 
-        <label>Chọn phương thức thanh toán:</label>
-        <div className="payment-methods">
-          <label>
+        <label style={{ 
+          fontSize: "1.1em", 
+          color: "#2c3e50", 
+          marginBottom: "10px", 
+          display: "block"
+        }}>Chọn phương thức thanh toán:</label>
+        <div className="payment-methods" style={{ 
+          marginBottom: "20px", 
+          padding: "15px", 
+          border: "1px solid #e0e0e0", 
+          borderRadius: "8px",
+          backgroundColor: "#f9f9f9"
+        }}>
+          <label style={{ 
+            display: "block", 
+            marginBottom: "10px", 
+            fontSize: "1em", 
+            color: "#34495e"
+          }}>
             <input
               type="radio"
               value="COD"
               checked={paymentMethod === "COD"}
               onChange={() => setPaymentMethod("COD")}
+              style={{ marginRight: "10px" }}
             />
             Thanh toán khi nhận hàng (COD)
           </label>
-          <label>
+          <label style={{ 
+            display: "block", 
+            marginBottom: "10px", 
+            fontSize: "1em", 
+            color: "#34495e"
+          }}>
             <input
               type="radio"
               value="VNPay"
               checked={paymentMethod === "VNPay"}
               onChange={() => setPaymentMethod("VNPay")}
+              style={{ marginRight: "10px" }}
             />
             VNPay
           </label>
           {paymentMethod === "VNPay" && (
             <span
               style={{
-                display: "flex",
+                display: "block",
                 width: "200px",
                 height: "200px",
-                marginLeft: "70px",
-                marginTop: "15px",
-                border: "1px solid",
+                margin: "15px auto 0",
+                border: "1px solid #ddd",
+                borderRadius: "8px",
+                overflow: "hidden",
+                boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)"
               }}
             >
               <img
                 src="/assets/user/image/VNPay.jpeg"
                 alt="QR VNPay"
-                style={{ width: "100%", height: "100%" }}
+                style={{ width: "100%", height: "100%", objectFit: "cover" }}
               />
             </span>
           )}
         </div>
 
-        <button onClick={handleCheckout} className="checkout-btn">
+        <button onClick={handleCheckout} className="checkout-btn" style={{ 
+          width: "100%", 
+          padding: "12px", 
+          border: "none", 
+          borderRadius: "6px",
+          backgroundColor: "#e74c3c",
+          color: "#fff",
+          fontSize: "1.2em",
+          fontWeight: "500",
+          cursor: "pointer",
+          transition: "background-color 0.3s ease",
+          boxShadow: "0 2px 8px rgba(231, 76, 60, 0.3)"
+        }}>
           Hoàn tất đơn hàng
         </button>
       </div>

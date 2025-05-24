@@ -142,13 +142,17 @@ const Cart = () => {
                     }
                     className="me-3"
                   />
-                  <img
-                    src = {`${imageBaseUrl}${item.product.images[0].imageLink}`}
-                    alt={item.product.name_product}
-                    className="cart-item-image"
-                  />
+                  <a href={`/products/${item.product.idProduct}`} className="product-name">
+                    <img
+                      src = {`${imageBaseUrl}${item.product.images[0].imageLink}`}
+                      alt={item.product.name_product}
+                      className="cart-item-image"
+                    />
+                  </a>
                   <div className="cart-item-details ms-3">
-                    <h4>{item.product.name_product}</h4>
+                    <a href={`/products/${item.product.idProduct}`} className="product-name">
+                      <h4>{item.product.name_product}</h4>
+                    </a>
                     <p>
                       {item.product.sale_price ? (
                         <>
