@@ -90,6 +90,13 @@ const Checkout = () => {
 
     try {
       await axios.post("http://localhost:8080/api/orders", order);
+
+      const productUpdates = selectedProducts.map((item) => ({
+        idProduct: item.product.idProduct,
+        quantity: item.quantity,
+      }));
+      await axios.put("http://localhost:8080/api/products/update-quantity-and-sold", productUpdates);
+
       selectedProducts.forEach((item) => removeFromCart(item.product.idProduct));
       alert("Đơn hàng đã đặt thành công!");
       navigate("/myorder");
