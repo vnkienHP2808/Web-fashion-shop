@@ -26,7 +26,7 @@ const Header = () => {
 
     const { cart } = useContext(CartContext);
     const totalItems = Array.isArray(cart)
-        ? new Set(cart.map(item => item.product.idProduct)).size
+        ? new Set(cart.map(item => `${item.product.idProduct}-${item.size}`)).size
         : 0;
 
 

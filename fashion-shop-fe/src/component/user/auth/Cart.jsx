@@ -50,7 +50,7 @@ const Cart = () => {
 
   const confirmDelete = () => {
     if (productToDelete) {
-      removeFromCart(productToDelete.product.idProduct);
+      removeFromCart(productToDelete.product.idProduct, productToDelete.size);
       setSelectedProducts(
         selectedProducts.filter((id) => id !== productToDelete.product.idProduct)
       );
@@ -58,14 +58,14 @@ const Cart = () => {
     handleCloseModal();
   };
 
-  const handleQuantityChange = (product, value) => {
+  const handleQuantityChange = (product, value, size) => {
     const quantity = parseInt(value, 10) || 1;
     if (quantity <= 0) {
       handleShowModal(product);
     } else if (quantity > product.product.in_stock) {
-      updateCartItemQuantity(product.product.idProduct, product.product.in_stock);
+      updateCartItemQuantity(product.product.idProduct, product.product.in_stock, size);
     } else {
-      updateCartItemQuantity(product.product.idProduct, quantity);
+      updateCartItemQuantity(product.product.idProduct, quantity, size);
     }
   };
 
@@ -153,7 +153,7 @@ const Cart = () => {
                     <a href={`/products/${item.product.idProduct}`} className="product-name">
                       <h4>{item.product.name_product}</h4>
                     </a>
-                    <p>
+                    <p> Giá: &nbsp;
                       {item.product.sale_price ? (
                         <>
                           <span
@@ -175,12 +175,12 @@ const Cart = () => {
                         <span>{item.product.price}₫</span>
                       )}
                     </p>
-
+                      <p>Kích thước: {item.size}</p>
                     <div className="quantity-controls d-flex align-items-center">
                       <Button
                         variant="light"
                         onClick={() =>
-                          handleQuantityChange(item, item.quantity - 1)
+                          handleQuantityChange(item, item.quantity - 1, item.size)
                         }
                         disabled={item.quantity <= 1}
                       >
@@ -190,7 +190,7 @@ const Cart = () => {
                         type="number"
                         value={item.quantity}
                         onChange={(e) =>
-                          handleQuantityChange(item, e.target.value)
+                          handleQuantityChange(item, e.target.value, item.size)
                         }
                         className="quantity-input mx-2"
                         style={{ width: "50px", textAlign: "center" }}
@@ -200,7 +200,7 @@ const Cart = () => {
                       <Button
                         variant="light"
                         onClick={() =>
-                          handleQuantityChange(item, item.quantity + 1)
+                          handleQuantityChange(item, item.quantity + 1, item.size)
                         }
                         disabled={item.quantity >= item.product.in_stock}
                       >

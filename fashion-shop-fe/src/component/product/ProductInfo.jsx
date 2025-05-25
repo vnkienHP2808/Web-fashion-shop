@@ -32,7 +32,7 @@ const ProductInfo = ({ product, listproduct }) => {
     const { addToCart } = useContext(CartContext);
     const handleAddToCart = () => {
         if (product.in_stock > 0) {
-            addToCart({ ...product, quantity });
+            addToCart({ ...product, quantity, size: selectedSize });
             alert("Sản phẩm đã được thêm vào giỏ hàng!");
         } else {
             alert("Sản phẩm hiện đã hết hàng.");
@@ -59,6 +59,7 @@ const ProductInfo = ({ product, listproduct }) => {
         const selectedProduct = {
             product: { ...product },
             quantity: quantity,
+            size: selectedSize,
         };
         navigate("/checkout", { state: { selectedCartItems: [selectedProduct] } });
     };

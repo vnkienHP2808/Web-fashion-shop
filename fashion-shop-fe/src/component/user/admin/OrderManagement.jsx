@@ -324,6 +324,10 @@ const OrderManagement = () => {
                                 <span style={{ fontSize: "0.9em", color: cssVars.colors.secondary }}>
                                   Số lượng: {item.quantity}
                                 </span>
+                                <span style={{ margin: "0 5px", color: cssVars.colors.muted }}> | </span>
+                                <span style={{ fontSize: "0.9em", color: cssVars.colors.secondary }}>
+                                  Kích thước: {item.size}
+                                </span>
                                 <div style={{ marginTop: "5px" }}>
                                   Giá:{" "}
                                   {item.product.is_sale && item.product.sale_price != null ? (

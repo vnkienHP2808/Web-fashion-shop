@@ -39,6 +39,7 @@ export const CartProvider = ({ children }) => {
         id_user: loggedInUser.id_user,
         productId: product.idProduct,
         quantity: product.quantity,
+        size: product.size,
       });
       fetchCartFromServer();
     } catch (err) {
@@ -46,12 +47,13 @@ export const CartProvider = ({ children }) => {
     }
   };
 
-  const updateCartItemQuantity = async (productId, quantity) => {
+  const updateCartItemQuantity = async (productId, quantity, size) => {
     try {
       await axios.put("http://localhost:8080/api/cart/update", {
         id_user: loggedInUser.id_user,
         productId,
         quantity,
+        size,
       });
       fetchCartFromServer();
     } catch (err) {
@@ -59,9 +61,9 @@ export const CartProvider = ({ children }) => {
     }
   };
 
-  const removeFromCart = async (productId) => {
+  const removeFromCart = async (productId, size) => {
     try {
-      await axios.delete(`http://localhost:8080/api/cart/${loggedInUser.id_user}/remove/${productId}`);
+      await axios.delete(`http://localhost:8080/api/cart/${loggedInUser.id_user}/remove/${productId}/${size}`);
       fetchCartFromServer();
     } catch (err) {
       console.error("Lỗi xóa sản phẩm:", err);

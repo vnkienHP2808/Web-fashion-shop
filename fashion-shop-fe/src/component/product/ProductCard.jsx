@@ -20,7 +20,7 @@ const ProductCard = ({ products, index }) => {
             return;
         }
         if (products.in_stock > 0) {
-            addToCart({ ...products, quantity: 1 });
+            addToCart({ ...products, quantity: 1, size: "S"});
             alert("Sản phẩm đã được thêm vào giỏ hàng!");
         } else {
             alert("Sản phẩm hiện đã hết hàng.");

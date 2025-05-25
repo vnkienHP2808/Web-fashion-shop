@@ -84,6 +84,7 @@ const Checkout = () => {
           idProduct: item.product.idProduct,
         },
         quantity: item.quantity,
+        size: item.size,
         totalAmount: (item.product.sale_price || item.product.price) * item.quantity,
       })),
     };
@@ -97,7 +98,7 @@ const Checkout = () => {
       }));
       await axios.put("http://localhost:8080/api/products/update-quantity-and-sold", productUpdates);
 
-      selectedProducts.forEach((item) => removeFromCart(item.product.idProduct));
+      selectedProducts.forEach((item) => removeFromCart(item.product.idProduct, item.size));
       alert("Đơn hàng đã đặt thành công!");
       navigate("/myorder");
     } catch (error) {
@@ -197,6 +198,7 @@ const Checkout = () => {
                     marginBottom: "10px" }}>Sản phẩm: {item.product.name_product}
                   </a>
                   <p style={{ margin: "5px 0", color: "#7f8c8d" }}>Số lượng: {item.quantity}</p>
+                  <p style={{ margin: "5px 0", color: "#7f8c8d" }}>Số lượng: {item.size}</p>
                   <p style={{ margin: "5px 0", color: "#7f8c8d" }}>
                     Giá sản phẩm: 
                     {item.product.sale_price ? (

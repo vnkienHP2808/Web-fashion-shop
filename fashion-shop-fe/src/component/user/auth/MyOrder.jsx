@@ -216,6 +216,10 @@ const MyOrders = () => {
                               <span style={{ fontSize: "0.9em", color: "#34495e" }}>
                                 Số lượng: {item.quantity}
                               </span>
+                              <span style={{ margin: "0 5px", color: "#bdc3c7" }}> | </span>
+                              <span style={{ fontSize: "0.9em", color: "#34495e" }}>
+                                Kích thước: {item.size}
+                              </span>
                             </div>
                           </>
                         ) : (
