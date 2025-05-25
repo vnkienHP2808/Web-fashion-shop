@@ -163,6 +163,7 @@ const UpdateProduct = () => {
                         }
                         disabled={!selectedCategory?.subCategories?.length}
                     >
+                        <option label="Vui lòng chọn!" style={{color: "red"}}></option>
                         {selectedCategory?.subCategories?.map((sub) => (
                             <option key={sub.id_subcat} value={sub.id_subcat}>
                                 {sub.name}

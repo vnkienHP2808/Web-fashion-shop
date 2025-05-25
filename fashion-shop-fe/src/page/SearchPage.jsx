@@ -7,8 +7,11 @@ import Paginated from "../component/ui/Pagination";
 import Breadcrump from "../component/ui/Breadcrump";
 import Filter from "../component/ui/Filter";
 import axios from "axios";
+import { useLocation } from "react-router-dom";
+
 
 const SearchPage = () => {
+  const location = useLocation();
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
@@ -22,7 +25,15 @@ const SearchPage = () => {
   const [totalElements, setTotalElements] = useState(0);
   const [hoverIndex, setHoverIndex] = useState(null);
 
-  const searchTerm = useState(location.state?.normalSearchTerm);
+  const [searchTerm, setSearchTerm] = useState(location.state?.searchTerm || "");
+
+  useEffect(() => {
+    if (location.state?.searchTerm) {
+      setSearchTerm(location.state.searchTerm);
+    }
+  }, [location.state]);
+
+  console.log(searchTerm); 
   useEffect(() => {
     if (!searchTerm) return;
     const params = {
@@ -32,18 +43,17 @@ const SearchPage = () => {
       ...(selectedSubCategory && { idSubcat: selectedSubCategory }),
       ...(selectedPriceRange && { priceRange: selectedPriceRange }),
       ...(selectedOccasion && { occasion: selectedOccasion }),
-      ...(searchTerm.length > 0 && { nameProduct: searchTerm }),
-
-  };
+      ...(searchTerm && searchTerm.trim() !== '' && { nameProduct: searchTerm }),
+    };
 
     axios.get(`http://localhost:8080/api/products/search`, { params })
       .then((res) => {
-        setProducts(res.data.content);
+        setProducts(Array.isArray(res.data.content) ? res.data.content : []);
         setTotalPages(res.data.totalPages);
         setTotalElements(res.data.totalElements || 0);
       })
       .catch((err) => console.error("Error fetching products:", err));
-  }, [currentPage, selectedCategory, selectedSubCategory, selectedPriceRange, selectedOccasion]);
+  }, [currentPage, selectedCategory, selectedSubCategory, selectedPriceRange, selectedOccasion, searchTerm]);
 
   useEffect(() => {
     axios.get("http://localhost:8080/api/categories")
