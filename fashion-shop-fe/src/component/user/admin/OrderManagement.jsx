@@ -236,6 +236,12 @@ const OrderManagement = () => {
                       >
                         <p style={{ fontSize: "0.9em", color: cssVars.colors.muted, margin: "5px 0" }}>
                           <strong style={{ fontWeight: "bold", color: cssVars.colors.secondary }}>
+                            ID khách hàng: 
+                          </strong>{" "}
+                          {order.id_user|| "N/A"}
+                        </p>
+                        <p style={{ fontSize: "0.9em", color: cssVars.colors.muted, margin: "5px 0" }}>
+                          <strong style={{ fontWeight: "bold", color: cssVars.colors.secondary }}>
                             Số điện thoại:
                           </strong>{" "}
                           {order.phoneNumber || "N/A"}

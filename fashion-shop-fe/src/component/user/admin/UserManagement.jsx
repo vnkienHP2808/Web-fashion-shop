@@ -85,6 +85,9 @@ const UserManagement = () => {
                 <thead>
                     <tr style={{ backgroundColor: "#f2f2f2" }}>
                         <th style={{ padding: "10px", border: "1px solid #ddd" }}>
+                            ID
+                        </th>
+                        <th style={{ padding: "10px", border: "1px solid #ddd" }}>
                             Tên người dùng
                         </th>
                         <th style={{ padding: "10px", border: "1px solid #ddd" }}>Email</th>
@@ -106,57 +109,72 @@ const UserManagement = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {users.map((user) => (
-                        <tr key={user.id_user}>
-                            <td style={{ padding: "10px", border: "1px solid #ddd" }}>
+                    {Array.isArray(users) && users.length > 0 ? (
+                        users.map((user) => (
+                            <tr key={user.id_user}>
+                                <td style={{ padding: "10px", border: "1px solid #ddd" }}>
+                                {user.id_user}
+                                </td>
+                                <td style={{ padding: "10px", border: "1px solid #ddd" }}>
                                 {user.name}
-                            </td>
-                            <td style={{ padding: "10px", border: "1px solid #ddd" }}>
+                                </td>
+                                <td style={{ padding: "10px", border: "1px solid #ddd" }}>
                                 {user.email}
-                            </td>
-                            <td style={{ padding: "10px", border: "1px solid #ddd" }}>
+                                </td>
+                                <td style={{ padding: "10px", border: "1px solid #ddd" }}>
                                 {Array.isArray(user.phones)
                                     ? user.phones.map((phone, index) => (
-                                        <div key={index}>{index + 1}- {phone}</div>
+                                        <div key={index}>
+                                        {index + 1} - {phone}
+                                        </div>
                                     ))
                                     : user.phones}
-                            </td>
-                            <td style={{ padding: "10px", border: "1px solid #ddd" }}>
+                                </td>
+                                <td style={{ padding: "10px", border: "1px solid #ddd" }}>
                                 {Array.isArray(user.addresses)
                                     ? user.addresses.map((address, index) => (
-                                        <div key={index}> {index + 1}- {address}.</div>
+                                        <div key={index}>
+                                        {index + 1} - {address}.
+                                        </div>
                                     ))
                                     : user.addresses}
-                            </td>
-                            <td style={{ padding: "10px", border: "1px solid #ddd" }}>
+                                </td>
+                                <td style={{ padding: "10px", border: "1px solid #ddd" }}>
                                 {user.role}
-                            </td>
-                            <td style={{ padding: "10px", border: "1px solid #ddd" }}>
+                                </td>
+                                <td style={{ padding: "10px", border: "1px solid #ddd" }}>
                                 {user.status}
-                            </td>
-                            <td style={{ padding: "10px", border: "1px solid #ddd" }}>
+                                </td>
+                                <td style={{ padding: "10px", border: "1px solid #ddd" }}>
                                 <button
                                     onClick={() => handleToggleUserStatus(user.id_user)}
                                     disabled={user.role === "Admin" && user.status === "Active"}
                                     style={{
-                                        backgroundColor:
-                                            user.status === "Active" ? "#f44336" : "#4CAF50",
-                                        color: "white",
-                                        padding: "5px 10px",
-                                        border: "none",
-                                        borderRadius: "4px",
-                                        cursor:
-                                            user.role === "Admin" && user.status === "Active"
-                                                ? "not-allowed"
-                                                : "pointer",
+                                    backgroundColor:
+                                        user.status === "Active" ? "#f44336" : "#4CAF50",
+                                    color: "white",
+                                    padding: "5px 10px",
+                                    border: "none",
+                                    borderRadius: "4px",
+                                    cursor:
+                                        user.role === "Admin" && user.status === "Active"
+                                        ? "not-allowed"
+                                        : "pointer",
                                     }}
                                 >
-                                    {user.status === "Active" ? "Deactivate" : "Activate"}
+                                    {user.status === "Active" ? "Deactive" : "Active"}
                                 </button>
+                                </td>
+                            </tr>
+                            ))
+                        ) : (
+                            <tr>
+                            <td colSpan="8" style={{ textAlign: "center", fontStyle: "italic", padding: "15px" }}>
+                                Không có người dùng nào
                             </td>
-                        </tr>
-                    ))}
-                </tbody>
+                            </tr>
+                        )}
+                    </tbody>
             </table>
             <div className="d-flex justify-content-center" style={{ marginTop: "20px" }}>
                 <Paginated totalPages={totalPages} currentPage={currentPage} handlePageChange={handlePageChange} />

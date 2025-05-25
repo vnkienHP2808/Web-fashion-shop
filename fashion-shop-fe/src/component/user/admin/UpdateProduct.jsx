@@ -355,7 +355,7 @@ const UpdateProduct = () => {
                         }
                     >
                         <option value="Active">Kích hoạt</option>
-                        <option value="Deactivate">Hủy kích hoạt</option>
+                        <option value="Inactive">Hủy kích hoạt</option>
                     </Form.Control>
                 </Form.Group>
 

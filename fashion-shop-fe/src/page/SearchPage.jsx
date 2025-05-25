@@ -32,9 +32,11 @@ const SearchPage = () => {
       ...(selectedSubCategory && { idSubcat: selectedSubCategory }),
       ...(selectedPriceRange && { priceRange: selectedPriceRange }),
       ...(selectedOccasion && { occasion: selectedOccasion }),
+      ...(searchTerm.length > 0 && { nameProduct: searchTerm }),
+
   };
 
-    axios.get(`http://localhost:8080/api/products/search/${searchTerm}`, { params })
+    axios.get(`http://localhost:8080/api/products/search`, { params })
       .then((res) => {
         setProducts(res.data.content);
         setTotalPages(res.data.totalPages);

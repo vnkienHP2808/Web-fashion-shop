@@ -108,7 +108,7 @@ const Header = () => {
             </div>
 
             {/* Search box */}
-            {/* <form onSubmit={handleSearch}>
+            <form onSubmit={handleSearch}>
                 <div className="d-flex justify-content-center align-items-center gap-2">
                     <i className="bx bx-search-alt-2 fs-4"></i>
                     <input
@@ -120,7 +120,7 @@ const Header = () => {
                         onChange={(e) => setSearchTerm(e.target.value)}
                     />
                 </div>
-            </form> */}
+            </form>
 
             {/* Icons */}
             <div className="icon-container">
