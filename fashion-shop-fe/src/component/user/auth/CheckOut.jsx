@@ -198,7 +198,7 @@ const Checkout = () => {
                     marginBottom: "10px" }}>Sản phẩm: {item.product.name_product}
                   </a>
                   <p style={{ margin: "5px 0", color: "#7f8c8d" }}>Số lượng: {item.quantity}</p>
-                  <p style={{ margin: "5px 0", color: "#7f8c8d" }}>Số lượng: {item.size}</p>
+                  <p style={{ margin: "5px 0", color: "#7f8c8d" }}>Kích thước: {item.size}</p>
                   <p style={{ margin: "5px 0", color: "#7f8c8d" }}>
                     Giá sản phẩm: 
                     {item.product.sale_price ? (

@@ -419,12 +419,10 @@ const OrderManagement = () => {
                     width: "200px",
                   }}
                 >
-                  <option value="Chờ thanh toán">Chờ thanh toán</option>
-                  <option value="Chờ nhận hàng">Chờ nhận hàng</option>
+                  <option value="Đang chuẩn bị hàng">Đang chuẩn bị hàng</option>
                   <option value="Đang giao hàng">Đang giao hàng</option>
                   <option value="Đã giao hàng">Đã giao hàng</option>
                   <option value="Hoàn thành">Hoàn thành</option>
-                  <option value="Yêu cầu hoàn trả">Yêu cầu hoàn trả</option>
                 </select>
               </li>
             );

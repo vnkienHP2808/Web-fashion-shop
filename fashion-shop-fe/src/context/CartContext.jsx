@@ -17,7 +17,6 @@ export const CartProvider = ({ children }) => {
         config.headers.Authorization = `Basic ${auth}`;
         return config;
       });
-      // Cleanup interceptor khi component unmount
       return () => axios.interceptors.request.eject(interceptor);
     }
   }, []);

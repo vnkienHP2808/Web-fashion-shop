@@ -80,12 +80,6 @@ const LogIn = () => {
             </div>
             <div className="login-act">
               <button className="sign-in btn">Đăng nhập</button>
-              <button
-                className="forgot-password"
-                onClick={() => navigate("/-resetPW")}
-              >
-                Quên mật khẩu?
-              </button>
               <p>
                 Bạn không có tài khoản?
                 <button
