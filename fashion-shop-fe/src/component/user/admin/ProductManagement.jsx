@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import instance from "../../../utils/axiosInstance"
 import AdminRoute from "./AdminRoute";
 import { Modal, Button, Form, Table } from "react-bootstrap";
 import Paginated from "../../ui/Pagination";
@@ -34,18 +34,6 @@ const ProductManagement = () => {
     const [productsPerPage] = useState(20);
     const [showAddModal, setShowAddModal] = useState(false);
 
-    // Thêm interceptor để gửi header Authorization
-    useEffect(() => {
-        const auth = sessionStorage.getItem("auth");
-        if (auth) {
-            const interceptor = axios.interceptors.request.use((config) => {
-                config.headers.Authorization = `Basic ${auth}`;
-                return config;
-            });
-            return () => axios.interceptors.request.eject(interceptor);
-        }
-    }, []);
-
     useEffect(() => {
         const params = {
             page: currentPage,
@@ -56,7 +44,7 @@ const ProductManagement = () => {
             ...(selectedOccasion && { occasion: selectedOccasion }),
         };
 
-        axios.get(`http://localhost:8080/api/products`, { params })
+        instance.get(`/api/products`, { params })
             .then((res) => {
                 setProducts(res.data.content);
                 setTotalPages(res.data.totalPages);
@@ -69,7 +57,7 @@ const ProductManagement = () => {
     }, [currentPage, selectedCategory, selectedSubCategory, selectedPriceRange, selectedOccasion]);
 
     useEffect(() => {
-        axios.get("http://localhost:8080/api/categories")
+        instance.get("/api/categories")
             .then((res) => setCategories(res.data))
             .catch((err) => console.error("Lỗi khi lấy danh mục:", err));
     }, []);
@@ -95,7 +83,7 @@ const ProductManagement = () => {
             formData.append("images", file);
         });
 
-        axios.post("http://localhost:8080/api/products/create", formData)
+        instance.post("/api/products/create", formData)
             .then((res) => {
                 setProducts([...products, res.data]);
                 setNewProduct({
@@ -123,8 +111,8 @@ const ProductManagement = () => {
 
     const handleDeleteProduct = (id) => {
         if (window.confirm("Bạn có chắc muốn xóa sản phẩm này không?")) {
-            axios
-                .delete(`http://localhost:8080/api/products/${id}`)
+            instance
+                .delete(`/api/products/${id}`)
                 .then(() => {
                     setProducts(products.filter((product) => product.idProduct !== id));
                 })

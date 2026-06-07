@@ -6,7 +6,7 @@ import { CartContext } from "../../context/CartContext";
 import { useNavigate } from "react-router-dom";
 
 const ProductInfo = ({ product, listproduct }) => {
-    const loggedInUser = JSON.parse(sessionStorage.getItem("account"));
+    const loggedInUser = JSON.parse(localStorage.getItem("account"));
     const imageBaseUrl = "http://localhost:8080/images/"; // Đường dẫn cơ bản cho hình ảnh sản phẩm
 
     // Ảnh minh họa sản phẩm

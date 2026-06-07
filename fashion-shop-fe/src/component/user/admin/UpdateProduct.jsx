@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
+import instance from "../../../utils/axiosInstance"
 import { Button, Form } from "react-bootstrap";
 
 const UpdateProduct = () => {
@@ -26,24 +26,13 @@ const UpdateProduct = () => {
     const nav = useNavigate();
 
     useEffect(() => {
-        const auth = sessionStorage.getItem("auth");
-        if (auth) {
-            const interceptor = axios.interceptors.request.use((config) => {
-                config.headers.Authorization = `Basic ${auth}`;
-                return config;
-            });
-            return () => axios.interceptors.request.eject(interceptor);
-        }
-    }, []);
-
-    useEffect(() => {
-        axios
-            .get(`http://localhost:8080/api/products/${id}`)
+        instance
+            .get(`/api/products/${id}`)
             .then((res) => setEditProduct(res.data))
             .catch((err) => console.error("Lỗi khi lấy sản phẩm:", err));
 
-        axios
-            .get("http://localhost:8080/api/categories")
+        instance
+            .get("/api/categories")
             .then((res) => setCategories(res.data))
             .catch((err) => console.error("Lỗi khi lấy danh mục:", err));
     }, [id]);
@@ -66,8 +55,8 @@ const UpdateProduct = () => {
             formData.append("images", file);
         });
 
-        axios
-            .put(`http://localhost:8080/api/products/${id}`, formData)
+        instance
+            .put(`/api/products/${id}`, formData)
             .then(() => {
                 alert("Cập nhật thành công!");
                 nav("/admin");

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import instance from "../../../utils/axiosInstance"
 import Paginated from "../../ui/Pagination";
 
 const UserManagement = () => {
@@ -10,18 +10,6 @@ const UserManagement = () => {
     const [usersPerPage] = useState(10);
     const [searchTerm, setSearchTerm] = useState("");
 
-    // Thêm interceptor để gửi header Authorization
-    useEffect(() => {
-        const auth = sessionStorage.getItem("auth");
-        if (auth) {
-            const interceptor = axios.interceptors.request.use((config) => {
-                config.headers.Authorization = `Basic ${auth}`;
-                return config;
-            });
-            return () => axios.interceptors.request.eject(interceptor);
-        }
-    }, []);
-
     useEffect(() => {
         const params = {
             page: currentPage,
@@ -29,7 +17,7 @@ const UserManagement = () => {
             ...(searchTerm.length > 0 && { name: searchTerm }),
         };
 
-        axios.get(`http://localhost:8080/api/users`, { params })
+        instance.get(`/api/users`, { params })
             .then((res) => {
                 setUsers(res.data.content);
                 setTotalPages(res.data.totalPages);
@@ -47,8 +35,8 @@ const UserManagement = () => {
             return;
         }
 
-        axios
-            .put(`http://localhost:8080/api/users/${id}/status`, updatedUser.status, {
+        instance
+            .put(`/api/users/${id}/status`, updatedUser.status, {
                 headers: {
                     "Content-Type": "application/json",
                 },

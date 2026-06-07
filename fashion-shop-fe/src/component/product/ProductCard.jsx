@@ -5,7 +5,7 @@ import { CartContext } from "../../context/CartContext";
 
 const ProductCard = ({ products, index }) => {
     const [hoverIndex, setHoverIndex] = useState(null);
-    const user = JSON.parse(sessionStorage.getItem("account"));
+    const user = JSON.parse(localStorage.getItem("account"));
     const navigate = useNavigate();
     const { addToCart } = useContext(CartContext);
     const imageBaseUrl = "http://localhost:8080/images/";
@@ -13,7 +13,7 @@ const ProductCard = ({ products, index }) => {
     const handleAddToCart = (e) => {
         e.stopPropagation();
         e.preventDefault();
-        const loggedInUser = sessionStorage.getItem("account");
+        const loggedInUser = localStorage.getItem("account");
         if (!loggedInUser) {
             alert("Bạn cần đăng nhập để thêm sản phẩm vào giỏ hàng.");
             navigate("/sign-in");

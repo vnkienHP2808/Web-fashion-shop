@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import instance from "../../../utils/axiosInstance"
 import Paginated from "../../ui/Pagination";
 import OrderFilter from "../../ui/OrderFilter";
 
@@ -45,17 +45,6 @@ const OrderManagement = () => {
   };
 
   useEffect(() => {
-    const auth = sessionStorage.getItem("auth");
-    if (auth) {
-      const interceptor = axios.interceptors.request.use((config) => {
-        config.headers.Authorization = `Basic ${auth}`;
-        return config;
-      });
-      return () => axios.interceptors.request.eject(interceptor);
-    }
-  }, []);
-
-  useEffect(() => {
     const params = {
       page: currentPage,
       size: ordersPerPage,
@@ -65,8 +54,8 @@ const OrderManagement = () => {
       ...(selectedDateRange.endDate && { endDate: selectedDateRange.endDate }),
     };
 
-    axios
-      .get(`http://localhost:8080/api/orders`, { params })
+    instance
+      .get(`/api/orders`, { params })
       .then((res) => {
         setOrders(Array.isArray(res.data.content) ? res.data.content : []);
         setTotalPages(res.data.totalPages || 1);
@@ -90,8 +79,8 @@ const OrderManagement = () => {
     );
     setOrders(updatedOrders);
 
-    axios
-      .put(`http://localhost:8080/api/orders/${id}`, status, {
+    instance
+      .put(`/api/orders/${id}`, status, {
         headers: {
           "Content-Type": "application/json",
         },
