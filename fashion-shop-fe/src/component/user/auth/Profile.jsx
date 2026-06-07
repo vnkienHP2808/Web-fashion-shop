@@ -1,9 +1,9 @@
 import "../../../style/logIn_signUp_profile_Format.css";
 import { useNavigate } from "react-router-dom";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 const Profile = () => {
-    const user = JSON.parse(sessionStorage.getItem("account"));
+    const user = JSON.parse(localStorage.getItem("account"));
     const navigate = useNavigate();
 
     const phoneNumberOptions = user.phones || [];

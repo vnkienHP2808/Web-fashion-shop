@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import Footer from "../../layout/Footer";
 import Header from "../../layout/Header";
-import axios from "axios";
 import Breadcrump from "../../ui/Breadcrump";
 import { CartContext } from "../../../context/CartContext";
 import { useNavigate } from "react-router-dom";
@@ -20,11 +19,11 @@ const Cart = () => {
   const [showClearAllModal, setShowClearAllModal] = useState(false);
   const [productToDelete, setProductToDelete] = useState(null);
   const [selectedProducts, setSelectedProducts] = useState([]);
-  const imageBaseUrl = "http://localhost:8080/images/"; // link cho hình ảnh sản phẩm
+  const imageBaseUrl = "http://localhost:8080/images/";
   const navigate = useNavigate();
 
   useEffect(() => {
-    const storedUser = sessionStorage.getItem("account");
+    const storedUser = localStorage.getItem("account");
     if (!storedUser) {
       navigate("/sign-in");
       return;
@@ -35,7 +34,6 @@ const Cart = () => {
       navigate("/404");
       return;
     }
-
   }, [navigate]);
 
   const handleShowModal = (product) => {
@@ -137,28 +135,31 @@ const Cart = () => {
                   <Form.Check
                     type="checkbox"
                     checked={selectedProducts.includes(item.product.idProduct)}
-                    onChange={() =>
-                      handleProductSelect(item.product.idProduct)
-                    }
+                    onChange={() => handleProductSelect(item.product.idProduct)}
                     className="me-3"
                   />
-                  <a href={`/products/${item.product.idProduct}`} className="product-name">
+                  <a
+                    href={`/products/${item.product.idProduct}`}
+                    className="product-name"
+                  >
                     <img
-                      src = {`${imageBaseUrl}${item.product.images[0].imageLink}`}
+                      src={`${imageBaseUrl}${item.product.images[0].imageLink}`}
                       alt={item.product.name_product}
                       className="cart-item-image"
                     />
                   </a>
                   <div className="cart-item-details ms-3">
-                    <a href={`/products/${item.product.idProduct}`} className="product-name">
+                    <a
+                      href={`/products/${item.product.idProduct}`}
+                      className="product-name"
+                    >
                       <h4>{item.product.name_product}</h4>
                     </a>
-                    <p> Giá: &nbsp;
+                    <p>
+                      Giá: &nbsp;
                       {item.product.sale_price ? (
                         <>
-                          <span
-                            style={{ color: "red", fontWeight: "bold" }}
-                          >
+                          <span style={{ color: "red", fontWeight: "bold" }}>
                             {item.product.sale_price}₫
                           </span>
                           <span
@@ -175,7 +176,7 @@ const Cart = () => {
                         <span>{item.product.price}₫</span>
                       )}
                     </p>
-                      <p>Kích thước: {item.size}</p>
+                    <p>Kích thước: {item.size}</p>
                     <div className="quantity-controls d-flex align-items-center">
                       <Button
                         variant="light"
@@ -223,10 +224,17 @@ const Cart = () => {
               </React.Fragment>
             ))}
           </div>
+
           <div className="col-md-4">
-            <div className="order-summary p-3 border" style={{ width: "360px" }}>
+            <div
+              className="order-summary p-3 border"
+              style={{ width: "360px" }}
+            >
               <h4>Thông tin đơn hàng</h4>
-              <p className="d-flex justify-content-between" style={{ fontSize: "18px" }}>
+              <p
+                className="d-flex justify-content-between"
+                style={{ fontSize: "18px" }}
+              >
                 Tổng tiền: <span>{totalAmount.toLocaleString()}₫</span>
               </p>
               <hr />
@@ -272,7 +280,10 @@ const Cart = () => {
           </Modal.Footer>
         </Modal>
 
-        <Modal show={showClearAllModal} onHide={() => setShowClearAllModal(false)}>
+        <Modal
+          show={showClearAllModal}
+          onHide={() => setShowClearAllModal(false)}
+        >
           <Modal.Header closeButton>
             <Modal.Title>Xác nhận xóa tất cả</Modal.Title>
           </Modal.Header>
@@ -280,7 +291,10 @@ const Cart = () => {
             Bạn có chắc chắn muốn xóa tất cả sản phẩm khỏi giỏ hàng?
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="secondary" onClick={() => setShowClearAllModal(false)}>
+            <Button
+              variant="secondary"
+              onClick={() => setShowClearAllModal(false)}
+            >
               Hủy
             </Button>
             <Button variant="danger" onClick={confirmClearAll}>

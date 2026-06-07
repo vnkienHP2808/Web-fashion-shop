@@ -1,43 +1,43 @@
 import React, { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import "../../style/header.css"
-import axios from "axios";
+import "../../style/header.css";
+import instance from "../../utils/axiosInstance";
 import { Dropdown } from "react-bootstrap";
 import { CartContext } from "../../context/CartContext";
 
 const Header = () => {
     const navigate = useNavigate();
     const [categories, setCategories] = useState([]);
-    const isLoggedIn = sessionStorage.getItem("account") !== null;
-    const loggedInUser = JSON.parse(sessionStorage.getItem("account"));
+    const isLoggedIn = localStorage.getItem("account") !== null;
+    const loggedInUser = JSON.parse(localStorage.getItem("account"));
     const [searchTerm, setSearchTerm] = useState("");
 
     useEffect(() => {
-        axios.get("http://localhost:8080/api/categories")
-          .then((res) => setCategories(res.data))
-          .catch((err) => console.error("Error fetching categories:", err));
+        instance
+            .get("/api/categories")
+            .then((res) => setCategories(res.data))
+            .catch((err) => console.error("Error fetching categories:", err));
     }, []);
 
     const handleLogout = () => {
-        sessionStorage.removeItem("account");
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("refreshToken");
+        localStorage.removeItem("account");
         alert("Bạn đã đăng xuất");
         navigate("/");
+        window.location.reload();
     };
 
     const { cart } = useContext(CartContext);
     const totalItems = Array.isArray(cart)
-        ? new Set(cart.map(item => `${item.product.idProduct}-${item.size}`)).size
+        ? new Set(cart.map((item) => `${item.product.idProduct}-${item.size}`)).size
         : 0;
-
 
     const handleSearch = (e) => {
         e.preventDefault();
         if (searchTerm.trim()) {
-            navigate("/search", {
-                state: { searchTerm: searchTerm },
-            });
-        }
-        else{
+            navigate("/search", { state: { searchTerm: searchTerm } });
+        } else {
             console.log("Search term is empty or invalid");
         }
     };
@@ -45,22 +45,34 @@ const Header = () => {
     return (
         <div className="header">
             {/* Logo */}
-            <div style={{ fontFamily: "Irish Grover", fontStyle: "normal", fontWeight: "bolder", letterSpacing: "20px" }}>
+            <div
+                style={{
+                    fontFamily: "Irish Grover",
+                    fontStyle: "normal",
+                    fontWeight: "bolder",
+                    letterSpacing: "20px",
+                }}
+            >
                 <h1>ELYTS</h1>
             </div>
 
             {/* Menu */}
             <div className="d-flex justify-content-center align-items-center">
                 <ul className="bar list-unstyled d-flex align-items-center gap-5 m-0 pt-3">
-                    <li><a href="/">Trang chủ</a></li>
-                    <li><a href="/products/new">Hàng mới về</a></li>
-                    <li><a href="/products/sale">Hàng giảm giá</a></li>
                     <li>
-                        <div style={{
-                            display: "flex",
-                            alignItems: "center",
-                        }}>
-                            <a href="/products/all" style={{marginRight:"5px"}}>Sản phẩm</a>
+                        <a href="/">Trang chủ</a>
+                    </li>
+                    <li>
+                        <a href="/products/new">Hàng mới về</a>
+                    </li>
+                    <li>
+                        <a href="/products/sale">Hàng giảm giá</a>
+                    </li>
+                    <li>
+                        <div style={{ display: "flex", alignItems: "center" }}>
+                            <a href="/products/all" style={{ marginRight: "5px" }}>
+                                Sản phẩm
+                            </a>
                             <Dropdown>
                                 <Dropdown.Toggle
                                     variant="light"
@@ -75,7 +87,10 @@ const Header = () => {
                                 ></Dropdown.Toggle>
                                 <Dropdown.Menu className="dropdown-menu-category">
                                     {categories.map((category, index) => (
-                                        <Dropdown.Item href={`/products/category/${category.id}`} key={index}>
+                                        <Dropdown.Item
+                                            href={`/products/category/${category.id}`}
+                                            key={index}
+                                        >
                                             {category.name}
                                         </Dropdown.Item>
                                     ))}
@@ -105,9 +120,12 @@ const Header = () => {
             <div className="icon-container">
                 {/* Cart */}
                 {loggedInUser !== null && loggedInUser.role === "Customer" && (
-                    <span style={{ cursor: "pointer", position: "relative"}}>
+                    <span style={{ cursor: "pointer", position: "relative" }}>
                         <div>
-                            <i className="bx bx-cart-alt fs-3" onClick={() => navigate("/cart")}></i>
+                            <i
+                                className="bx bx-cart-alt fs-3"
+                                onClick={() => navigate("/cart")}
+                            ></i>
                             {totalItems > 0 && (
                                 <span
                                     style={{
@@ -125,7 +143,7 @@ const Header = () => {
                                         fontSize: "12px",
                                         fontWeight: "bold",
                                         lineHeight: "18px",
-                                        transform: "translate(50%, -50%)"
+                                        transform: "translate(50%, -50%)",
                                     }}
                                 >
                                     {totalItems}
@@ -134,12 +152,20 @@ const Header = () => {
                         </div>
                     </span>
                 )}
+
                 {/* Account */}
-                <span style={{ cursor: "pointer"}}>
+                <span style={{ cursor: "pointer" }}>
                     {isLoggedIn ? (
                         <Dropdown>
-                            <Dropdown.Toggle variant="link" id="dropdown-basic" className="text-dark">
-                                <i className="bx bx-user fs-3" style={{color: "black"}}></i>
+                            <Dropdown.Toggle
+                                variant="link"
+                                id="dropdown-basic"
+                                className="text-dark"
+                            >
+                                <i
+                                    className="bx bx-user fs-3"
+                                    style={{ color: "black" }}
+                                ></i>
                             </Dropdown.Toggle>
                             <Dropdown.Menu>
                                 {loggedInUser.role === "Customer" && (
@@ -162,15 +188,20 @@ const Header = () => {
                                         Quản lý
                                     </Dropdown.Item>
                                 )}
-                                <Dropdown.Item onClick={handleLogout}>
-                                    Đăng xuất
-                                </Dropdown.Item>
+                                <Dropdown.Item onClick={handleLogout}>Đăng xuất</Dropdown.Item>
                             </Dropdown.Menu>
                         </Dropdown>
                     ) : (
                         <Dropdown>
-                            <Dropdown.Toggle variant="link" id="dropdown-basic" className="text-dark">
-                                <i className="bx bx-user fs-3" style={{color: "black"}}></i>
+                            <Dropdown.Toggle
+                                variant="link"
+                                id="dropdown-basic"
+                                className="text-dark"
+                            >
+                                <i
+                                    className="bx bx-user fs-3"
+                                    style={{ color: "black" }}
+                                ></i>
                             </Dropdown.Toggle>
                             <Dropdown.Menu>
                                 <Dropdown.Item onClick={() => navigate("/sign-in")}>

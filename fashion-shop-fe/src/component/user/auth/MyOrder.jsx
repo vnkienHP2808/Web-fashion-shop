@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import Paginated from "../../ui/Pagination";
 import OrderFilter from "../../ui/OrderFilter";
+import instance from "../../../utils/axiosInstance"
 
 const MyOrders = () => {
   const [orders, setOrders] = useState([]);
@@ -25,18 +25,7 @@ const MyOrders = () => {
   const imageBaseUrl = "http://localhost:8080/images/";
 
   useEffect(() => {
-    const auth = sessionStorage.getItem("auth");
-    if (auth) {
-      const interceptor = axios.interceptors.request.use((config) => {
-        config.headers.Authorization = `Basic ${auth}`;
-        return config;
-      });
-      return () => axios.interceptors.request.eject(interceptor);
-    }
-  }, []);
-
-  useEffect(() => {
-    const account = JSON.parse(sessionStorage.getItem("account"));
+    const account = JSON.parse(localStorage.getItem("account"));
     if (account) {
       setUserId(account.id_user);
     }
@@ -52,8 +41,8 @@ const MyOrders = () => {
         ...(selectedDateRange.startDate && { startDate: selectedDateRange.startDate }),
         ...(selectedDateRange.endDate && { endDate: selectedDateRange.endDate }),
       };
-      axios
-        .get(`http://localhost:8080/api/orders/user/${userId}`, { params })
+      instance
+        .get(`/api/orders/user/${userId}`, { params })
         .then((res) => {
           setOrders(Array.isArray(res.data.content) ? res.data.content : []);
           setTotalPages(res.data.totalPages);

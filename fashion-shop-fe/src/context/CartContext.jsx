@@ -1,30 +1,18 @@
 import React, { createContext, useState, useEffect } from "react";
-import axios from "axios";
+import instance from "../utils/axiosInstance";
 
 export const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState([]);
 
-  const storedUser = sessionStorage.getItem("account");
+  const storedUser = localStorage.getItem("account");
   const loggedInUser = storedUser ? JSON.parse(storedUser) : null;
-
-  // Thiết lập interceptor cho axios để thêm header Authorization
-  useEffect(() => {
-    const auth = sessionStorage.getItem("auth");
-    if (auth) {
-      const interceptor = axios.interceptors.request.use((config) => {
-        config.headers.Authorization = `Basic ${auth}`;
-        return config;
-      });
-      return () => axios.interceptors.request.eject(interceptor);
-    }
-  }, []);
 
   const fetchCartFromServer = async () => {
     if (!loggedInUser) return;
     try {
-      const res = await axios.get(`http://localhost:8080/api/cart/${loggedInUser.id_user}`);
+      const res = await instance.get(`/api/cart/${loggedInUser.id_user}`);
       setCart(res.data);
     } catch (error) {
       console.error("Lỗi khi lấy giỏ hàng:", error);
@@ -34,7 +22,7 @@ export const CartProvider = ({ children }) => {
   const addToCart = async (product) => {
     if (!loggedInUser) return;
     try {
-      await axios.post("http://localhost:8080/api/cart/add", {
+      await instance.post("/api/cart/add", {
         id_user: loggedInUser.id_user,
         productId: product.idProduct,
         quantity: product.quantity,
@@ -48,7 +36,7 @@ export const CartProvider = ({ children }) => {
 
   const updateCartItemQuantity = async (productId, quantity, size) => {
     try {
-      await axios.put("http://localhost:8080/api/cart/update", {
+      await instance.put("/api/cart/update", {
         id_user: loggedInUser.id_user,
         productId,
         quantity,
@@ -62,7 +50,7 @@ export const CartProvider = ({ children }) => {
 
   const removeFromCart = async (productId, size) => {
     try {
-      await axios.delete(`http://localhost:8080/api/cart/${loggedInUser.id_user}/remove/${productId}/${size}`);
+      await instance.delete(`/api/cart/${loggedInUser.id_user}/remove/${productId}/${size}`);
       fetchCartFromServer();
     } catch (err) {
       console.error("Lỗi xóa sản phẩm:", err);
@@ -71,7 +59,7 @@ export const CartProvider = ({ children }) => {
 
   const clearCart = async () => {
     try {
-      await axios.delete(`http://localhost:8080/api/cart/${loggedInUser.id_user}/clear`);
+      await instance.delete(`/api/cart/${loggedInUser.id_user}/clear`);
       fetchCartFromServer();
     } catch (err) {
       console.error("Lỗi xóa toàn bộ giỏ hàng:", err);

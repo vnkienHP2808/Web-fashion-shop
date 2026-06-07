@@ -1,7 +1,7 @@
 import "../../../style/logIn_signUp_profile_Format.css";
 import { useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import instance from "../../../utils/axiosInstance";
 
 const LogIn = () => {
   const navigate = useNavigate();
@@ -9,7 +9,7 @@ const LogIn = () => {
   const [password, setPassword] = useState("");
 
   useEffect(() => {
-    const account = sessionStorage.getItem("account");
+    const account = localStorage.getItem("account");
     if (account) {
       navigate("/");
     }
@@ -19,19 +19,15 @@ const LogIn = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post("http://localhost:8080/auth/sign-in", {
-        email,
-        password,
-      });
+      const response = await instance.post("/auth/sign-in", { email, password });
 
-      const user = response.data;
+      const { accessToken, refreshToken, user } = response.data;
 
       if (user.status === "Active") {
-        // Lưu thông tin người dùng
-        sessionStorage.setItem("account", JSON.stringify(user));
-        // Tạo chuỗi Base64 cho Basic Auth
-        const auth = btoa(`${email}:${password}`);
-        sessionStorage.setItem("auth", auth); // Lưu auth để dùng cho API
+        localStorage.setItem("accessToken", accessToken);
+        localStorage.setItem("refreshToken", refreshToken);
+        localStorage.setItem("account", JSON.stringify(user));
+
         alert("Đăng nhập thành công!");
         navigate("/");
         window.location.reload();

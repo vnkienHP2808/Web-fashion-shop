@@ -2,31 +2,18 @@
 
 import "../../../style/logIn_signUp_profile_Format.css";
 import { useNavigate } from "react-router-dom";
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React, { useState } from "react";
+import instance from "../../../utils/axiosInstance"
 
 const SetPassword = () => {
     const navigate = useNavigate();
-    const user = JSON.parse(sessionStorage.getItem("account"));
+    const user = JSON.parse(localStorage.getItem("account"));
 
     const [oldPassword, setOldPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
     const [successMessage, setSuccessMessage] = useState("");
-
-    // Thêm interceptor để gửi header Authorization
-    useEffect(() => {
-        const auth = sessionStorage.getItem("auth");
-        if (auth) {
-            const interceptor = axios.interceptors.request.use((config) => {
-                config.headers.Authorization = `Basic ${auth}`;
-                return config;
-            });
-            // Cleanup interceptor khi component unmount
-            return () => axios.interceptors.request.eject(interceptor);
-        }
-    }, []);
 
     const handleChangePassword = async () => {
         setErrorMessage("");
@@ -38,17 +25,12 @@ const SetPassword = () => {
         }
 
         try {
-            const response = await axios.post("http://localhost:8080/auth/change-password", {
+            await instance.post("/auth/change-password", {
                 userId: user.id_user,
                 oldPassword: oldPassword,
                 newPassword: newPassword
             });
 
-            const updatedUser = { ...user, password: newPassword };
-            // Cập nhật lại auth với mật khẩu mới
-            const auth = btoa(`${user.email}:${newPassword}`);
-            sessionStorage.setItem("auth", auth);
-            sessionStorage.setItem("account", JSON.stringify(updatedUser));
             setSuccessMessage("Đổi mật khẩu thành công!");
             setTimeout(() => navigate("/profile"), 2000);
         } catch (error) {

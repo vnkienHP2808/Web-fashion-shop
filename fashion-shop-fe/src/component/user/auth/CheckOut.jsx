@@ -5,10 +5,10 @@ import Breadcrump from "../../ui/Breadcrump";
 import React, { useContext, useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import "../../../style/checkout.css";
-import axios from "axios";
+import instance from "../../../utils/axiosInstance"
 
 const Checkout = () => {
-  const { clearCart, removeFromCart } = useContext(CartContext);
+  const { removeFromCart } = useContext(CartContext);
   const [user, setUser] = useState(null);
   const [paymentMethod, setPaymentMethod] = useState("COD");
   const navigate = useNavigate();
@@ -18,19 +18,9 @@ const Checkout = () => {
   const [selectedAddress, setSelectedAddress] = useState("");
   const location = useLocation();
   const selectedProducts = location.state?.selectedCartItems || [];
-  const [loggedInUser] = useState(() => JSON.parse(sessionStorage.getItem("account")));
+  const [loggedInUser] = useState(() => JSON.parse(localStorage.getItem("account")));
   
   const imageBaseUrl = "http://localhost:8080/images/"; // Thêm base URL cho ảnh
-  useEffect(() => {
-    const auth = sessionStorage.getItem("auth");
-    if (auth) {
-      const interceptor = axios.interceptors.request.use((config) => {
-        config.headers.Authorization = `Basic ${auth}`;
-        return config;
-      });
-      return () => axios.interceptors.request.eject(interceptor);
-    }
-  }, []);
 
   useEffect(() => {
     if (!loggedInUser) {
@@ -46,7 +36,7 @@ const Checkout = () => {
 
   useEffect(() => {
     if (loggedInUser) {
-      axios.get(`http://localhost:8080/api/users/${loggedInUser.id_user}`)
+      instance.get(`/api/users/${loggedInUser.id_user}`)
         .then((res) => setUser(res.data))
         .catch((err) => console.error("Lỗi khi lấy thông tin người dùng:", err));
     }
@@ -90,13 +80,13 @@ const Checkout = () => {
     };
 
     try {
-      await axios.post("http://localhost:8080/api/orders", order);
+      await instance.post("/api/orders", order);
 
       const productUpdates = selectedProducts.map((item) => ({
         idProduct: item.product.idProduct,
         quantity: item.quantity,
       }));
-      await axios.put("http://localhost:8080/api/products/update-quantity-and-sold", productUpdates);
+      await instance.put("/api/products/update-quantity-and-sold", productUpdates);
 
       selectedProducts.forEach((item) => removeFromCart(item.product.idProduct, item.size));
       alert("Đơn hàng đã đặt thành công!");
@@ -118,7 +108,7 @@ const Checkout = () => {
     setSelectedAddress(newAddress);
   
     try {
-      await axios.put(`http://localhost:8080/api/users/${loggedInUser.id_user}/addresses`, {
+      await instance.put(`/api/users/${loggedInUser.id_user}/addresses`, {
         addresses: updatedAddresses,
       });
       alert("Địa chỉ đã được thêm thành công!");
@@ -141,7 +131,7 @@ const Checkout = () => {
     setSelectedPhoneNumber(newPhoneNumber);
   
     try {
-      await axios.put(`http://localhost:8080/api/users/${loggedInUser.id_user}/phones`, {
+      await instance.put(`/api/users/${loggedInUser.id_user}/phones`, {
         phones: updatedPhones,
       });
       alert("Số điện thoại đã được thêm thành công!");
@@ -200,7 +190,7 @@ const Checkout = () => {
                   <p style={{ margin: "5px 0", color: "#7f8c8d" }}>Số lượng: {item.quantity}</p>
                   <p style={{ margin: "5px 0", color: "#7f8c8d" }}>Kích thước: {item.size}</p>
                   <p style={{ margin: "5px 0", color: "#7f8c8d" }}>
-                    Giá sản phẩm: 
+                    Giá sản phẩm:
                     {item.product.sale_price ? (
                       <>
                         <span style={{ color: "#e74c3c", fontWeight: "bold" }}>

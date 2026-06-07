@@ -1,7 +1,7 @@
 import "../../../style/logIn_signUp_profile_Format.css";
 import { useNavigate } from "react-router-dom";
 import React, { useState } from 'react';
-import axios from "axios";
+import instance from "../../../utils/axiosInstance"
 
 const SignUp = () => {
     const [username, setUsername] = useState('');
@@ -29,9 +29,9 @@ const SignUp = () => {
         };
 
         try {
-            const response = await axios.post("http://localhost:8080/auth/sign-up", payload);
+            await instance.post("/auth/sign-up", payload);
             alert("Đăng ký thành công!");
-            navigate("/sign-in"); // điều hướng đến đăng nhập sau khi đăng ký
+            navigate("/sign-in");
         } catch (err) {
             console.error(err);
             alert("Có lỗi xảy ra trong quá trình đăng ký.");
