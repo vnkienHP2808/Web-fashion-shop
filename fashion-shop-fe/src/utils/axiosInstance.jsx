@@ -1,11 +1,11 @@
 import axios from "axios";
 
-const api = axios.create({
+const instance = axios.create({
   baseURL: "http://localhost:8080",
 });
 
 // Tự động gắn accessToken vào mọi request
-api.interceptors.request.use((config) => {
+instance.interceptors.request.use((config) => {
   const token = localStorage.getItem("accessToken");
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
@@ -14,7 +14,7 @@ api.interceptors.request.use((config) => {
 });
 
 // Tự động refresh khi accessToken hết hạn (401)
-api.interceptors.response.use(
+instance.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
@@ -43,7 +43,7 @@ api.interceptors.response.use(
 
         // Gửi lại request cũ với token mới
         originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
-        return api(originalRequest);
+        return instance(originalRequest);
       } catch {
         localStorage.clear();
         window.location.href = "/sign-in";
@@ -54,4 +54,4 @@ api.interceptors.response.use(
   }
 );
 
-export default api;
+export default instance;
